@@ -61,8 +61,18 @@ export default function App() {
       </div>
 
       {/* HEADER */}
+ 
+
       <header className="header" data-header>
-        <div className="container">
+        <div className="container header-inner">
+    <a href="#home" className="header-logo" aria-label="Go to home">
+      <img
+        src="/assets/images/NellyLogo.png"   // <-- replace with your logo path
+        alt="Original BlueGate"
+        className="logo-img"
+      />
+    </a>
+
           <nav className="navbar" data-navbar>
             <button className="close-btn" aria-label="close menu" data-nav-toggler>
               <ion-icon name="close-outline" aria-hidden="true"></ion-icon>
@@ -796,7 +806,7 @@ export default function App() {
 
           <div className="footer-bottom">
             <p className="copyright">
-              &copy; 2025 Nelly Ange Original Blue Gate Restaurant. All Rights Reserved
+              &copy; 2026 Nelly Ange Original Blue Gate Restaurant. All Rights Reserved
             </p>
           </div>
         </div>
