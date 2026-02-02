@@ -414,7 +414,7 @@ export default function App() {
           <section className="special-dish text-center" aria-labelledby="dish-label">
             <div className="special-dish-banner">
               <img
-                src="/assets/images/special-dish-banner.jpg"
+                src="/assets/images/service-1.jpg"
                 width="940"
                 height="900"
                 loading="lazy"
@@ -665,18 +665,18 @@ export default function App() {
                         width="350"
                         height="450"
                         loading="lazy"
-                        alt="Flavour so good you’ll try to eat with your eyes."
+                        alt="Jazz And Afrobeats Night"
                         className="img-cover"
                       />
 
-                      <time className="publish-date label-2" dateTime="2025-09-15">
-                        15/09/2025
+                      <time className="publish-date label-2" dateTime="2026-02-14">
+                        14/02/2026
                       </time>
                     </div>
 
                     <div className="card-content">
-                      <p className="card-subtitle label-2 text-center">Food, Flavour</p>
-                      <h3 className="card-title title-2 text-center">Flavour so good you’ll try to eat with your eyes.</h3>
+                      <p className="section-subtitle label-2 text-center">Jazz And Afrobeats Night</p>
+                      <h3 className="card-title title-2 text-center">Come With Family & Friends for quality experience</h3>
                     </div>
                   </div>
                 </li>
@@ -694,7 +694,7 @@ export default function App() {
                       />
 
                       <time className="publish-date label-2" dateTime="2025-09-08">
-                        08/09/2025
+                        08/09/2026
                       </time>
                     </div>
 
@@ -718,7 +718,7 @@ export default function App() {
                       />
 
                       <time className="publish-date label-2" dateTime="2025-09-03">
-                        03/09/2025
+                        03/09/2026
                       </time>
                     </div>
 
