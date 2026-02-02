@@ -19,6 +19,9 @@
   /**
    * COLORS
    */
+--brand-blue-1: #1e90ff;
+--brand-blue-2: #9fd3ff;
+--brand-blue-3: #0b5ed7;
 
   --gold-crayola: hsl(246, 100%, 38%);
   --quick-silver: hsla(0, 0%, 65%, 1);
@@ -788,6 +791,33 @@ body.nav-active { overflow: hidden; }
   z-index: 1;
 }
 
+/* Dark overlay on hero background so text pops */
+.hero .slider-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.65),
+    rgba(0, 0, 0, 0.712),
+    rgba(0, 0, 0, 0.75)
+  );
+  z-index: 1;
+}
+
+/* make sure the background image stays behind overlay */
+.hero .slider-bg img {
+  position: relative;
+  z-index: 0;
+}
+
+/* make sure hero text stays above overlay */
+.hero .slider-item > *:not(.slider-bg) {
+  position: relative;
+  z-index: 2;
+}
+
+
 .hero .slider-item {
   position: absolute;
   top: 50%;
@@ -832,7 +862,16 @@ body.nav-active { overflow: hidden; }
 
 .hero .section-subtitle::after { margin-block: 14px 20px; }
 
-.hero-text { margin-block: 10px 40px; }
+
+.hero-text {
+  font-family: var(--fontFamily-dm_sans);
+  font-size: 1.8rem;
+  line-height: 1.6;
+  color: #e9eef5;
+  max-width: 520px;
+  margin-inline: auto;
+}
+
 
 .hero .btn { margin-inline: auto; }
 
@@ -1132,6 +1171,7 @@ body.nav-active { overflow: hidden; }
 .testi {
   padding-block-end: 340px;
   position: static;
+  
 }
 
 .testi .quote {
@@ -2227,3 +2267,235 @@ textarea.input-field {
 }
 
 
+/* ===============================
+   HERO MOBILE CLEANUP
+================================ */
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 3.2rem;
+    line-height: 1.25;
+  }
+
+  .hero-text {
+    font-size: 1.6rem;
+    padding-inline: 14px;
+  }
+
+  .hero .section-subtitle {
+    font-size: 1.3rem;
+  }
+
+  .hero .btn {
+    margin-top: 10px;
+  }
+}
+
+/* ===============================
+   GLOBAL CLEAN TEXT OVERRIDES
+   (removes funky/over-styled text)
+================================ */
+
+/* Make headings clean + standard */
+.display-1,
+.headline-1,
+.headline-2,
+.title-1,
+.title-2,
+.title-3,
+.title-4 {
+  font-family: var(--fontFamily-dm_sans) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+}
+
+/* Make normal text very readable */
+body,
+p,
+span,
+a,
+li,
+input,
+textarea,
+select,
+button {
+  font-family: var(--fontFamily-dm_sans) !important;
+  letter-spacing: 0 !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Stop shouting uppercase everywhere */
+.section-subtitle,
+.navbar-link,
+.btn,
+.footer-link,
+.btn-text,
+.event-card .card-subtitle,
+.menu-card .badge,
+.testi .profile-name {
+  text-transform: none !important;
+  letter-spacing: 0.03em !important; /* tiny spacing, still neat */
+}
+
+/* Make general paragraph text lighter & clearer */
+.section-text,
+.menu-card .card-text,
+.footer-brand :is(.body-4, .label-1),
+.form-right .body-4,
+.feature-card .card-text,
+.copyright {
+  color: #d7e1ee !important; /* clearer light text */
+  line-height: 1.75 !important;
+}
+
+
+/* ===============================
+   BLUE THEME POLISH
+================================ */
+
+.btn,
+.btn-text,
+.contact-number,
+.menu-card .span,
+.event-card .publish-date,
+.testi .profile-name {
+  color: var(--brand-blue-2) !important;
+}
+
+.btn {
+  border-color: var(--brand-blue-1) !important;
+}
+
+.btn::before {
+  background-color: var(--brand-blue-1) !important;
+}
+
+.btn-secondary {
+  background-color: var(--brand-blue-1) !important;
+  color: #06101f !important;
+}
+
+.btn-secondary::before {
+  background-color: var(--brand-blue-3) !important;
+}
+
+/* Hover underline and separators match theme */
+.separator {
+  border-color: var(--brand-blue-1) !important;
+}
+
+.hover-underline::after {
+  border-block-color: var(--brand-blue-1) !important;
+}
+
+/* Scrollbar accent */
+::-webkit-scrollbar-thumb {
+  background-color: var(--brand-blue-1) !important;
+}
+
+
+/* ============================= */
+/* CLEAN E-COM MENU (MOBILE FIRST) */
+/* ============================= */
+
+.menu-ecom .section-title {
+  margin-block-end: 18px;
+}
+
+.menu-tabs {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 10px 0 16px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.menu-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.menu-tab {
+  flex: 0 0 auto;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--white-alpha-20);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--white);
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  transition: var(--transition-1);
+}
+.menu-tab.active {
+  border-color: var(--gold-crayola);
+  background: rgba(79, 120, 255, 0.14);
+  color: #ffffff;
+}
+
+.menu-items {
+  display: grid;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.menu-item-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.menu-item-name {
+  font-family: var(--fontFamily-dm_sans); /* removes fancy look */
+  font-size: 1.55rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #ffffff;
+}
+
+.menu-item-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.menu-item-price {
+  font-family: var(--fontFamily-dm_sans); /* removes fancy look */
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: #9fd3ff; /* clean blue */
+  white-space: nowrap;
+}
+
+.menu-add-btn {
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(159, 211, 255, 0.35);
+  background: rgba(159, 211, 255, 0.12);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.25rem;
+  transition: var(--transition-1);
+}
+.menu-add-btn:hover {
+  background: rgba(159, 211, 255, 0.18);
+}
+
+.menu-hint {
+  margin-top: 18px;
+  color: var(--quick-silver);
+  font-size: 1.35rem;
+}
+
+/* Slightly bigger on tablets */
+@media (min-width: 768px) {
+  .menu-items {
+    grid-template-columns: 1fr 1fr;
+  }
+}

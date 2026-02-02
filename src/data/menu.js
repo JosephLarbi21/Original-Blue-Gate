@@ -1,30 +1,51 @@
-export const MENU = [
+export const menuData = [
   {
-    id: "banku-soup",
-    name: "Banku with Soup",
-    price: 25.5,
-    image: "/assets/images/menu-1.png",
-    description:
-      "Tomatoes, green bell pepper, sliced cucumber onion, olives, and feta cheese.",
-    tags: ["Seasonal"],
-    addons: [
-      { id: "extra-pepper", name: "Extra Pepper", price: 2 },
-      { id: "goat-meat", name: "Goat Meat", price: 10 },
-      { id: "soft-drink", name: "Soft Drink", price: 8 },
-      { id: "water", name: "Mineral Water", price: 5 },
+    category: "Main Dishes",
+    items: [
+      { name: "Fried Rice & Grilled Chicken", price: 95 },
+      { name: "Fried Rice & Grilled Turkey", price: 100 },
+      { name: "Assorted Fried Rice", price: 80 },
+      { name: "Jollof Rice & Grilled Chicken", price: 90 },
+      { name: "Jollof Rice & Grilled Turkey", price: 100 },
+      { name: "Plain Rice & Grilled Chicken", price: 85 },
+      { name: "Plain Rice & Grilled Turkey", price: 90 },
+      { name: "Plain Rice & Egg Stew", price: 60 },
+      { name: "Plain Rice & C. Sauce", price: 70 },
+      { name: "Pork & Jollof Rice", price: 90 },
+      { name: "Acheke & Tilapia", price: 150 }, // sticker partly covered but looks like 150
+      { name: "Pork & F. Rice", price: 80 },
+      { name: "Pork & Yam Fries", price: 80 },
+      { name: "Yam Fries & Grilled Turkey", price: 90 },
+      { name: "Tilapia & Chips", price: 160 },
+      { name: "Pork with Banku", price: 60 },
+      { name: "Pork & Plain Rice", price: 80 },
+      { name: "Pork with Yam Chips", price: 80 },
     ],
   },
   {
-    id: "jollof-chicken",
-    name: "Jollof Rice with Chicken",
-    price: 10,
-    image: "/assets/images/menu-3.png",
-    description:
-      "Classic Ghanaian jollof rice served with juicy chicken.",
-    addons: [
-      { id: "extra-chicken", name: "Extra Chicken", price: 12 },
-      { id: "coleslaw", name: "Coleslaw", price: 5 },
-      { id: "soft-drink", name: "Soft Drink", price: 8 },
+    category: "Local Dishes",
+    items: [
+      { name: "Banku & Okro (Goat Meat & Tuna)", price: 60 },
+      { name: "Banku & Tilapia", priceRange: [120, 150] },
+      { name: "Fufu & Soup (Goat, Tuna)", priceRange: [60, 70] },
+      { name: "Tuo Zaafi", price: 60 },
+    ],
+  },
+  {
+    category: "Extras",
+    items: [
+      { name: "Grilled Chicken Thigh", price: 55 },
+      { name: "F/G Turkey", price: 60 },
+      { name: "Pork", price: 50 },
+      { name: "Tilapia", priceRange: [110, 140] },
+      { name: "Catfish", priceRange: [120, 150] },
+      { name: "Yam Chips", price: 30 },
+      { name: "Fried Rice", price: 40 },
+      { name: "Jollof", price: 40 },
+      { name: "Sausage", price: 10 },
+      { name: "Gizzard", price: 15 },
+      { name: "Goat Khebab", price: 20 },
+      { name: "Chicken Khebab", price: 20 },
     ],
   },
 ];

@@ -8,7 +8,7 @@ export default function App() {
       {/* PRELOADER */}
       <div className="preload" data-preaload>
         <div className="circle"></div>
-        <p className="text">Original BlueGate</p>
+        <p className="text">Original Blue Gate</p>
       </div>
 
       {/* TOP BAR */}
@@ -258,8 +258,10 @@ export default function App() {
               <h2 className="headline-1 section-title">We Offer Top Notch</h2>
 
               <p className="section-text">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry lorem Ipsum has been the
-                industrys standard dummy text ever.
+                 At Original BlueGate, we serve freshly prepared meals made with quality ingredients
+      and authentic local recipes. From delicious rice dishes and grilled meats to
+      traditional Ghanaian favorites, every meal is cooked with care to give you great
+      taste, generous portions, and real value.
               </p>
 
               <ul className="grid-list">
@@ -372,13 +374,13 @@ export default function App() {
                   Our Story
                 </p>
 
-                <h2 className="headline-1 section-title">Every Fla vor Tells a Story</h2>
+                <h2 className="headline-1 section-title">Where Good Food Meets Great Moments</h2>
 
                 <p className="section-text">
-                  Lorem Ipsum is simply dummy text of the printingand typesetting industry lorem Ipsum has been the
-                  industrys standard dummy text ever since the when an unknown printer took a galley of type and
-                  scrambled it to make a type specimen book It has survived not only five centuries, but also the leap
-                  into.
+                   Original BlueGate was created to bring people together over good food and a warm,
+  welcoming atmosphere. We specialize in well-prepared local and continental dishes,
+  served fresh and full of flavor. Whether you are dining in with family, meeting friends,
+  or ordering for takeaway, our goal is to give you a satisfying experience every time.
                 </p>
 
                 <div className="contact-label">Book Through Call</div>
@@ -442,13 +444,14 @@ export default function App() {
                 <h2 className="headline-1 section-title">Grills & Sizzlers</h2>
 
                 <p className="section-text">
-                  Lorem Ipsum is simply dummy text of the printingand typesetting industry lorem Ipsum has been the
-                  industrys standard dummy text ever since the when an unknown printer took a galley of type.
+                 Our grills and sizzlers are prepared fresh and served hot, using well-seasoned meats
+  and carefully selected ingredients. Each dish is cooked to bring out rich flavors,
+  tender textures, and a satisfying taste that keeps our customers coming back.
                 </p>
 
                 <div className="wrapper">
-                  <del className="del body-3">₵40.00</del>
-                  <span className="span body-1">₵20.00</span>
+                  <del className="del body-3">₵140.00</del>
+                  <span className="span body-1">₵100.00</span>
                 </div>
 
                 <a href="#menu" className="btn btn-primary">
