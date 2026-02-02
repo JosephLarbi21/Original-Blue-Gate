@@ -1,22 +1,34 @@
+import MenuSection from "./components/menu/MenuSection";
+
+
+
 export default function App() {
   return (
     <>
       {/* PRELOADER */}
       <div className="preload" data-preaload>
         <div className="circle"></div>
-        <p className="text">Nelly Ange</p>
+        <p className="text">Original BlueGate</p>
       </div>
 
       {/* TOP BAR */}
       <div className="topbar">
         <div className="container">
-          <address className="topbar-item">
-            <div className="icon">
-              <ion-icon name="location-outline" aria-hidden="true"></ion-icon>
-            </div>
+         <address className="topbar-item">
+  <div className="icon">
+    <ion-icon name="location-outline" aria-hidden="true"></ion-icon>
+  </div>
 
-            <span className="span">Osu Mission Street, Accra, Ghana</span>
-          </address>
+  <a
+    href="https://www.google.com/maps/search/?api=1&query=Osu+Mission+Street+Accra+Ghana"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="span"
+  >
+    Osu, Mission Street, Accra-Ghana
+  </a>
+</address>
+
 
           <div className="separator"></div>
 
@@ -25,7 +37,7 @@ export default function App() {
               <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
             </div>
 
-            <span className="span">Daily : 8.00 am to 10.00 pm</span>
+            <span className="span">Daily : 9.30 am - Midnight</span>
           </div>
 
           <a href="tel:+233537965155" className="topbar-item link">
@@ -38,12 +50,12 @@ export default function App() {
 
           <div className="separator"></div>
 
-          <a href="mailto:nellyange20@gmail.com" className="topbar-item link">
+          <a href="mailto:orders@nellyangepubandgrill.com" className="topbar-item link">
             <div className="icon">
               <ion-icon name="mail-outline" aria-hidden="true"></ion-icon>
             </div>
 
-            <span className="span">example@gmail.com</span>
+            <span className="span">Orders@nellyangepubandgrill.com</span>
           </a>
         </div>
       </div>
@@ -65,7 +77,7 @@ export default function App() {
 
               <li className="navbar-item">
                 <a href="#menu" className="navbar-link hover-underline">
-                  <span>Menus</span>
+                  <span>Menu</span>
                 </a>
               </li>
 
@@ -90,9 +102,9 @@ export default function App() {
 
             <div className="text-center">
               <p className="navbar-title">Visit Us</p>
-              <address>Blue Gate, Delicious City, Accra, Ghana</address>
-              <p>Open: 9.30 am - 2.30pm</p>
-              <a href="mailto:nellyange20@gmail.com">nellyange20@gmail.com</a>
+              <address>Osu, Mission Street, Accra-Ghana</address>
+              <p>Open: 9.30 am - Midnight</p>
+              <a href="mailto:nellyange20@gmail.com">orders@nellyangepubandgrill.com</a>
               <p>Booking Request</p>
               <a href="tel:+233537965155">+233 53 796 5155</a>
             </div>
@@ -225,6 +237,10 @@ export default function App() {
             </a>
           </section>
 
+          {/* MENU */}
+          <MenuSection />
+
+
           {/* SERVICE */}
           <section className="section service bg-black-10 text-center" aria-label="service">
             <div className="container">
@@ -254,7 +270,7 @@ export default function App() {
 
                     <div className="card-content">
                       <h3 className="title-4 card-title">
-                        <a href="#">Breakfast</a>
+                        <a href="#">Grills & Sizzlers</a>
                       </h3>
 
                       <a href="#menu" className="btn-text hover-underline label-2">
@@ -281,7 +297,7 @@ export default function App() {
 
                     <div className="card-content">
                       <h3 className="title-4 card-title">
-                        <a href="#">Appetizers</a>
+                        <a href="#">African Cuisine</a>
                       </h3>
 
                       <a href="#menu" className="btn-text hover-underline label-2">
@@ -382,7 +398,7 @@ export default function App() {
                 />
 
                 <div className="abs-img abs-img-1 has-before" data-parallax-item data-parallax-speed="1.75">
-                  
+
                 </div>
 
                 <div className="abs-img abs-img-2 has-before">
@@ -413,7 +429,7 @@ export default function App() {
 
                 <p className="section-subtitle label-2">Special Dish</p>
 
-                <h2 className="headline-1 section-title">Lobster Tortellini</h2>
+                <h2 className="headline-1 section-title">Grills & Sizzlers</h2>
 
                 <p className="section-text">
                   Lorem Ipsum is simply dummy text of the printingand typesetting industry lorem Ipsum has been the
@@ -438,170 +454,7 @@ export default function App() {
             <img src="/assets/images/shape-9.png" width="351" height="462" loading="lazy" alt="" className="shape shape-2" />
           </section>
 
-          {/* MENU */}
-          <section className="section menu" aria-label="menu-label" id="menu">
-            <div className="container">
-              <p className="section-subtitle text-center label-2">Special Selection</p>
-              <h2 className="headline-1 section-title text-center">Delicious Menu</h2>
 
-              <ul className="grid-list">
-                <li>
-                  <div className="menu-card hover:card">
-                    <figure className="card-banner img-holder" style={{ "--width": 100, "--height": 100 }}>
-                      <img src="/assets/images/menu-1.png" width="100" height="100" loading="lazy" alt="Greek Salad" className="img-cover" />
-                    </figure>
-
-                    <div>
-                      <div className="title-wrapper">
-                        <h3 className="title-3">
-                          <a href="#" className="card-title">
-                            Banku with Soup
-                          </a>
-                        </h3>
-
-                        <span className="badge label-1">Seasonal</span>
-
-                        <span className="span title-2">₵25.50</span>
-                      </div>
-
-                      <p className="card-text label-1">
-                        Tomatoes, green bell pepper, sliced cucumber onion, olives, and feta cheese.
-                      </p>
-                    </div>
-                  </div>
-                </li>
-
-                <li>
-                  <div className="menu-card hover:card">
-                    <figure className="card-banner img-holder" style={{ "--width": 100, "--height": 100 }}>
-                      <img src="/assets/images/menu-2.png" width="100" height="100" loading="lazy" alt="Lasagne" className="img-cover" />
-                    </figure>
-
-                    <div>
-                      <div className="title-wrapper">
-                        <h3 className="title-3">
-                          <a href="#" className="card-title">
-                            Lasagne
-                          </a>
-                        </h3>
-
-                        <span className="span title-2">₵40.00</span>
-                      </div>
-
-                      <p className="card-text label-1">
-                        Vegetables, cheeses, ground meats, tomato sauce, seasonings and spices
-                      </p>
-                    </div>
-                  </div>
-                </li>
-
-                <li>
-                  <div className="menu-card hover:card">
-                    <figure className="card-banner img-holder" style={{ "--width": 100, "--height": 100 }}>
-                      <img src="/assets/images/menu-3.png" width="100" height="100" loading="lazy" alt="Butternut Pumpkin" className="img-cover" />
-                    </figure>
-
-                    <div>
-                      <div className="title-wrapper">
-                        <h3 className="title-3">
-                          <a href="#" className="card-title">
-                            Jollof Rice With Chicken
-                          </a>
-                        </h3>
-
-                        <span className="span title-2">₵10.00</span>
-                      </div>
-
-                      <p className="card-text label-1">
-                        Typesetting industry lorem Lorem Ipsum is simply dummy text of the priand.
-                      </p>
-                    </div>
-                  </div>
-                </li>
-
-                <li>
-                  <div className="menu-card hover:card">
-                    <figure className="card-banner img-holder" style={{ "--width": 100, "--height": 100 }}>
-                      <img src="/assets/images/menu-4.png" width="100" height="100" loading="lazy" alt="Tokusen Wagyu" className="img-cover" />
-                    </figure>
-
-                    <div>
-                      <div className="title-wrapper">
-                        <h3 className="title-3">
-                          <a href="#" className="card-title">
-                            Tokusen Wagyu
-                          </a>
-                        </h3>
-
-                        <span className="badge label-1">New</span>
-
-                        <span className="span title-2">₵39.00</span>
-                      </div>
-
-                      <p className="card-text label-1">
-                        Vegetables, cheeses, ground meats, tomato sauce, seasonings and spices.
-                      </p>
-                    </div>
-                  </div>
-                </li>
-
-                <li>
-                  <div className="menu-card hover:card">
-                    <figure className="card-banner img-holder" style={{ "--width": 100, "--height": 100 }}>
-                      <img src="/assets/images/menu-5.png" width="100" height="100" loading="lazy" alt="Olivas Rellenas" className="img-cover" />
-                    </figure>
-
-                    <div>
-                      <div className="title-wrapper">
-                        <h3 className="title-3">
-                          <a href="#" className="card-title">
-                            Rice with stew
-                          </a>
-                        </h3>
-
-                        <span className="span title-2">₵25.00</span>
-                      </div>
-
-                      <p className="card-text label-1">
-                        Avocados with crab meat, red onion, crab salad stuffed red bell pepper and green bell pepper.
-                      </p>
-                    </div>
-                  </div>
-                </li>
-
-                <li>
-                  <div className="menu-card hover:card">
-                    <figure className="card-banner img-holder" style={{ "--width": 100, "--height": 100 }}>
-                      <img src="/assets/images/menu-6.png" width="100" height="100" loading="lazy" alt="Opu Fish" className="img-cover" />
-                    </figure>
-
-                    <div>
-                      <div className="title-wrapper">
-                        <h3 className="title-3">
-                          <a href="#" className="card-title">
-                            Opu Fish
-                          </a>
-                        </h3>
-
-                        <span className="span title-2">₵49.00</span>
-                      </div>
-
-                      <p className="card-text label-1">
-                        Vegetables, cheeses, ground meats, tomato sauce, seasonings and spices
-                      </p>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-
-              <p className="menu-text text-center">
-                We open daily from <span className="span">7:00 am</span> to <span className="span">9:00 pm</span>
-              </p>
-
-              <img src="/assets/images/shape-5.png" width="921" height="1036" loading="lazy" alt="shape" className="shape shape-2 move-anim" />
-              <img src="/assets/images/shape-6.png" width="343" height="345" loading="lazy" alt="shape" className="shape shape-3 move-anim" />
-            </div>
-          </section>
 
           {/* TESTIMONIALS */}
           <section
@@ -720,7 +573,7 @@ export default function App() {
 
                   <p className="contact-label">Location</p>
 
-                  <address className="body-4">Nelly Ange, Osu Accra</address>
+                  <address className="body-4">Osu, Mission Street, Accra-Ghana</address>
 
                   <p className="contact-label">Lunch Time</p>
 
@@ -886,17 +739,17 @@ export default function App() {
         <div className="container">
           <div className="footer-top grid-list">
             <div className="footer-brand has-before has-after">
-              <address className="body-4">Nelly Ange, Osu Accra</address>
+              <address className="body-4">Osu, Mission Street, Accra-Ghana</address>
 
-              <a href="mailto:nellyange20@gmail.com" className="body-4 contact-link">
-                nellyange20@gmail.com
+              <a href="mailto:orders@nellyangepubandgrill.com" className="body-4 contact-link">
+                orders@nellyangepubandgrill.com
               </a>
 
               <a href="tel:+233537965155" className="body-4 contact-link">
                 Booking Request : +233 53 796 5155
               </a>
 
-              <p className="body-4">Open : 09:00 am - 01:00 pm</p>
+              <p className="body-4">Open : 09:00 am - Midnight</p>
 
               <div className="wrapper">
                 <div className="separator"></div>
@@ -907,7 +760,7 @@ export default function App() {
               <p className="title-1">Get News &amp; Offers</p>
 
               <p className="label-1">
-                Subscribe us &amp; Get <span className="span">25% Off.</span>
+                Subscribe us &amp; Get <span className="span">25% Off.</span> with Mastercard
               </p>
 
               <form action="" className="input-wrapper">
