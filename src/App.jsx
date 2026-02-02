@@ -699,7 +699,7 @@ export default function App() {
                     </div>
 
                     <div className="card-content">
-                      <p className="card-subtitle label-2 text-center">Healthy Food</p>
+                      <p className="section-subtitle label-2 text-center">Healthy Food</p>
                       <h3 className="card-title title-2 text-center">Flavour so good you’ll try to eat with your eyes.</h3>
                     </div>
                   </div>
@@ -723,7 +723,7 @@ export default function App() {
                     </div>
 
                     <div className="card-content">
-                      <p className="card-subtitle label-2 text-center">Recipie</p>
+                      <p className="section-subtitle label-2 text-center">Recipie</p>
                       <h3 className="card-title title-2 text-center">Flavour so good you’ll try to eat with your eyes.</h3>
                     </div>
                   </div>
