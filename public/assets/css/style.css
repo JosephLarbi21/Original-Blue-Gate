@@ -2227,36 +2227,3 @@ textarea.input-field {
 }
 
 
-/* Ensure header layout supports logo */
-.header .header-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-/* Logo container */
-.header-logo {
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-  z-index: 1001;
-}
-
-/* Logo image – bigger & clean */
-.logo-img {
-  height: 72px;          /* ⬅️ increase from ~52px */
-  width: auto;
-  max-width: 240px;
-  object-fit: contain;
-  display: block;
-}
-
-/* Mobile adjustment */
-@media (max-width: 768px) {
-  .logo-img {
-    height: 56px;
-    max-width: 180px;
-  }
-}
-

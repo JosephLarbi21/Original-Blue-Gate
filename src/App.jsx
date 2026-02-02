@@ -64,7 +64,7 @@ export default function App() {
  
 
       <header className="header" data-header>
-        <div className="container header-inner">
+        <div className="container ">
     <a href="#home" className="header-logo" aria-label="Go to home">
       <img
         src="/assets/images/NellyLogo.png"   // <-- replace with your logo path
