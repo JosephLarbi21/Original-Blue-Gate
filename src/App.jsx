@@ -65,7 +65,7 @@ export default function App() {
 
       <header className="header" data-header>
         <div className="container ">
-    <a href="#home" className="header-logo" aria-label="Go to home">
+    <a href="/home" className="header-logo" aria-label="Go to home">
       <img
         src="/assets/images/NellyLogo.png"   // <-- replace with your logo path
         alt="Original BlueGate"
@@ -80,31 +80,31 @@ export default function App() {
 
             <ul className="navbar-list">
               <li className="navbar-item">
-                <a href="#home" className="navbar-link hover-underline">
+                <a href="/home" className="navbar-link hover-underline">
                   <span>Home</span>
                 </a>
               </li>
 
               <li className="navbar-item">
-                <a href="#menu" className="navbar-link hover-underline">
+                <a href="/menu" className="navbar-link hover-underline">
                   <span>Menu</span>
                 </a>
               </li>
 
               <li className="navbar-item">
-                <a href="#about" className="navbar-link hover-underline">
+                <a href="/about" className="navbar-link hover-underline">
                   <span>About Us</span>
                 </a>
               </li>
 
               <li className="navbar-item">
-                <a href="#events" className="navbar-link hover-underline">
+                <a href="/events" className="navbar-link hover-underline">
                   <span>Events</span>
                 </a>
               </li>
 
               <li className="navbar-item">
-                <a href="#reservation" className="navbar-link hover-underline">
+                <a href="/reservation" className="navbar-link hover-underline">
                   <span>Contact</span>
                 </a>
               </li>
@@ -120,7 +120,7 @@ export default function App() {
             </div>
           </nav>
 
-          <a href="#reservation" className="btn btn-secondary">
+          <a href="/reservation" className="btn btn-secondary">
             <span className="text text-1">Find A Table</span>
             <span className="text text-2" aria-hidden="true">
               Find A Table
@@ -164,7 +164,7 @@ export default function App() {
                   Come with family & feel the joy of mouthwatering food
                 </p>
 
-                <a href="#menu" className="btn btn-primary slider-reveal">
+                <a href="/menu" className="btn btn-primary slider-reveal">
                   <span className="text text-1">View Our Menu</span>
                   <span className="text text-2" aria-hidden="true">
                     View Our Menu
@@ -194,7 +194,7 @@ export default function App() {
                   Come with family & feel the joy of mouthwatering food
                 </p>
 
-                <a href="#menu" className="btn btn-primary slider-reveal">
+                <a href="/menu" className="btn btn-primary slider-reveal">
                   <span className="text text-1">View Our Menu</span>
                   <span className="text text-2" aria-hidden="true">
                     View Our Menu
@@ -224,7 +224,7 @@ export default function App() {
                   Come with family & feel the joy of mouthwatering food
                 </p>
 
-                <a href="#menu" className="btn btn-primary slider-reveal">
+                <a href="/menu" className="btn btn-primary slider-reveal">
                   <span className="text text-1">View Our Menu</span>
                   <span className="text text-2" aria-hidden="true">
                     View Our Menu
@@ -241,7 +241,7 @@ export default function App() {
               <ion-icon name="chevron-forward"></ion-icon>
             </button>
 
-            <a href="#reservation" className="hero-btn has-after">
+            <a href="/reservation" className="hero-btn has-after">
               <img src="/assets/images/hero-icon.png" width="48" height="48" alt="booking icon" />
               <span className="label-2 text-center span">Book A Table</span>
             </a>
@@ -267,7 +267,7 @@ export default function App() {
               <ul className="grid-list">
                 <li>
                   <div className="service-card">
-                    <a href="#" className="has-before hover:shine">
+                    <a href="/" className="has-before hover:shine">
                       <figure className="card-banner img-holder" style={{ "--width": 285, "--height": 336 }}>
                         <img
                           src="/assets/images/service-1.jpg"
@@ -282,10 +282,10 @@ export default function App() {
 
                     <div className="card-content">
                       <h3 className="title-4 card-title">
-                        <a href="#">Grills & Sizzlers</a>
+                        <a href="/">Grills & Sizzlers</a>
                       </h3>
 
-                      <a href="#menu" className="btn-text hover-underline label-2">
+                      <a href="/menu" className="btn-text hover-underline label-2">
                         View Menu
                       </a>
                     </div>
@@ -294,7 +294,7 @@ export default function App() {
 
                 <li>
                   <div className="service-card">
-                    <a href="#" className="has-before hover:shine">
+                    <a href="/" className="has-before hover:shine">
                       <figure className="card-banner img-holder" style={{ "--width": 285, "--height": 336 }}>
                         <img
                           src="/assets/images/service-2.jpg"
@@ -312,7 +312,7 @@ export default function App() {
                         <a href="#">African Cuisine</a>
                       </h3>
 
-                      <a href="#menu" className="btn-text hover-underline label-2">
+                      <a href="/menu" className="btn-text hover-underline label-2">
                         View Menu
                       </a>
                     </div>
