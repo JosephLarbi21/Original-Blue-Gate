@@ -3047,7 +3047,7 @@ body{
 
   /* Title: much bigger for mobile */
   .hero .hero-title {
-    font-size: 3.8rem !important;
+    font-size: 2rem !important;
     line-height: 1.12 !important;
     font-weight: 900 !important;
     margin-bottom: 12px !important;

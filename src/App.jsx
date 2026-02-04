@@ -221,7 +221,7 @@ export default function App() {
               Today's Special
             </a>
             <a href="#events" className="navlink">
-              Jazz & Afrobeats Nights
+              Jazz & Afrobeats 
             </a>
             <a href="#menu" className="navlink">
               Menu
@@ -312,16 +312,14 @@ export default function App() {
                   <img src="/assets/images/hero-slider-1.jpg" width="1880" height="950" alt="" className="img-cover" />
                 </div>
 
-                <p className="label-2 section-subtitle slider-reveal">Traditional & Hygiene</p>
+                <p className="label-2 section-subtitle slider-reveal">Charcoal Grill Sizzlers</p>
 
                 <h1 className="display-1 hero-title slider-reveal">
-                  For the love of <br />
-                  delicious food
+                   Some 30 year of mouthwatering charcoal have become our speciality
+                  
                 </h1>
 
-                <p className="body-2 hero-text slider-reveal">
-                  Come with family & feel the joy of mouthwatering food
-                </p>
+               
 
                 <a href="#menu" className="btn btn-primary slider-reveal">
                   <span className="text text-1">View Our Menu</span>
@@ -336,7 +334,7 @@ export default function App() {
                   <img src="/assets/images/hero-slider-2.jpg" width="1880" height="950" alt="" className="img-cover" />
                 </div>
 
-                <p className="label-2 section-subtitle slider-reveal">Delightful experience</p>
+                <p className="label-2 section-subtitle slider-reveal">Inspired by love</p>
 
                 <h1 className="display-1 hero-title slider-reveal">
                   Flavors Inspired by <br />
@@ -369,11 +367,7 @@ export default function App() {
   Original Blue Gate
 </h1>
 
-<p className="body-2 hero-text slider-reveal">
-  Join us this Valentine’s Day for an unforgettable evening of great food,
-  smooth jazz & afrobeats, romantic ambiance, and special couple packages.
-  Limited tables available.
-</p>
+
 
 <a href="/valentines-booking" className="btn btn-primary slider-reveal">
   <span className="text text-1">Reserve for Valentine’s Day</span>
