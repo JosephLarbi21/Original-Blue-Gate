@@ -3038,8 +3038,8 @@ body{
 
   /* Subtitle: bigger and readable */
   .hero .section-subtitle {
-    font-size: 1.75rem !important;
-    font-weight: 900 !important;
+    font-size: 1.6rem !important;
+    font-weight: 700 !important;
     padding: 10px 29px !important;
     border-radius: 999px !important;
     margin-bottom: 14px !important;
@@ -3049,7 +3049,7 @@ body{
   .hero .hero-title {
     font-size: 2rem !important;
     line-height: 1.12 !important;
-    font-weight: 900 !important;
+    font-weight: 700 !important;
     margin-bottom: 12px !important;
     text-shadow: 0 10px 28px rgba(0, 0, 0, 0.65) !important;
   }
