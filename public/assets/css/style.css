@@ -3010,3 +3010,85 @@ body{
   font-size: 1.35rem;
 }
 .val-link{ color: #e2c9a4; font-weight: 900; }
+
+
+
+
+/* =========================================
+   MOBILE HERO: EXTRA VISIBILITY + READABILITY
+========================================= */
+@media (max-width: 768px) {
+  /* Stronger overlay on mobile so text stands out */
+  .hero .slider-bg::after {
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.78),
+      rgba(0, 0, 0, 0.85),
+      rgba(0, 0, 0, 0.88)
+    ) !important;
+  }
+
+  /* Pull content slightly up + give more breathing space */
+  .hero .slider-item {
+    padding-block-start: 70px !important;
+    padding-inline: 18px !important;
+    place-content: start center !important; /* not dead center */
+    text-align: center;
+  }
+
+  /* Subtitle: bigger and readable */
+  .hero .section-subtitle {
+    font-size: 1.75rem !important;
+    font-weight: 900 !important;
+    padding: 10px 29px !important;
+    border-radius: 999px !important;
+    margin-bottom: 14px !important;
+  }
+
+  /* Title: much bigger for mobile */
+  .hero .hero-title {
+    font-size: 3.8rem !important;
+    line-height: 1.12 !important;
+    font-weight: 900 !important;
+    margin-bottom: 12px !important;
+    text-shadow: 0 10px 28px rgba(0, 0, 0, 0.65) !important;
+  }
+
+  /* Paragraph: bigger and not thin */
+  .hero .hero-text {
+    font-size: 1.75rem !important;
+    line-height: 1.8 !important;
+    font-weight: 600 !important;
+    max-width: 34ch !important; /* better readability on phones */
+    margin-inline: auto !important;
+    color: rgba(255, 255, 255, 0.95) !important;
+    text-shadow: 0 8px 22px rgba(0, 0, 0, 0.60) !important;
+  }
+
+  /* Button: full width for easy tap */
+  .hero .btn.btn-primary {
+    width: 100% !important;
+    max-width: 340px !important;
+    margin-top: 16px !important;
+    padding: 15px 18px !important;
+    font-size: 1.45rem !important;
+    border-width: 2px !important;
+  }
+
+  /* Make the floating "Book A Table" bubble not cover content */
+  .hero-btn {
+    bottom: 12px !important;
+    right: 12px !important;
+    transform: scale(0.62) !important;
+  }
+}
+
+/* Even smaller phones (e.g. 360px width) */
+@media (max-width: 390px) {
+  .hero .hero-title {
+    font-size: 3.4rem !important;
+  }
+  .hero .hero-text {
+    font-size: 1.65rem !important;
+  }
+}
