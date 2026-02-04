@@ -22,8 +22,9 @@
 --brand-blue-1: #1e90ff;
 --brand-blue-2: #9fd3ff;
 --brand-blue-3: #0b5ed7;
+--brand-blue-4: #dfad0a;
 
-  --gold-crayola: hsl(246, 100%, 38%);
+  --gold-crayola: hsla(221, 90%, 61%, 0.952);
   --quick-silver: hsla(0, 0%, 65%, 1);
   --davys-grey: hsla(30, 3%, 34%, 1);
   --smoky-black-1: hsla(40, 12%, 5%, 1);
@@ -68,7 +69,7 @@
   --fontSize-body-3: 1.8rem;
   --fontSize-body-4: 1.6rem;
   --fontSize-label-1: 1.4rem;
-  --fontSize-label-2: 1.2rem;
+  --fontSize-label-2: 1.5rem;
 
   /* font-weight */
   --weight-regular: 400;
@@ -318,12 +319,12 @@ body.nav-active { overflow: hidden; }
 .section-subtitle {
   position: relative;
   color: #9fd3ff; /* light readable blue */
-  font-weight: 600;
+  font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.15em;
   margin-block-end: 14px;
 
-  font-size: 1.5rem;        /* bigger */
+  font-size: 2.5rem;        /* bigger */
   line-height: 1.4;      /* clearer */
 }
 
@@ -662,7 +663,7 @@ body.nav-active { overflow: hidden; }
 
 .navbar {
   position: fixed;
-  background-color: var(--smoky-black-1);
+  background-color: #ffff;
   top: 0;
   left: -360px;
   bottom: 0;
@@ -690,7 +691,7 @@ body.nav-active { overflow: hidden; }
   margin-block: 30px 20px;
 }
 
-.navbar .close-btn ion-icon { --ionicon-stroke-width: 40px; }
+.navbar .close-btn ion-icon { --ionicon-stroke-width: 20px; }
 
 .navbar .close-btn:is(:hover, :focus-visible) { color: var(--gold-crayola); }
 
@@ -706,7 +707,7 @@ body.nav-active { overflow: hidden; }
   margin-block-end: 100px;
 }
 
-.navbar-item { border-block-start: 1px solid var(--white-alpha-20); }
+.navbar-item { border-block-start: 1px solid #ffff; }
 
 .navbar-link {
   position: relative;
@@ -2273,12 +2274,12 @@ textarea.input-field {
 
 @media (max-width: 768px) {
   .hero-title {
-    font-size: 3.2rem;
+    font-size: 2.8rem;
     line-height: 1.25;
   }
 
   .hero-text {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     padding-inline: 14px;
   }
 
@@ -2499,3 +2500,513 @@ button {
     grid-template-columns: 1fr 1fr;
   }
 }
+
+
+
+
+/* =========================================================
+   PROFESSIONAL THEME OVERRIDES (PASTE AT BOTTOM)
+   - removes the mixed blue look
+   - keeps a premium dark + gold theme
+========================================================= */
+
+:root{
+  --accent: #c8a97e;       /* premium gold */
+  --accent-2: #e2c9a4;     /* softer gold */
+  --bg: #0b0d10;           /* rich black */
+  --bg-2: #11151b;         /* panels */
+  --text: #ffffff;
+  --muted: rgba(255,255,255,.72);
+  --line: rgba(255,255,255,.10);
+}
+
+/* body cleanup (your old height:300vh causes layout issues) */
+body{
+  background-color: var(--bg) !important;
+  color: var(--text) !important;
+  overflow-x: hidden !important;
+  height: auto !important;
+  min-height: 100vh !important;
+}
+
+/* global accent */
+.separator{ border-color: var(--accent) !important; }
+::-webkit-scrollbar-thumb{ background-color: var(--accent) !important; }
+
+.btn{
+  border-color: var(--accent) !important;
+  color: var(--accent) !important;
+}
+.btn::before{ background-color: var(--accent) !important; }
+.btn-secondary{
+  background: var(--accent) !important;
+  color: #141414 !important;
+}
+.btn-secondary::before{ background: #000 !important; }
+
+/* subtitles */
+.section-subtitle{
+  color: var(--accent-2) !important;
+}
+
+/* =========================================================
+   HEADER / NAV (NEW STRUCTURE)
+========================================================= */
+
+.header .container{
+  gap: 14px !important;
+}
+
+/* Bigger logo - clean */
+.header-logo{ display:flex; align-items:center; }
+.logo-img{
+  height: 64px;
+  width: auto;
+  object-fit: contain;
+}
+@media (max-width: 768px){
+  .logo-img{ height: 54px; }
+}
+
+/* desktop nav */
+.navbar-desktop{
+  display: none;
+  align-items: center;
+  gap: 22px;
+  margin-left: auto;
+}
+.navbar-desktop .navlink{
+  color: rgba(255,255,255,.86);
+  font-weight: 700;
+  font-size: 1.35rem;
+  letter-spacing: .02em;
+  transition: 250ms ease;
+}
+.navbar-desktop .navlink:hover{
+  color: var(--accent-2);
+}
+
+/* show desktop nav on large */
+@media (min-width: 1200px){
+  .navbar-desktop{ display:flex; }
+  .nav-open-btn{ display:none !important; }
+  .header-cta{ display:inline-flex !important; }
+}
+
+/* keep CTA hidden on tiny if you want */
+.header-cta{ display:none; }
+
+/* =========================================================
+   MOBILE DRAWER (fixes side menu crashing/white-on-white)
+========================================================= */
+
+.mobile-drawer{
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100dvh;
+  width: min(380px, 88vw);
+  background: rgba(17, 21, 27, 0.98);
+  border-right: 1px solid var(--line);
+  transform: translateX(-105%);
+  transition: 260ms ease;
+  z-index: 9999;
+  padding: 18px;
+  overflow-y: auto;
+}
+.mobile-drawer.active{ transform: translateX(0); }
+
+.drawer-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.65);
+  opacity: 0;
+  pointer-events: none;
+  transition: 260ms ease;
+  z-index: 9998;
+}
+.drawer-overlay.active{
+  opacity: 1;
+  pointer-events: all;
+}
+
+.mobile-drawer-head{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.drawer-logo{
+  height: 56px;
+  width: auto;
+  object-fit: contain;
+}
+.drawer-close{
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  display:grid;
+  place-items:center;
+  color: #fff;
+}
+.drawer-close ion-icon{ font-size: 22px; }
+
+.mobile-drawer-links{
+  display: grid;
+  gap: 10px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.mobile-drawer-links a{
+  padding: 12px 10px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.06);
+  color: rgba(255,255,255,.9);
+  font-weight: 700;
+  font-size: 1.45rem;
+}
+.mobile-drawer-links a:hover{ border-color: rgba(200,169,126,.35); }
+
+.mobile-drawer-info{
+  padding-top: 14px;
+  color: var(--muted);
+  font-size: 1.4rem;
+}
+.drawer-title{
+  color: #fff;
+  font-weight: 800;
+  margin-top: 10px;
+}
+.drawer-cta{
+  width: 100%;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+/* =========================================================
+   RESERVATION ALERT
+========================================================= */
+.form-alert{
+  margin: 10px 0 18px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  font-size: 1.35rem;
+}
+.form-alert.success{
+  background: rgba(46, 204, 113, 0.12);
+  border-color: rgba(46, 204, 113, 0.35);
+}
+.form-alert.error{
+  background: rgba(231, 76, 60, 0.12);
+  border-color: rgba(231, 76, 60, 0.35);
+}
+
+/* =========================================================
+   WHATSAPP FLOAT BUTTON
+========================================================= */
+.whatsapp-float{
+  position: fixed;
+  bottom: 90px;
+  right: 18px;
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  background: #25D366;
+  color: #0a0a0a;
+  display: grid;
+  place-items: center;
+  z-index: 9997;
+  box-shadow: 0 18px 50px rgba(0,0,0,.35);
+}
+.whatsapp-float ion-icon{
+  font-size: 28px;
+  color: #0a0a0a;
+}
+
+/* =========================================================
+   COOKIE BANNER
+========================================================= */
+.cookie-banner{
+  position: fixed;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+  z-index: 10000;
+}
+.cookie-inner{
+  max-width: 980px;
+  margin: 0 auto;
+  background: rgba(17,21,27,0.96);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 14px;
+  display:flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+.cookie-title{
+  color: #fff;
+  font-weight: 900;
+  margin-bottom: 4px;
+}
+.cookie-desc{ color: var(--muted); font-size: 1.35rem; }
+.cookie-actions{ display:flex; gap: 10px; }
+.cookie-btn{
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(200,169,126,.45);
+  background: var(--accent);
+  color: #111;
+  font-weight: 900;
+  cursor: pointer;
+}
+.cookie-btn.ghost{
+  background: transparent;
+  color: #fff;
+  border-color: var(--line);
+}
+@media (max-width: 520px){
+  .cookie-inner{ flex-direction: column; align-items: flex-start; }
+}
+
+/* =========================================================
+   MENU IMAGE CARDS (restaurant-style)
+========================================================= */
+.menu-cards{
+  display:grid;
+  gap: 14px;
+  margin-top: 14px;
+}
+.menu-card-box{
+  display:grid;
+  grid-template-columns: 110px 1fr;
+  gap: 12px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.menu-card-img{
+  height: 110px;
+  background: rgba(255,255,255,.06);
+}
+.menu-card-img img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.menu-card-body{
+  padding: 12px 12px 12px 0;
+  display:flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.menu-card-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+.menu-card-name{
+  font-weight: 900;
+  color: #fff;
+  font-size: 1.5rem;
+  line-height: 1.25;
+}
+.menu-card-price{
+  color: var(--accent-2);
+  font-weight: 900;
+  white-space: nowrap;
+}
+.menu-card-desc{
+  color: var(--muted);
+  font-size: 1.32rem;
+  line-height: 1.6;
+}
+
+@media (min-width: 768px){
+  .menu-cards{
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+
+
+
+
+/* ================================
+   FIX: MENU COVERING RESERVATION
+   Remove the overlap effect
+================================ */
+.reservation-form {
+  margin-block-start: 0 !important; /* was -270px */
+}
+
+/* Give reservation its own space */
+.reservation {
+  padding-top: 70px !important;
+}
+
+/* Make sure menu doesn't collide visually */
+.menu.menu-ecom {
+  padding-bottom: 70px !important;
+}
+
+
+
+/* ==============================
+   VALENTINE BOOKING PAGE
+============================== */
+.val-page{
+  background: var(--bg, #0b0d10);
+  color: #fff;
+  min-height: 100vh;
+}
+
+.val-hero{
+  padding: 110px 16px 24px;
+  background:
+    radial-gradient(900px 400px at 20% 10%, rgba(200,169,126,.18), transparent 55%),
+    radial-gradient(800px 500px at 90% 20%, rgba(255,60,120,.12), transparent 55%),
+    linear-gradient(to bottom, rgba(0,0,0,.85), rgba(0,0,0,.9));
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.val-container{
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.val-back{
+  display: inline-block;
+  color: rgba(255,255,255,.85);
+  border: 1px solid rgba(255,255,255,.12);
+  padding: 10px 12px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+.val-back:hover{ border-color: rgba(200,169,126,.45); }
+
+.val-tag{
+  color: rgba(255,255,255,.75);
+  font-weight: 800;
+  letter-spacing: .02em;
+}
+
+.val-title{
+  margin-top: 10px;
+  font-size: clamp(2.4rem, 2.2rem + 2vw, 4.2rem);
+  line-height: 1.1;
+  font-weight: 900;
+}
+
+.val-sub{
+  margin-top: 12px;
+  color: rgba(255,255,255,.75);
+  max-width: 720px;
+  line-height: 1.7;
+  font-size: 1.5rem;
+}
+
+.val-form-wrap{
+  padding: 26px 16px 90px;
+}
+
+.val-card{
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 18px;
+  padding: 18px;
+}
+
+.val-card-title{
+  font-size: 2rem;
+  font-weight: 900;
+}
+.val-card-desc{
+  color: rgba(255,255,255,.7);
+  margin-top: 6px;
+  margin-bottom: 14px;
+  font-size: 1.4rem;
+}
+
+.val-form{ margin-top: 6px; }
+
+.val-grid{
+  display: grid;
+  gap: 12px;
+}
+@media (min-width: 768px){
+  .val-grid{ grid-template-columns: 1fr 1fr; }
+  .val-full{ grid-column: 1 / -1; }
+}
+
+.val-label{
+  display:block;
+  font-weight: 800;
+  margin-bottom: 6px;
+  color: rgba(255,255,255,.9);
+  font-size: 1.35rem;
+}
+
+.val-input, .val-textarea{
+  width: 100%;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 14px;
+  padding: 12px 12px;
+  color: #fff;
+  outline: none;
+  font-size: 1.45rem;
+}
+.val-input:focus, .val-textarea:focus{
+  border-color: rgba(200,169,126,.55);
+}
+
+.val-textarea{
+  min-height: 110px;
+  resize: vertical;
+}
+
+.val-btn{
+  width: 100%;
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(200,169,126,.55);
+  background: #c8a97e;
+  color: #111;
+  font-weight: 900;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+.val-btn:disabled{ opacity: .7; cursor:not-allowed; }
+
+.val-alert{
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.12);
+  font-size: 1.35rem;
+}
+.val-alert.success{
+  background: rgba(46, 204, 113, 0.12);
+  border-color: rgba(46, 204, 113, 0.35);
+}
+.val-alert.error{
+  background: rgba(231, 76, 60, 0.12);
+  border-color: rgba(231, 76, 60, 0.35);
+}
+
+.val-footnote{
+  margin-top: 10px;
+  color: rgba(255,255,255,.70);
+  font-size: 1.35rem;
+}
+.val-link{ color: #e2c9a4; font-weight: 900; }

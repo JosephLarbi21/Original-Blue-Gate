@@ -1,10 +1,156 @@
+import React, { useEffect, useMemo, useState } from "react";
 import MenuSection from "./components/menu/MenuSection";
+import CookieBanner from "./components/CookieBanner";
+import WhatsAppFloat from "./components/What'sAppFloat";
+import { Routes, Route } from "react-router-dom";
+import ValentinesBooking from "./pages/ValentinesBooking";
 
 
+const BUSINESS_EMAIL = "orders@nellyangepubandgrill.com";
+const WHATSAPP_NUMBER = "233537965155"; // change if different (no + sign)
 
 export default function App() {
+  // ---- Preloader (keeps your existing behavior) ----
+  useEffect(() => {
+    const preloader = document.querySelector("[data-preaload]");
+    const runPreload = () => {
+      if (!preloader) return;
+      preloader.classList.add("loaded");
+      document.body.classList.add("loaded");
+    };
+
+    if (document.readyState === "complete") runPreload();
+    else window.addEventListener("load", runPreload, { once: true });
+  }, []);
+
+  // ---- Navbar toggle (React-safe; removes mobile crash) ----
+  const [navOpen, setNavOpen] = useState(false);
+
+  useEffect(() => {
+    document.body.classList.toggle("nav-active", navOpen);
+
+    // close on ESC
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") setNavOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+
+    // close when resizing to desktop
+    const onResize = () => {
+      if (window.innerWidth >= 1200) setNavOpen(false);
+    };
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("resize", onResize);
+    };
+  }, [navOpen]);
+
+  // ---- Header active & back-to-top ----
+  useEffect(() => {
+    const header = document.querySelector("[data-header]");
+    const backTopBtn = document.querySelector("[data-back-top-btn]");
+    let lastScrollPos = 0;
+
+    const hideHeader = () => {
+      if (!header) return;
+      const isScrollBottom = lastScrollPos < window.scrollY;
+      if (isScrollBottom) header.classList.add("hide");
+      else header.classList.remove("hide");
+      lastScrollPos = window.scrollY;
+    };
+
+    const onScroll = () => {
+      if (!header || !backTopBtn) return;
+      if (window.scrollY >= 50) {
+        header.classList.add("active");
+        backTopBtn.classList.add("active");
+        hideHeader();
+      } else {
+        header.classList.remove("active");
+        backTopBtn.classList.remove("active");
+      }
+    };
+
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // ---- Reservation form (sends email via /api/reservation) ----
+  const [booking, setBooking] = useState({
+    name: "",
+    phone: "",
+    persons: "2-person",
+    date: "",
+    time: "07:00pm",
+    message: "",
+  });
+
+  const [bookingStatus, setBookingStatus] = useState({ type: "", text: "" });
+  const [bookingLoading, setBookingLoading] = useState(false);
+
+  const onBookingChange = (e) => {
+    const { name, value } = e.target;
+    setBooking((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const submitBooking = async (e) => {
+    e.preventDefault();
+    setBookingStatus({ type: "", text: "" });
+
+    // basic validation
+    if (!booking.name.trim() || !booking.phone.trim() || !booking.date) {
+      setBookingStatus({ type: "error", text: "Please enter your name, phone number and date." });
+      return;
+    }
+
+    setBookingLoading(true);
+    try {
+      const res = await fetch("/api/reservation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...booking,
+          toEmail: BUSINESS_EMAIL,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data?.message || "Failed to send booking.");
+
+      setBookingStatus({
+        type: "success",
+        text: "Booking sent successfully. We will contact you shortly.",
+      });
+
+      setBooking({
+        name: "",
+        phone: "",
+        persons: "2-person",
+        date: "",
+        time: "07:00pm",
+        message: "",
+      });
+    } catch (err) {
+      setBookingStatus({
+        type: "error",
+        text: err.message || "Something went wrong. Please try again.",
+      });
+    } finally {
+      setBookingLoading(false);
+    }
+  };
+
   return (
     <>
+      {/* COOKIE CONSENT */}
+      <CookieBanner />
+
+      {/* WHATSAPP FLOAT */}
+      <WhatsAppFloat phone={WHATSAPP_NUMBER} />
+
       {/* PRELOADER */}
       <div className="preload" data-preaload>
         <div className="circle"></div>
@@ -14,21 +160,19 @@ export default function App() {
       {/* TOP BAR */}
       <div className="topbar">
         <div className="container">
-         <address className="topbar-item">
-  <div className="icon">
-    <ion-icon name="location-outline" aria-hidden="true"></ion-icon>
-  </div>
-
-  <a
-    href="https://www.google.com/maps/search/?api=1&query=Osu+Mission+Street+Accra+Ghana"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="span"
-  >
-    Osu, Mission Street, Accra-Ghana
-  </a>
-</address>
-
+          <address className="topbar-item">
+            <div className="icon">
+              <ion-icon name="location-outline" aria-hidden="true"></ion-icon>
+            </div>
+            <a
+              href="https://www.google.com/maps/search/?api=1&query=Osu+Mission+Street+Accra+Ghana"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="span"
+            >
+              Osu, Mission Street, Accra-Ghana
+            </a>
+          </address>
 
           <div className="separator"></div>
 
@@ -36,7 +180,6 @@ export default function App() {
             <div className="icon">
               <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
             </div>
-
             <span className="span">Daily : 9.30 am - Midnight</span>
           </div>
 
@@ -44,116 +187,132 @@ export default function App() {
             <div className="icon">
               <ion-icon name="call-outline" aria-hidden="true"></ion-icon>
             </div>
-
             <span className="span">+233 53 796 5155</span>
           </a>
 
           <div className="separator"></div>
 
-          <a href="mailto:orders@nellyangepubandgrill.com" className="topbar-item link">
+          <a href={`mailto:${BUSINESS_EMAIL}`} className="topbar-item link">
             <div className="icon">
               <ion-icon name="mail-outline" aria-hidden="true"></ion-icon>
             </div>
-
-            <span className="span">Orders@nellyangepubandgrill.com</span>
+            <span className="span">{BUSINESS_EMAIL}</span>
           </a>
         </div>
       </div>
 
       {/* HEADER */}
- 
-
       <header className="header" data-header>
-        <div className="container ">
-    <a href="#home" className="header-logo" aria-label="Go to home">
-      <img
-        src="/assets/images/NellyLogo.png"   // <-- replace with your logo path
-        alt="Original BlueGate"
-        className="logo-img"
-      />
-    </a>
+        <div className="container">
+          {/* LOGO (BIGGER & CLEAN) */}
+          <a href="#home" className="header-logo" aria-label="Go to home">
+            <img src="/assets/images/logo01.jpg" alt="Original BlueGate" className="logo-img" />
+          </a>
 
-          <nav className="navbar" data-navbar>
-            <button className="close-btn" aria-label="close menu" data-nav-toggler>
-              <ion-icon name="close-outline" aria-hidden="true"></ion-icon>
-            </button>
-
-            <ul className="navbar-list">
-              <li className="navbar-item">
-                <a href="#home" className="navbar-link hover-underline">
-                  <span>Home</span>
-                </a>
-              </li>
-
-              <li className="navbar-item">
-                <a href="#menu" className="navbar-link hover-underline">
-                  <span>Menu</span>
-                </a>
-              </li>
-
-              <li className="navbar-item">
-                <a href="#about" className="navbar-link hover-underline">
-                  <span>About Us</span>
-                </a>
-              </li>
-
-              <li className="navbar-item">
-                <a href="#events" className="navbar-link hover-underline">
-                  <span>Events</span>
-                </a>
-              </li>
-
-              <li className="navbar-item">
-                <a href="#reservation" className="navbar-link hover-underline">
-                  <span>Contact</span>
-                </a>
-              </li>
-            </ul>
-
-            <div className="text-center">
-              <p className="navbar-title">Visit Us</p>
-              <address>Osu, Mission Street, Accra-Ghana</address>
-              <p>Open: 9.30 am - Midnight</p>
-              <a href="mailto:nellyange20@gmail.com">orders@nellyangepubandgrill.com</a>
-              <p>Booking Request</p>
-              <a href="tel:+233537965155">+233 53 796 5155</a>
-            </div>
+          {/* DESKTOP NAV */}
+          <nav className="navbar-desktop" aria-label="Primary">
+            <a href="#home" className="navlink">
+              Home
+            </a>
+            <a href="#menu" className="navlink">
+              Grills & Sizzlers
+            </a>
+            <a href="#about" className="navlink">
+              Today's Special
+            </a>
+            <a href="#events" className="navlink">
+              Jazz & Afrobeats Nights
+            </a>
+            <a href="#menu" className="navlink">
+              Menu
+            </a>
           </nav>
 
-          <a href="#reservation" className="btn btn-secondary">
+          {/* CTA (Desktop) */}
+          <a href="#reservation" className="btn btn-secondary header-cta">
             <span className="text text-1">Find A Table</span>
             <span className="text text-2" aria-hidden="true">
               Find A Table
             </span>
           </a>
 
-          <button className="nav-open-btn" aria-label="open menu" data-nav-toggler>
+          {/* MOBILE MENU BUTTON */}
+          <button
+            className="nav-open-btn"
+            aria-label="open menu"
+            type="button"
+            onClick={() => setNavOpen(true)}
+          >
             <span className="line line-1"></span>
             <span className="line line-2"></span>
             <span className="line line-3"></span>
           </button>
-
-          <div className="overlay" data-overlay data-nav-toggler></div>
         </div>
+
+        {/* MOBILE DRAWER */}
+        <div className={`mobile-drawer ${navOpen ? "active" : ""}`} aria-hidden={!navOpen}>
+          <div className="mobile-drawer-head">
+            <img src="/assets/images/NellyLogo.png" alt="Original BlueGate" className="drawer-logo" />
+            <button
+              className="drawer-close"
+              aria-label="close menu"
+              type="button"
+              onClick={() => setNavOpen(false)}
+            >
+              <ion-icon name="close-outline" aria-hidden="true"></ion-icon>
+            </button>
+          </div>
+
+          <div className="mobile-drawer-links">
+            <a href="#home" onClick={() => setNavOpen(false)}>
+              Home
+            </a>
+            <a href="#menu" onClick={() => setNavOpen(false)}>
+              Grills & Sizzlers
+            </a>
+            <a href="#about" onClick={() => setNavOpen(false)}>
+              Today's Special
+            </a>
+            <a href="#events" onClick={() => setNavOpen(false)}>
+              Jazz & Afrobeats Nights
+            </a>
+            <a href="#menu" onClick={() => setNavOpen(false)}>
+              Menu
+            </a>
+          </div>
+
+          <div className="mobile-drawer-info">
+            <p className="drawer-title">Visit Us</p>
+            <p>Osu, Mission Street, Accra-Ghana</p>
+            <p>Open: 9.30 am - Midnight</p>
+            <a href={`mailto:${BUSINESS_EMAIL}`}>{BUSINESS_EMAIL}</a>
+            <p className="drawer-title">Booking</p>
+            <a href="tel:+233537965155">+233 53 796 5155</a>
+
+            <a href="#reservation" className="btn btn-secondary drawer-cta" onClick={() => setNavOpen(false)}>
+              <span className="text text-1">Book A Table</span>
+              <span className="text text-2" aria-hidden="true">
+                Book A Table
+              </span>
+            </a>
+          </div>
+        </div>
+
+        {/* OVERLAY */}
+        <div className={`drawer-overlay ${navOpen ? "active" : ""}`} onClick={() => setNavOpen(false)} />
       </header>
 
       <main>
         <article>
-          {/* HERO */}
+          {/* HERO (unchanged from your version; keep your slider JS if you want) */}
           <section className="hero text-center" aria-label="home" id="home">
             <ul className="hero-slider" data-hero-slider>
               <li className="slider-item active" data-hero-slider-item>
                 <div className="slider-bg">
-                  <img
-                    src="/assets/images/hero-slider-1.jpg"
-                    width="1880"
-                    height="950"
-                    alt=""
-                    className="img-cover"
-                  />
+                  <img src="/assets/images/hero-slider-1.jpg" width="1880" height="950" alt="" className="img-cover" />
                 </div>
 
-                <p className="label-2 section-subtitle slider-reveal">Tradational & Hygine</p>
+                <p className="label-2 section-subtitle slider-reveal">Traditional & Hygiene</p>
 
                 <h1 className="display-1 hero-title slider-reveal">
                   For the love of <br />
@@ -174,50 +333,14 @@ export default function App() {
 
               <li className="slider-item" data-hero-slider-item>
                 <div className="slider-bg">
-                  <img
-                    src="/assets/images/hero-slider-2.jpg"
-                    width="1880"
-                    height="950"
-                    alt=""
-                    className="img-cover"
-                  />
+                  <img src="/assets/images/hero-slider-2.jpg" width="1880" height="950" alt="" className="img-cover" />
                 </div>
 
-                <p className="label-2 section-subtitle slider-reveal">delightful experience</p>
+                <p className="label-2 section-subtitle slider-reveal">Delightful experience</p>
 
                 <h1 className="display-1 hero-title slider-reveal">
                   Flavors Inspired by <br />
                   the Seasons
-                </h1>
-
-                <p className="body-2 hero-text slider-reveal">
-                  Come with family & feel the joy of mouthwatering food
-                </p>
-
-                <a href="/menu" className="btn btn-primary slider-reveal">
-                  <span className="text text-1">View Our Menu</span>
-                  <span className="text text-2" aria-hidden="true">
-                    View Our Menu
-                  </span>
-                </a>
-              </li>
-
-              <li className="slider-item" data-hero-slider-item>
-                <div className="slider-bg">
-                  <img
-                    src="/assets/images/hero-slider-1.jpg"
-                    width="1880"
-                    height="950"
-                    alt=""
-                    className="img-cover"
-                  />
-                </div>
-
-                <p className="label-2 section-subtitle slider-reveal">amazing & delicious</p>
-
-                <h1 className="display-1 hero-title slider-reveal">
-                  Where every flavor <br />
-                  tells a story
                 </h1>
 
                 <p className="body-2 hero-text slider-reveal">
@@ -230,6 +353,35 @@ export default function App() {
                     View Our Menu
                   </span>
                 </a>
+              </li>
+
+              <li className="slider-item" data-hero-slider-item>
+                <div className="slider-bg">
+                  <img src="/assets/images/hero-slider-1.jpg" width="1880" height="950" alt="" className="img-cover" />
+                </div>
+
+               <p className="label-2 section-subtitle slider-reveal">
+  Valentine’s Day Special
+</p>
+
+<h1 className="display-1 hero-title slider-reveal">
+  Celebrate Love at <br />
+  Original Blue Gate
+</h1>
+
+<p className="body-2 hero-text slider-reveal">
+  Join us this Valentine’s Day for an unforgettable evening of great food,
+  smooth jazz & afrobeats, romantic ambiance, and special couple packages.
+  Limited tables available.
+</p>
+
+<a href="/valentines-booking" className="btn btn-primary slider-reveal">
+  <span className="text text-1">Reserve for Valentine’s Day</span>
+  <span className="text text-2" aria-hidden="true">
+    Reserve for Valentine’s Day
+  </span>
+</a>
+
               </li>
             </ul>
 
@@ -247,278 +399,51 @@ export default function App() {
             </a>
           </section>
 
-          {/* MENU */}
+          {/* MENU (UPDATED CARDS WITH IMAGES) */}
           <MenuSection />
 
+          {/* ... keep your other sections as they are ... */}
 
-          {/* SERVICE */}
-          <section className="section service bg-black-10 text-center" aria-label="service">
-            <div className="container">
-              <p className="section-subtitle label-2">Flavors For Royalty</p>
-              <h2 className="headline-1 section-title">We Offer Top Notch</h2>
-
-              <p className="section-text">
-                 At Original BlueGate, we serve freshly prepared meals made with quality ingredients
-      and authentic local recipes. From delicious rice dishes and grilled meats to
-      traditional Ghanaian favorites, every meal is cooked with care to give you great
-      taste, generous portions, and real value.
-              </p>
-
-              <ul className="grid-list">
-                <li>
-                  <div className="service-card">
-                    <a href="#" className="has-before hover:shine">
-                      <figure className="card-banner img-holder" style={{ "--width": 285, "--height": 336 }}>
-                        <img
-                          src="/assets/images/service-1.jpg"
-                          width="285"
-                          height="336"
-                          loading="lazy"
-                          alt="Breakfast"
-                          className="img-cover"
-                        />
-                      </figure>
-                    </a>
-
-                    <div className="card-content">
-                      <h3 className="title-4 card-title">
-                        <a href="#">Grills & Sizzlers</a>
-                      </h3>
-
-                      <a href="#menu" className="btn-text hover-underline label-2">
-                        View Menu
-                      </a>
-                    </div>
-                  </div>
-                </li>
-
-                <li>
-                  <div className="service-card">
-                    <a href="#" className="has-before hover:shine">
-                      <figure className="card-banner img-holder" style={{ "--width": 285, "--height": 336 }}>
-                        <img
-                          src="/assets/images/service-2.jpg"
-                          width="285"
-                          height="336"
-                          loading="lazy"
-                          alt="Appetizers"
-                          className="img-cover"
-                        />
-                      </figure>
-                    </a>
-
-                    <div className="card-content">
-                      <h3 className="title-4 card-title">
-                        <a href="#">African Cuisine</a>
-                      </h3>
-
-                      <a href="#menu" className="btn-text hover-underline label-2">
-                        View Menu
-                      </a>
-                    </div>
-                  </div>
-                </li>
-
-                <li>
-                  <div className="service-card">
-                    <a href="#" className="has-before hover:shine">
-                      <figure className="card-banner img-holder" style={{ "--width": 285, "--height": 336 }}>
-                        <img
-                          src="/assets/images/service-3.jpg"
-                          width="285"
-                          height="336"
-                          loading="lazy"
-                          alt="Drinks"
-                          className="img-cover"
-                        />
-                      </figure>
-                    </a>
-
-                    <div className="card-content">
-                      <h3 className="title-4 card-title">
-                        <a href="#">Drinks</a>
-                      </h3>
-
-                      <a href="#menu" className="btn-text hover-underline label-2">
-                        View Menu
-                      </a>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-
-              <img
-                src="/assets/images/shape-1.png"
-                width="246"
-                height="412"
-                loading="lazy"
-                alt="shape"
-                className="shape shape-1 move-anim"
-              />
-              <img
-                src="/assets/images/shape-2.png"
-                width="343"
-                height="345"
-                loading="lazy"
-                alt="shape"
-                className="shape shape-2 move-anim"
-              />
-            </div>
-          </section>
-
-          {/* ABOUT */}
-          <section className="section about text-center" aria-labelledby="about-label" id="about">
-            <div className="container">
-              <div className="about-content">
-                <p className="label-2 section-subtitle" id="about-label">
-                  Our Story
-                </p>
-
-                <h2 className="headline-1 section-title">Where Good Food Meets Great Moments</h2>
-
-                <p className="section-text">
-                   Original BlueGate was created to bring people together over good food and a warm,
-  welcoming atmosphere. We specialize in well-prepared local and continental dishes,
-  served fresh and full of flavor. Whether you are dining in with family, meeting friends,
-  or ordering for takeaway, our goal is to give you a satisfying experience every time.
-                </p>
-
-                <div className="contact-label">Book Through Call</div>
-
-                <a href="tel:+233537965155" className="body-1 contact-number hover-underline">
-                  +233 53 796 5155
-                </a>
-
-                <a href="#" className="btn btn-primary">
-                  <span className="text text-1">Read More</span>
-                  <span className="text text-2" aria-hidden="true">
-                    Read More
-                  </span>
-                </a>
-              </div>
-
-              <figure className="about-banner">
-                <img
-                  src="/assets/images/hero-slider-1.jpg"
-                  width="570"
-                  height="570"
-                  loading="lazy"
-                  alt="about banner"
-                  className="w-100"
-                  data-parallax-item
-                  data-parallax-speed="1"
-                />
-
-                <div className="abs-img abs-img-1 has-before" data-parallax-item data-parallax-speed="1.75">
-
-                </div>
-
-                <div className="abs-img abs-img-2 has-before">
-                  <img src="/assets/images/badge-2.png" width="133" height="134" loading="lazy" alt="" />
-                </div>
-              </figure>
-
-              <img src="/assets/images/shape-3.png" width="197" height="194" loading="lazy" alt="" className="shape" />
-            </div>
-          </section>
-
-          {/* SPECIAL DISH */}
-          <section className="special-dish text-center" aria-labelledby="dish-label">
-            <div className="special-dish-banner">
-              <img
-                src="/assets/images/service-1.jpg"
-                width="940"
-                height="900"
-                loading="lazy"
-                alt="special dish"
-                className="img-cover"
-              />
-            </div>
-
-            <div className="special-dish-content bg-black-10">
-              <div className="container">
-                <img src="/assets/images/badge-1.png" width="28" height="41" loading="lazy" alt="badge" className="abs-img" />
-
-                <p className="section-subtitle label-2">Special Dish</p>
-
-                <h2 className="headline-1 section-title">Grills & Sizzlers</h2>
-
-                <p className="section-text">
-                 Our grills and sizzlers are prepared fresh and served hot, using well-seasoned meats
-  and carefully selected ingredients. Each dish is cooked to bring out rich flavors,
-  tender textures, and a satisfying taste that keeps our customers coming back.
-                </p>
-
-                <div className="wrapper">
-                  <del className="del body-3">₵140.00</del>
-                  <span className="span body-1">₵100.00</span>
-                </div>
-
-                <a href="#menu" className="btn btn-primary">
-                  <span className="text text-1">View All Menu</span>
-                  <span className="text text-2" aria-hidden="true">
-                    View All Menu
-                  </span>
-                </a>
-              </div>
-            </div>
-
-            <img src="/assets/images/shape-4.png" width="179" height="359" loading="lazy" alt="" className="shape shape-1" />
-            <img src="/assets/images/shape-9.png" width="351" height="462" loading="lazy" alt="" className="shape shape-2" />
-          </section>
-
-
-
-          {/* TESTIMONIALS */}
-          <section
-            className="section testi text-center has-bg-image"
-            style={{ backgroundImage: "url('/assets/images/hero-slider-1.jpg')" }}
-            aria-label="testimonials"
-            id="testimonial"
-          >
-            <div className="container">
-              <div className="quote">”</div>
-
-              <p className="headline-2 testi-text">
-                I wanted to thank you for inviting me down for that amazing dinner the other night. The food was
-                extraordinary.
-              </p>
-
-              <div className="wrapper">
-                <div className="separator"></div>
-                <div className="separator"></div>
-                <div className="separator"></div>
-              </div>
-
-              <div className="profile">
-                <img src="/assets/images/testi-avatar.jpg" width="100" height="100" loading="lazy" alt="Sam Jhonson" className="img" />
-                <p className="label-2 profile-name">Sam Jhonson</p>
-              </div>
-            </div>
-          </section>
-
-          {/* RESERVATION */}
+          {/* RESERVATION (UPDATED - SENDS EMAIL) */}
           <section className="reservation" id="reservation">
             <div className="container">
               <div className="form reservation-form bg-black-10">
-                <form action="" className="form-left">
+                <form className="form-left" onSubmit={submitBooking}>
                   <h2 className="headline-1 text-center">Online Reservation</h2>
 
                   <p className="form-text text-center">
-                    Booking request <a href="tel:+233537965155" className="link">+233 53 796 5155</a>
-                    {" "}or fill out the order form
+                    Booking request{" "}
+                    <a href="tel:+233537965155" className="link">
+                      +233 53 796 5155
+                    </a>{" "}
+                    or fill out the order form
                   </p>
 
                   <div className="input-wrapper">
-                    <input type="text" name="name" placeholder="Your Name" autoComplete="off" className="input-field" />
-                    <input type="tel" name="phone" placeholder="Phone Number" autoComplete="off" className="input-field" />
+                    <input
+                      type="text"
+                      name="name"
+                      placeholder="Your Name"
+                      autoComplete="off"
+                      className="input-field"
+                      value={booking.name}
+                      onChange={onBookingChange}
+                    />
+                    <input
+                      type="tel"
+                      name="phone"
+                      placeholder="Phone Number"
+                      autoComplete="off"
+                      className="input-field"
+                      value={booking.phone}
+                      onChange={onBookingChange}
+                    />
                   </div>
 
                   <div className="input-wrapper">
                     <div className="icon-wrapper">
                       <ion-icon name="person-outline" aria-hidden="true"></ion-icon>
-
-                      <select name="person" className="input-field">
+                      <select name="persons" className="input-field" value={booking.persons} onChange={onBookingChange}>
                         <option value="1-person">1 Person</option>
                         <option value="2-person">2 Person</option>
                         <option value="3-person">3 Person</option>
@@ -527,20 +452,24 @@ export default function App() {
                         <option value="6-person">6 Person</option>
                         <option value="7-person">7 Person</option>
                       </select>
-
                       <ion-icon name="chevron-down" aria-hidden="true"></ion-icon>
                     </div>
 
                     <div className="icon-wrapper">
                       <ion-icon name="calendar-clear-outline" aria-hidden="true"></ion-icon>
-                      <input type="date" name="reservation-date" className="input-field" />
+                      <input
+                        type="date"
+                        name="date"
+                        className="input-field"
+                        value={booking.date}
+                        onChange={onBookingChange}
+                      />
                       <ion-icon name="chevron-down" aria-hidden="true"></ion-icon>
                     </div>
 
                     <div className="icon-wrapper">
                       <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
-
-                      <select name="time" className="input-field">
+                      <select name="time" className="input-field" value={booking.time} onChange={onBookingChange}>
                         <option value="08:00am">08 : 00 am</option>
                         <option value="09:00am">09 : 00 am</option>
                         <option value="10:00am">10 : 00 am</option>
@@ -557,23 +486,32 @@ export default function App() {
                         <option value="09:00pm">09 : 00 pm</option>
                         <option value="10:00pm">10 : 00 pm</option>
                       </select>
-
                       <ion-icon name="chevron-down" aria-hidden="true"></ion-icon>
                     </div>
                   </div>
 
-                  <textarea name="message" placeholder="Message" autoComplete="off" className="input-field"></textarea>
+                  <textarea
+                    name="message"
+                    placeholder="Message"
+                    autoComplete="off"
+                    className="input-field"
+                    value={booking.message}
+                    onChange={onBookingChange}
+                  ></textarea>
 
-                  <button type="submit" className="btn btn-secondary">
-                    <span className="text text-1">Book A Table</span>
-                    <span className="text text-2" aria-hidden="true">Book A Table</span>
+                  {bookingStatus.text ? (
+                    <div className={`form-alert ${bookingStatus.type}`}>{bookingStatus.text}</div>
+                  ) : null}
+
+                  <button type="submit" className="btn btn-secondary" disabled={bookingLoading}>
+                    <span className="text text-1">{bookingLoading ? "Sending..." : "Book A Table"}</span>
+                    <span className="text text-2" aria-hidden="true">
+                      {bookingLoading ? "Sending..." : "Book A Table"}
+                    </span>
                   </button>
                 </form>
 
-                <div
-                  className="form-right text-center"
-                  style={{ backgroundImage: "url('/assets/images/form-pattern.png')" }}
-                >
+                <div className="form-right text-center" style={{ backgroundImage: "url('/assets/images/form-pattern.png')" }}>
                   <h2 className="headline-1 text-center">Contact Us</h2>
 
                   <p className="contact-label">Booking Request</p>
@@ -606,156 +544,19 @@ export default function App() {
             </div>
           </section>
 
-          {/* FEATURES */}
-          <section className="section features text-center" aria-label="features" id="features">
-            <div className="container">
-              <p className="section-subtitle label-2">Why Choose Us</p>
-              <h2 className="headline-1 section-title">Our Strength</h2>
-
-              <ul className="grid-list">
-                <li className="feature-item">
-                  <div className="feature-card">
-                    <div className="card-icon">
-                      <img src="/assets/images/features-icon-1.png" width="100" height="80" loading="lazy" alt="icon" />
-                    </div>
-
-                    <h3 className="title-2 card-title">Hygienic Food</h3>
-                    <p className="label-1 card-text">Lorem Ipsum is simply dummy printing and typesetting.</p>
-                  </div>
-                </li>
-
-                <li className="feature-item">
-                  <div className="feature-card">
-                    <div className="card-icon">
-                      <img src="/assets/images/features-icon-2.png" width="100" height="80" loading="lazy" alt="icon" />
-                    </div>
-
-                    <h3 className="title-2 card-title">Fresh Environment</h3>
-                    <p className="label-1 card-text">Lorem Ipsum is simply dummy printing and typesetting.</p>
-                  </div>
-                </li>
-
-                <li className="feature-item">
-                  <div className="feature-card">
-                    <div className="card-icon">
-                      <img src="/assets/images/features-icon-3.png" width="100" height="80" loading="lazy" alt="icon" />
-                    </div>
-
-                    <h3 className="title-2 card-title">Skilled Chefs</h3>
-                    <p className="label-1 card-text">Lorem Ipsum is simply dummy printing and typesetting.</p>
-                  </div>
-                </li>
-
-                <li className="feature-item">
-                  <div className="feature-card">
-                    <div className="card-icon">
-                      <img src="/assets/images/features-icon-4.png" width="100" height="80" loading="lazy" alt="icon" />
-                    </div>
-
-                    <h3 className="title-2 card-title">Event & Party</h3>
-                    <p className="label-1 card-text">Lorem Ipsum is simply dummy printing and typesetting.</p>
-                  </div>
-                </li>
-              </ul>
-
-              <img src="/assets/images/shape-7.png" width="208" height="178" loading="lazy" alt="shape" className="shape shape-1" />
-              <img src="/assets/images/shape-8.png" width="120" height="115" loading="lazy" alt="shape" className="shape shape-2" />
-            </div>
-          </section>
-
-          {/* EVENT */}
-          <section className="section event bg-black-10" aria-label="event" id="events">
-            <div className="container">
-              <p className="section-subtitle label-2 text-center">Recent Updates</p>
-              <h2 className="section-title headline-1 text-center">Upcoming Event</h2>
-
-              <ul className="grid-list">
-                <li>
-                  <div className="event-card has-before hover:shine">
-                    <div className="card-banner img-holder" style={{ "--width": 350, "--height": 450 }}>
-                      <img
-                        src="/assets/images/event-1.jpg"
-                        width="350"
-                        height="450"
-                        loading="lazy"
-                        alt="Jazz And Afrobeats Night"
-                        className="img-cover"
-                      />
-
-                      <time className="publish-date label-2" dateTime="2026-02-14">
-                        14/02/2026
-                      </time>
-                    </div>
-
-                    <div className="card-content">
-                      <p className="section-subtitle label-2 text-center">Jazz And Afrobeats Night</p>
-                      <h3 className="card-title title-2 text-center">Come With Family & Friends for quality experience</h3>
-                    </div>
-                  </div>
-                </li>
-
-                <li>
-                  <div className="event-card has-before hover:shine">
-                    <div className="card-banner img-holder" style={{ "--width": 350, "--height": 450 }}>
-                      <img
-                        src="/assets/images/event-2.jpg"
-                        width="350"
-                        height="450"
-                        loading="lazy"
-                        alt="Flavour so good you’ll try to eat with your eyes."
-                        className="img-cover"
-                      />
-
-                      <time className="publish-date label-2" dateTime="2025-09-08">
-                        08/09/2026
-                      </time>
-                    </div>
-
-                    <div className="card-content">
-                      <p className="section-subtitle label-2 text-center">Healthy Food</p>
-                      <h3 className="card-title title-2 text-center">Flavour so good you’ll try to eat with your eyes.</h3>
-                    </div>
-                  </div>
-                </li>
-
-                <li>
-                  <div className="event-card has-before hover:shine">
-                    <div className="card-banner img-holder" style={{ "--width": 350, "--height": 450 }}>
-                      <img
-                        src="/assets/images/event-3.jpg"
-                        width="350"
-                        height="450"
-                        loading="lazy"
-                        alt="Flavour so good you’ll try to eat with your eyes."
-                        className="img-cover"
-                      />
-
-                      <time className="publish-date label-2" dateTime="2025-09-03">
-                        03/09/2026
-                      </time>
-                    </div>
-
-                    <div className="card-content">
-                      <p className="section-subtitle label-2 text-center">Recipie</p>
-                      <h3 className="card-title title-2 text-center">Flavour so good you’ll try to eat with your eyes.</h3>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </section>
+          {/* keep your rest... */}
         </article>
       </main>
 
-      {/* FOOTER */}
+      {/* FOOTER (keep yours) */}
       <footer className="footer section has-bg-image text-center" style={{ backgroundImage: "url('/assets/images/footer-bg.jpg')" }}>
         <div className="container">
           <div className="footer-top grid-list">
             <div className="footer-brand has-before has-after">
               <address className="body-4">Osu, Mission Street, Accra-Ghana</address>
 
-              <a href="mailto:orders@nellyangepubandgrill.com" className="body-4 contact-link">
-                orders@nellyangepubandgrill.com
+              <a href={`mailto:${BUSINESS_EMAIL}`} className="body-4 contact-link">
+                {BUSINESS_EMAIL}
               </a>
 
               <a href="tel:+233537965155" className="body-4 contact-link">
@@ -773,44 +574,88 @@ export default function App() {
               <p className="title-1">Get News &amp; Offers</p>
 
               <p className="label-1">
-                Subscribe us &amp; Get <span className="span">25% Off.</span> with Mastercard
+                Buy and &amp; Get <span className="span">25% Off.</span> with Mastercard
               </p>
 
               <form action="" className="input-wrapper">
                 <div className="icon-wrapper">
                   <ion-icon name="mail-outline" aria-hidden="true"></ion-icon>
-
                   <input type="email" name="email_address" placeholder="Your email" autoComplete="off" className="input-field" />
                 </div>
 
                 <button type="submit" className="btn btn-secondary">
                   <span className="text text-1">Subscribe</span>
-                  <span className="text text-2" aria-hidden="true">Subscribe</span>
+                  <span className="text text-2" aria-hidden="true">
+                    Subscribe
+                  </span>
                 </button>
               </form>
             </div>
 
             <ul className="footer-list">
-              <li><a href="#home" className="label-2 footer-link hover-underline">Home</a></li>
-              <li><a href="#menu" className="label-2 footer-link hover-underline">Menus</a></li>
-              <li><a href="#about" className="label-2 footer-link hover-underline">About Us</a></li>
-              <li><a href="#events" className="label-2 footer-link hover-underline">Events</a></li>
-              <li><a href="#reservation" className="label-2 footer-link hover-underline">Contact</a></li>
+              <li>
+                <a href="#home" className="label-2 footer-link hover-underline">
+                  Home
+                </a>
+              </li>
+              <li>
+                <a href="#menu" className="label-2 footer-link hover-underline">
+                  Menus
+                </a>
+              </li>
+              <li>
+                <a href="#about" className="label-2 footer-link hover-underline">
+                  About Us
+                </a>
+              </li>
+              <li>
+                <a href="#events" className="label-2 footer-link hover-underline">
+                  Events
+                </a>
+              </li>
+              <li>
+                <a href="#reservation" className="label-2 footer-link hover-underline">
+                  Contact
+                </a>
+              </li>
             </ul>
 
             <ul className="footer-list">
-              <li><a href="#" className="label-2 footer-link hover-underline">Facebook</a></li>
-              <li><a href="#" className="label-2 footer-link hover-underline">Instagram</a></li>
-              <li><a href="#" className="label-2 footer-link hover-underline">X</a></li>
-              <li><a href="#" className="label-2 footer-link hover-underline">Tiktok</a></li>
-              <li><a href="#" className="label-2 footer-link hover-underline">Google Map</a></li>
+              <li>
+                <a href="#" className="label-2 footer-link hover-underline">
+                  Facebook
+                </a>
+              </li>
+              <li>
+                <a href="#" className="label-2 footer-link hover-underline">
+                  Instagram
+                </a>
+              </li>
+              <li>
+                <a href="#" className="label-2 footer-link hover-underline">
+                  X
+                </a>
+              </li>
+              <li>
+                <a href="#" className="label-2 footer-link hover-underline">
+                  Tiktok
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.google.com/maps/search/?api=1&query=Osu+Mission+Street+Accra+Ghana"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="label-2 footer-link hover-underline"
+                >
+                  Google Map
+                </a>
+              </li>
             </ul>
           </div>
 
           <div className="footer-bottom">
-            <p className="copyright">
-              &copy; 2026 Nelly Ange Original Blue Gate Restaurant. All Rights Reserved
-            </p>
+            <p className="copyright">&copy; 2026 Nelly Ange Original Blue Gate Restaurant. All Rights Reserved</p>
           </div>
         </div>
       </footer>

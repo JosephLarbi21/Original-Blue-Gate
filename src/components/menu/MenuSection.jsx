@@ -38,27 +38,32 @@ export default function MenuSection() {
           ))}
         </div>
 
-        {/* Items */}
-        <div className="menu-items">
+        {/* Cards */}
+        <div className="menu-cards">
           {activeData?.items?.map((item) => (
-            <div className="menu-item-card" key={item.name}>
-              <div className="menu-item-left">
-                <p className="menu-item-name">{item.name}</p>
+            <div className="menu-card-box" key={item.name}>
+              <div className="menu-card-img">
+                <img src={item.image} alt={item.name} loading="lazy" />
               </div>
 
-              <div className="menu-item-right">
-                <p className="menu-item-price">{formatPrice(item)}</p>
+              <div className="menu-card-body">
+                <div className="menu-card-top">
+                  <p className="menu-card-name">{item.name}</p>
+                  <p className="menu-card-price">{formatPrice(item)}</p>
+                </div>
 
-                {/* Placeholder button for later cart step */}
+                {item.desc ? <p className="menu-card-desc">{item.desc}</p> : null}
+
+                {/* "Add Now" removed for now */}
+                {/*
                 <button className="menu-add-btn" type="button">
                   Add
                 </button>
+                */}
               </div>
             </div>
           ))}
         </div>
-
-      
       </div>
     </section>
   );
