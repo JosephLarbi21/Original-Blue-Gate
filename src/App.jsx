@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
 import MenuSection from "./components/menu/MenuSection";
-import CookieBanner from "./components/CookieBanner";
 import WhatsAppFloat from "./components/What'sAppFloat";
 import { Routes, Route } from "react-router-dom";
 import ValentinesBooking from "./pages/ValentinesBooking";
@@ -145,8 +144,7 @@ export default function App() {
 
   return (
     <>
-      {/* COOKIE CONSENT */}
-      <CookieBanner />
+     
 
       {/* WHATSAPP FLOAT */}
       <WhatsAppFloat phone={WHATSAPP_NUMBER} />
@@ -252,7 +250,7 @@ export default function App() {
         {/* MOBILE DRAWER */}
         <div className={`mobile-drawer ${navOpen ? "active" : ""}`} aria-hidden={!navOpen}>
           <div className="mobile-drawer-head">
-            <img src="/assets/images/NellyLogo.png" alt="Original BlueGate" className="drawer-logo" />
+            <img src="/assets/images/logo01.jpg" alt="Original BlueGate" className="drawer-logo" />
             <button
               className="drawer-close"
               aria-label="close menu"
@@ -274,7 +272,7 @@ export default function App() {
               Today's Special
             </a>
             <a href="#events" onClick={() => setNavOpen(false)}>
-              Jazz & Afrobeats Nights
+              Jazz & Afrobeats 
             </a>
             <a href="#menu" onClick={() => setNavOpen(false)}>
               Menu

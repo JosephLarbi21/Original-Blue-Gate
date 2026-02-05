@@ -57,7 +57,7 @@
   --fontFamily-dm_sans: 'DM Sans', sans-serif;
 
   /* font-size */
-  --fontSize-display-1: calc(1.3rem + 6.7vw);
+  --fontSize-display-1: calc(1.1rem + 4.7vw);
   --fontSize-headline-1: calc(2rem + 2.5vw);
   --fontSize-headline-2: calc(1.3rem + 2.4vw);
   --fontSize-title-1: calc(1.6rem + 1.2vw);
@@ -2619,7 +2619,7 @@ body{
 .drawer-overlay{
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.65);
+  background: rgba(0, 0, 0, 0.418);
   opacity: 0;
   pointer-events: none;
   transition: 260ms ease;
@@ -3049,7 +3049,7 @@ body{
   .hero .hero-title {
     font-size: 2rem !important;
     line-height: 1.12 !important;
-    font-weight: 700 !important;
+    font-weight: 500 !important;
     margin-bottom: 12px !important;
     text-shadow: 0 10px 28px rgba(0, 0, 0, 0.65) !important;
   }
@@ -3091,4 +3091,43 @@ body{
   .hero .hero-text {
     font-size: 1.65rem !important;
   }
+}
+
+
+/* =========================================
+   STICKY HEADER (NO MOVING / NO HIDE)
+   - keeps header fixed
+   - prevents the "hide" scroll behavior
+========================================= */
+
+.header {
+  position: fixed;          /* keep it pinned */
+  top: 0 !important;        /* always at top */
+  left: 0;
+  width: 100%;
+  transform: translateY(0) !important;
+}
+
+/* JS adds .hide on scroll — we cancel it */
+.header.hide {
+  transform: translateY(0) !important;
+  transition-delay: 0ms !important;
+}
+
+/* Optional: keep topbar visible too (if you want it NOT to slide away) */
+@media (min-width: 575px) {
+  .topbar:has(~ .header.active) {
+    transform: translateY(0) !important;
+  }
+
+  /* your CSS currently moves header down when topbar shows */
+  .header { top: 0 !important; }
+}
+
+/* Optional (recommended): prevent content going under the fixed header */
+main {
+  padding-top: 110px; /* adjust if your header+topbar is taller/shorter */
+}
+@media (max-width: 575px) {
+  main { padding-top: 90px; }
 }
