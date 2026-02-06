@@ -144,7 +144,7 @@ export default function App() {
 
   return (
     <>
-     
+
 
       {/* WHATSAPP FLOAT */}
       <WhatsAppFloat phone={WHATSAPP_NUMBER} />
@@ -219,7 +219,7 @@ export default function App() {
               Today's Special
             </a>
             <a href="#events" className="navlink">
-              Jazz & Afrobeats 
+              Jazz & Afrobeats
             </a>
             <a href="#menu" className="navlink">
               Menu
@@ -272,7 +272,7 @@ export default function App() {
               Today's Special
             </a>
             <a href="#events" onClick={() => setNavOpen(false)}>
-              Jazz & Afrobeats 
+              Jazz & Afrobeats
             </a>
             <a href="#menu" onClick={() => setNavOpen(false)}>
               Menu
@@ -313,12 +313,12 @@ export default function App() {
                 <p className="label-2 section-subtitle slider-reveal">Charcoal Grill Sizzlers</p>
 
                 <h1 className="display-1 hero-title slider-reveal">
-                  For the love of <br />
-                  delicious food
+                  Some 30 years of mouthwatering grills have<br />
+                  become our speciality
                 </h1>
 
                 <p className="body-2 hero-text slider-reveal">
-                  Come with family & feel the joy of mouthwatering food
+                  order now come dine with family and friends
                 </p>
 
                 <a href="#menu" className="btn btn-primary slider-reveal">
@@ -358,27 +358,27 @@ export default function App() {
                   <img src="/assets/images/hero-slider-1.jpg" width="1880" height="950" alt="" className="img-cover" />
                 </div>
 
-               <p className="label-2 section-subtitle slider-reveal">
-  Valentine’s Day Special
-</p>
+                <p className="label-2 section-subtitle slider-reveal">
+                  Valentine’s Day Special
+                </p>
 
-<h1 className="display-1 hero-title slider-reveal">
-  Celebrate Love at <br />
-  Original Blue Gate
-</h1>
+                <h1 className="display-1 hero-title slider-reveal">
+                  Celebrate Love at <br />
+                  Original Blue Gate
+                </h1>
 
-<p className="body-2 hero-text slider-reveal">
-  Join us this Valentine’s Day for an unforgettable evening of great food,
-  smooth jazz & afrobeats, romantic ambiance, and special couple packages.
-  Limited tables available.
-</p>
+                <p className="body-2 hero-text slider-reveal">
+                  Join us this Valentine’s Day for an unforgettable evening of great food,
+                  smooth jazz & afrobeats, romantic ambiance, and special couple packages.
+                  Limited tables available.
+                </p>
 
-<a href="/valentines-booking" className="btn btn-primary slider-reveal">
-  <span className="text text-1">Reserve for Valentine’s Day</span>
-  <span className="text text-2" aria-hidden="true">
-    Reserve for Valentine’s Day
-  </span>
-</a>
+                <a href="/valentines-booking" className="btn btn-primary slider-reveal">
+                  <span className="text text-1">Reserve for Valentine’s Day</span>
+                  <span className="text text-2" aria-hidden="true">
+                    Reserve for Valentine’s Day
+                  </span>
+                </a>
 
               </li>
             </ul>
