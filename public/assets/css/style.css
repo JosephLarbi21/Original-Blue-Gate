@@ -346,7 +346,7 @@ body.nav-active { overflow: hidden; }
   letter-spacing: var(--letterSpacing-5);
   max-width: max-content;
   border: 2px solid var(--gold-crayola);
-  padding: 12px 45px;
+  padding: 10px 40px;
   overflow: hidden;
   z-index: 1;
 }
@@ -3070,7 +3070,7 @@ body{
     width: 100% !important;
     max-width: 340px !important;
     margin-top: 16px !important;
-    padding: 15px 18px !important;
+    padding: 12px 18px !important;
     font-size: 1.45rem !important;
     border-width: 2px !important;
   }
@@ -3130,4 +3130,292 @@ main {
 }
 @media (max-width: 575px) {
   main { padding-top: 90px; }
+}
+
+
+
+
+/* =========================================================
+   HERO FONT FIX (NO FONT FILES)
+   - Uses Centaur / Eras Medium ITC if installed on device
+   - Otherwise falls back to premium-looking alternatives
+   Paste at the VERY BOTTOM of style.css
+========================================================= */
+
+/* Subtitle: Centaur 13 + light blue */
+.hero .hero-slider li .section-subtitle,
+.hero .hero-slider li p.section-subtitle,
+.hero .hero-slider li .label-2.section-subtitle {
+  font-family: "Centaur", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif !important;
+  font-size: 13px !important;
+  color: var(--brand-blue-2) !important; /* #9fd3ff */
+  font-weight: 400 !important;
+  letter-spacing: 0.15em !important;
+  text-transform: uppercase !important;
+}
+
+/* UL LI P: Centaur 15 */
+.hero .hero-slider li p {
+  font-family: "Centaur", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif !important;
+  font-size: 15px !important;
+  line-height: 1.65 !important;
+}
+
+/* Hero text paragraph (still Centaur 15) */
+.hero .hero-slider li .hero-text {
+  font-family: "Centaur", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif !important;
+  font-size: 15px !important;
+  line-height: 1.7 !important;
+  color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* UL LI H1: Eras Medium ITC size 20 */
+.hero .hero-slider li h1,
+.hero .hero-slider li .hero-title {
+  font-family: "Eras Medium ITC", "Eras Demi ITC", "Trebuchet MS", "Segoe UI", Arial, sans-serif !important;
+  font-size: 40px !important;
+  line-height: 1.25 !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.02em !important;
+}
+
+/* Keep mobile readable, but keep your exact sizes */
+@media (max-width: 768px) {
+  .hero .hero-slider li h1,
+  .hero .hero-slider li .hero-title {
+    font-size: 60px !important;
+  }
+
+  .hero .hero-slider li p,
+  .hero .hero-slider li .hero-text {
+    font-size: 15px !important;
+  }
+
+  .hero .hero-slider li .section-subtitle,
+  .hero .hero-slider li p.section-subtitle {
+    font-size: 13px !important;
+  }
+}
+
+
+/* =========================================================
+   HERO H1 – CURSIVE STYLE (NO FONT FILES)
+   Elegant cursive for hero titles only
+========================================================= */
+
+.hero .hero-slider li h1,
+.hero .hero-slider li .hero-title {
+  font-family:
+    "Lucida Handwriting",
+    "Segoe Script",
+    "Brush Script MT",
+    "Apple Chancery",
+    "Comic Sans MS",
+    cursive !important;
+
+  font-size: 20px !important;     /* keep your size */
+  line-height: 1.25 !important;
+  font-weight: 400 !important;    /* cursive looks better lighter */
+  letter-spacing: 0.04em !important;
+}
+
+/* Mobile – keep it readable */
+@media (max-width: 768px) {
+  .hero .hero-slider li h1,
+  .hero .hero-slider li .hero-title {
+    font-size: 20px !important;
+    line-height: 1.2 !important;
+  }
+}
+
+
+/* =========================================================
+   HERO H1 – "Lucy Said Ok" cursive style (CSS ONLY)
+   No font files, no assets
+========================================================= */
+
+.hero .hero-slider li h1,
+.hero .hero-slider li .hero-title {
+  font-family:
+    "Lucy Said Ok",
+    "Lucida Handwriting",
+    "Segoe Script",
+    "Apple Chancery",
+    "Brush Script MT",
+    cursive !important;
+
+  font-size: 20px !important;     /* your requested size */
+  line-height: 1.25 !important;
+  font-weight: 400 !important;    /* cursive looks best lighter */
+  letter-spacing: 0.04em !important;
+}
+
+/* Mobile – keep it readable */
+@media (max-width: 768px) {
+  .hero .hero-slider li h1,
+  .hero .hero-slider li .hero-title {
+    font-size: 20px !important;
+    line-height: 1.2 !important;
+  }
+}
+
+
+
+/* =========================================================
+   HERO H1 – CLICKER SCRIPT (CURSIVE)
+   Uses your exact font definition
+========================================================= */
+
+/* Font style (as requested) */
+.clicker-script-regular {
+  font-family: "Clicker Script", cursive;
+  font-weight: 900;
+  font-style: normal;
+}
+
+/* Apply Clicker Script ONLY to hero H1 */
+.hero .hero-slider li h1,
+.hero .hero-slider li .hero-title {
+  font-family: "Clicker Script", cursive !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+
+  font-size: 40px !important;   /* your requested size */
+  line-height: 1.25 !important;
+  letter-spacing: 0.04em !important;
+}
+
+
+
+/* =========================================
+   TOPBAR CLICK FIX (LOCATION / PHONE / EMAIL)
+========================================= */
+
+/* Ensure topbar is ABOVE hero & clickable */
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000 !important;
+  pointer-events: auto !important;
+}
+
+/* Header must sit BELOW topbar */
+.header {
+  top: 40px !important; /* adjust if your topbar height differs */
+  z-index: 900 !important;
+}
+
+/* Make all topbar links clickable */
+.topbar a,
+.topbar address {
+  pointer-events: auto !important;
+  cursor: pointer;
+}
+
+/* Prevent icons from blocking clicks */
+.topbar ion-icon,
+.topbar .icon {
+  pointer-events: none;
+}
+
+/* Ensure items behave like links */
+.topbar-item.link,
+.topbar-item a {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
+
+
+/* =========================================
+   TOPBAR CLICK FIX (NOT FIXED)
+   Keeps topbar normal-flow & clickable
+========================================= */
+
+/* Ensure topbar sits ABOVE hero overlays */
+.topbar {
+  position: relative;        /* NOT fixed */
+  z-index: 50 !important;
+  pointer-events: auto !important;
+}
+
+/* Make sure hero is below topbar in stacking */
+.hero {
+  position: relative;
+  z-index: 1;
+}
+
+/* Hero overlay must not block clicks above it */
+.hero .slider-bg::after {
+  pointer-events: none !important;
+}
+
+/* Make all topbar links clickable */
+.topbar a,
+.topbar address {
+  pointer-events: auto !important;
+  cursor: pointer;
+}
+
+/* Prevent icons from blocking taps/clicks */
+.topbar ion-icon,
+.topbar .icon {
+  pointer-events: none;
+}
+
+/* Ensure link rows behave properly */
+.topbar-item,
+.topbar-item.link,
+.topbar-item a {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
+/* Better tap area (mobile-friendly) */
+.topbar a {
+  min-height: 36px;
+}
+
+
+/* =========================================
+   LOGO = SAME HEIGHT AS NAVBAR / HEADER
+========================================= */
+
+/* Ensure header has a consistent height */
+.header .container {
+  min-height: 80px;          /* desktop navbar height */
+  display: flex;
+  align-items: center;
+}
+
+/* Logo wrapper takes full navbar height */
+.header-logo {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* Logo image scales to navbar height */
+.logo-img {
+  height: 100%;
+  max-height: 80px;          /* match navbar height */
+  width: auto;
+  object-fit: contain;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .header .container {
+    min-height: 64px;        /* mobile navbar height */
+  }
+
+  .logo-img {
+    max-height: 64px;
+  }
 }
