@@ -1,15 +1,12 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import MenuSection from "./components/menu/MenuSection";
 import WhatsAppFloat from "./components/What'sAppFloat";
-import { Routes, Route } from "react-router-dom";
-import ValentinesBooking from "./pages/ValentinesBooking";
-
 
 const BUSINESS_EMAIL = "orders@nellyangepubandgrill.com";
 const WHATSAPP_NUMBER = "233537965155"; // change if different (no + sign)
 
 export default function App() {
-  // ---- Preloader (keeps your existing behavior) ----
+  // ---- Preloader ----
   useEffect(() => {
     const preloader = document.querySelector("[data-preaload]");
     const runPreload = () => {
@@ -22,19 +19,17 @@ export default function App() {
     else window.addEventListener("load", runPreload, { once: true });
   }, []);
 
-  // ---- Navbar toggle (React-safe; removes mobile crash) ----
+  // ---- Navbar toggle ----
   const [navOpen, setNavOpen] = useState(false);
 
   useEffect(() => {
     document.body.classList.toggle("nav-active", navOpen);
 
-    // close on ESC
     const onKeyDown = (e) => {
       if (e.key === "Escape") setNavOpen(false);
     };
     window.addEventListener("keydown", onKeyDown);
 
-    // close when resizing to desktop
     const onResize = () => {
       if (window.innerWidth >= 1200) setNavOpen(false);
     };
@@ -98,7 +93,6 @@ export default function App() {
     e.preventDefault();
     setBookingStatus({ type: "", text: "" });
 
-    // basic validation
     if (!booking.name.trim() || !booking.phone.trim() || !booking.date) {
       setBookingStatus({ type: "error", text: "Please enter your name, phone number and date." });
       return;
@@ -116,13 +110,9 @@ export default function App() {
       });
 
       const data = await res.json();
-
       if (!res.ok) throw new Error(data?.message || "Failed to send booking.");
 
-      setBookingStatus({
-        type: "success",
-        text: "Booking sent successfully. We will contact you shortly.",
-      });
+      setBookingStatus({ type: "success", text: "Booking sent successfully. We will contact you shortly." });
 
       setBooking({
         name: "",
@@ -144,8 +134,6 @@ export default function App() {
 
   return (
     <>
-
-
       {/* WHATSAPP FLOAT */}
       <WhatsAppFloat phone={WHATSAPP_NUMBER} />
 
@@ -202,45 +190,25 @@ export default function App() {
       {/* HEADER */}
       <header className="header" data-header>
         <div className="container">
-          {/* LOGO (BIGGER & CLEAN) */}
           <a href="#home" className="header-logo" aria-label="Go to home">
             <img src="/assets/images/logo01.jpg" alt="Original BlueGate" className="logo-img" />
           </a>
 
           {/* DESKTOP NAV */}
           <nav className="navbar-desktop" aria-label="Primary">
-            <a href="#home" className="navlink">
-              Home
-            </a>
-            <a href="#menu" className="navlink">
-              Grills & Sizzlers
-            </a>
-            <a href="#about" className="navlink">
-              Today's Special
-            </a>
-            <a href="#events" className="navlink">
-              Jazz & Afrobeats
-            </a>
-            <a href="#menu" className="navlink">
-              Menu
-            </a>
+            <a href="#home" className="navlink">Home</a>
+            <a href="#grills" className="navlink">Grills & Sizzlers</a>
+            <a href="#special" className="navlink">Today's Special</a>
+            <a href="#jazz" className="navlink">Jazz & Afrobeats</a>
+            <a href="#menu" className="navlink">Menu</a>
           </nav>
 
-          {/* CTA (Desktop) */}
           <a href="#reservation" className="btn btn-secondary header-cta">
             <span className="text text-1">Find A Table</span>
-            <span className="text text-2" aria-hidden="true">
-              Find A Table
-            </span>
+            <span className="text text-2" aria-hidden="true">Find A Table</span>
           </a>
 
-          {/* MOBILE MENU BUTTON */}
-          <button
-            className="nav-open-btn"
-            aria-label="open menu"
-            type="button"
-            onClick={() => setNavOpen(true)}
-          >
+          <button className="nav-open-btn" aria-label="open menu" type="button" onClick={() => setNavOpen(true)}>
             <span className="line line-1"></span>
             <span className="line line-2"></span>
             <span className="line line-3"></span>
@@ -251,32 +219,17 @@ export default function App() {
         <div className={`mobile-drawer ${navOpen ? "active" : ""}`} aria-hidden={!navOpen}>
           <div className="mobile-drawer-head">
             <img src="/assets/images/logo01.jpg" alt="Original BlueGate" className="drawer-logo" />
-            <button
-              className="drawer-close"
-              aria-label="close menu"
-              type="button"
-              onClick={() => setNavOpen(false)}
-            >
+            <button className="drawer-close" aria-label="close menu" type="button" onClick={() => setNavOpen(false)}>
               <ion-icon name="close-outline" aria-hidden="true"></ion-icon>
             </button>
           </div>
 
           <div className="mobile-drawer-links">
-            <a href="#home" onClick={() => setNavOpen(false)}>
-              Home
-            </a>
-            <a href="#menu" onClick={() => setNavOpen(false)}>
-              Grills & Sizzlers
-            </a>
-            <a href="#about" onClick={() => setNavOpen(false)}>
-              Today's Special
-            </a>
-            <a href="#events" onClick={() => setNavOpen(false)}>
-              Jazz & Afrobeats
-            </a>
-            <a href="#menu" onClick={() => setNavOpen(false)}>
-              Menu
-            </a>
+            <a href="#home" onClick={() => setNavOpen(false)}>Home</a>
+            <a href="#grills" onClick={() => setNavOpen(false)}>Grills & Sizzlers</a>
+            <a href="#special" onClick={() => setNavOpen(false)}>Today's Special</a>
+            <a href="#jazz" onClick={() => setNavOpen(false)}>Jazz & Afrobeats</a>
+            <a href="#menu" onClick={() => setNavOpen(false)}>Menu</a>
           </div>
 
           <div className="mobile-drawer-info">
@@ -284,25 +237,23 @@ export default function App() {
             <p>Osu, Mission Street, Accra-Ghana</p>
             <p>Open: 9.30 am - Midnight</p>
             <a href={`mailto:${BUSINESS_EMAIL}`}>{BUSINESS_EMAIL}</a>
+
             <p className="drawer-title">Booking</p>
             <a href="tel:+233537965155">+233 53 796 5155</a>
 
             <a href="#reservation" className="btn btn-secondary drawer-cta" onClick={() => setNavOpen(false)}>
               <span className="text text-1">Book A Table</span>
-              <span className="text text-2" aria-hidden="true">
-                Book A Table
-              </span>
+              <span className="text text-2" aria-hidden="true">Book A Table</span>
             </a>
           </div>
         </div>
 
-        {/* OVERLAY */}
         <div className={`drawer-overlay ${navOpen ? "active" : ""}`} onClick={() => setNavOpen(false)} />
       </header>
 
       <main>
         <article>
-          {/* HERO (unchanged from your version; keep your slider JS if you want) */}
+          {/* HERO */}
           <section className="hero text-center" aria-label="home" id="home">
             <ul className="hero-slider" data-hero-slider>
               <li className="slider-item active" data-hero-slider-item>
@@ -313,19 +264,15 @@ export default function App() {
                 <p className="label-2 section-subtitle slider-reveal">Charcoal Grill Sizzlers</p>
 
                 <h1 className="display-1 hero-title slider-reveal">
-                  Some 30 years of mouthwatering grills have<br />
+                  Some 30 years of mouthwatering grills have <br />
                   become our speciality
                 </h1>
 
-                <p className="body-2 hero-text slider-reveal">
-                  order now come dine with family and friends
-                </p>
+                <p className="body-2 hero-text slider-reveal">order now come dine with family and friends</p>
 
                 <a href="#menu" className="btn btn-primary slider-reveal">
                   <span className="text text-1">View Our Menu</span>
-                  <span className="text text-2" aria-hidden="true">
-                    View Our Menu
-                  </span>
+                  <span className="text text-2" aria-hidden="true">View Our Menu</span>
                 </a>
               </li>
 
@@ -341,15 +288,11 @@ export default function App() {
                   the Seasons
                 </h1>
 
-                <p className="body-2 hero-text slider-reveal">
-                  Come with family & feel the joy of mouthwatering food
-                </p>
+                <p className="body-2 hero-text slider-reveal">Come with family & feel the joy of mouthwatering food</p>
 
                 <a href="#menu" className="btn btn-primary slider-reveal">
                   <span className="text text-1">View Our Menu</span>
-                  <span className="text text-2" aria-hidden="true">
-                    View Our Menu
-                  </span>
+                  <span className="text text-2" aria-hidden="true">View Our Menu</span>
                 </a>
               </li>
 
@@ -358,9 +301,7 @@ export default function App() {
                   <img src="/assets/images/hero-slider-1.jpg" width="1880" height="950" alt="" className="img-cover" />
                 </div>
 
-                <p className="label-2 section-subtitle slider-reveal">
-                  Valentine’s Day Special
-                </p>
+                <p className="label-2 section-subtitle slider-reveal">Valentine’s Day Special</p>
 
                 <h1 className="display-1 hero-title slider-reveal">
                   Celebrate Love at <br />
@@ -368,18 +309,14 @@ export default function App() {
                 </h1>
 
                 <p className="body-2 hero-text slider-reveal">
-                  Join us this Valentine’s Day for an unforgettable evening of great food,
-                  smooth jazz & afrobeats, romantic ambiance, and special couple packages.
-                  Limited tables available.
+                  Join us this Valentine’s Day for an unforgettable evening of great food, smooth jazz & afrobeats,
+                  romantic ambiance, and special couple packages. Limited tables available.
                 </p>
 
-                <a href="/valentines-booking" className="btn btn-primary slider-reveal">
+                <a href="#reservation" className="btn btn-primary slider-reveal">
                   <span className="text text-1">Reserve for Valentine’s Day</span>
-                  <span className="text text-2" aria-hidden="true">
-                    Reserve for Valentine’s Day
-                  </span>
+                  <span className="text text-2" aria-hidden="true">Reserve for Valentine’s Day</span>
                 </a>
-
               </li>
             </ul>
 
@@ -397,12 +334,19 @@ export default function App() {
             </a>
           </section>
 
-          {/* MENU (UPDATED CARDS WITH IMAGES) */}
+          {/* GRILLS & SIZZLERS */}
+          <GrillsSizzlersSection />
+
+          {/* TODAY'S SPECIAL */}
+          <TodaysSpecialSection />
+
+          {/* JAZZ & AFROBEATS */}
+          <JazzAfrobeatsSection />
+
+          {/* MENU */}
           <MenuSection />
 
-          {/* ... keep your other sections as they are ... */}
-
-          {/* RESERVATION (UPDATED - SENDS EMAIL) */}
+          {/* RESERVATION */}
           <section className="reservation" id="reservation">
             <div className="container">
               <div className="form reservation-form bg-black-10">
@@ -455,13 +399,7 @@ export default function App() {
 
                     <div className="icon-wrapper">
                       <ion-icon name="calendar-clear-outline" aria-hidden="true"></ion-icon>
-                      <input
-                        type="date"
-                        name="date"
-                        className="input-field"
-                        value={booking.date}
-                        onChange={onBookingChange}
-                      />
+                      <input type="date" name="date" className="input-field" value={booking.date} onChange={onBookingChange} />
                       <ion-icon name="chevron-down" aria-hidden="true"></ion-icon>
                     </div>
 
@@ -497,15 +435,11 @@ export default function App() {
                     onChange={onBookingChange}
                   ></textarea>
 
-                  {bookingStatus.text ? (
-                    <div className={`form-alert ${bookingStatus.type}`}>{bookingStatus.text}</div>
-                  ) : null}
+                  {bookingStatus.text ? <div className={`form-alert ${bookingStatus.type}`}>{bookingStatus.text}</div> : null}
 
                   <button type="submit" className="btn btn-secondary" disabled={bookingLoading}>
                     <span className="text text-1">{bookingLoading ? "Sending..." : "Book A Table"}</span>
-                    <span className="text text-2" aria-hidden="true">
-                      {bookingLoading ? "Sending..." : "Book A Table"}
-                    </span>
+                    <span className="text text-2" aria-hidden="true">{bookingLoading ? "Sending..." : "Book A Table"}</span>
                   </button>
                 </form>
 
@@ -525,14 +459,12 @@ export default function App() {
                   <address className="body-4">Osu, Mission Street, Accra-Ghana</address>
 
                   <p className="contact-label">Lunch Time</p>
-
                   <p className="body-4">
                     Monday to Sunday <br />
                     11.00 am - 2.30pm
                   </p>
 
                   <p className="contact-label">Dinner Time</p>
-
                   <p className="body-4">
                     Monday to Sunday <br />
                     05.00 pm - 10.00pm
@@ -541,119 +473,124 @@ export default function App() {
               </div>
             </div>
           </section>
-
-          {/* keep your rest... */}
         </article>
       </main>
 
-      {/* FOOTER (keep yours) */}
-      <footer className="footer section has-bg-image text-center" style={{ backgroundImage: "url('/assets/images/footer-bg.jpg')" }}>
-        <div className="container">
-          <div className="footer-top grid-list">
-            <div className="footer-brand has-before has-after">
-              <address className="body-4">Osu, Mission Street, Accra-Ghana</address>
+      {/* FOOTER */}
+      <footer className="footer-pro" aria-label="Footer">
+        <div className="footer-pro__bg" />
 
-              <a href={`mailto:${BUSINESS_EMAIL}`} className="body-4 contact-link">
-                {BUSINESS_EMAIL}
+        <div className="container footer-pro__container">
+          <div className="footer-pro__top">
+            <div className="footer-pro__brand">
+              <a href="#home" className="footer-pro__logo" aria-label="Original Blue Gate Home">
+                <img src="/assets/images/logo01.jpg" alt="Original Blue Gate" className="footer-pro__logo-img" loading="lazy" />
               </a>
 
-              <a href="tel:+233537965155" className="body-4 contact-link">
-                Booking Request : +233 53 796 5155
-              </a>
-
-              <p className="body-4">Open : 09:00 am - Midnight</p>
-
-              <div className="wrapper">
-                <div className="separator"></div>
-                <div className="separator"></div>
-                <div className="separator"></div>
-              </div>
-
-              <p className="title-1">Get News &amp; Offers</p>
-
-              <p className="label-1">
-                Buy and &amp; Get <span className="span">25% Off.</span> with Mastercard
+              <p className="footer-pro__about">
+                Great food, warm atmosphere, and unforgettable moments. Join us at Original Blue Gate for local & continental
+                dishes, grills, cocktails, and live nights.
               </p>
 
-              <form action="" className="input-wrapper">
-                <div className="icon-wrapper">
-                  <ion-icon name="mail-outline" aria-hidden="true"></ion-icon>
-                  <input type="email" name="email_address" placeholder="Your email" autoComplete="off" className="input-field" />
-                </div>
-
-                <button type="submit" className="btn btn-secondary">
-                  <span className="text text-1">Subscribe</span>
-                  <span className="text text-2" aria-hidden="true">
-                    Subscribe
-                  </span>
-                </button>
-              </form>
+              <div className="footer-pro__badges">
+                <span className="footer-pro__badge">
+                  <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
+                  Daily: 9:30am – Midnight
+                </span>
+                <span className="footer-pro__badge">
+                  <ion-icon name="location-outline" aria-hidden="true"></ion-icon>
+                  Osu, Mission Street • Accra
+                </span>
+              </div>
             </div>
 
-            <ul className="footer-list">
-              <li>
-                <a href="#home" className="label-2 footer-link hover-underline">
-                  Home
-                </a>
-              </li>
-              <li>
-                <a href="#menu" className="label-2 footer-link hover-underline">
-                  Menus
-                </a>
-              </li>
-              <li>
-                <a href="#about" className="label-2 footer-link hover-underline">
-                  About Us
-                </a>
-              </li>
-              <li>
-                <a href="#events" className="label-2 footer-link hover-underline">
-                  Events
-                </a>
-              </li>
-              <li>
-                <a href="#reservation" className="label-2 footer-link hover-underline">
-                  Contact
-                </a>
-              </li>
-            </ul>
+            <div className="footer-pro__col">
+              <h3 className="footer-pro__title">Quick Links</h3>
+              <ul className="footer-pro__links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#grills">Grills & Sizzlers</a></li>
+                <li><a href="#special">Today's Special</a></li>
+                <li><a href="#jazz">Jazz & Afrobeats</a></li>
+                <li><a href="#menu">Menu</a></li>
+                <li><a href="#reservation">Reservations</a></li>
+              </ul>
+            </div>
 
-            <ul className="footer-list">
-              <li>
-                <a href="#" className="label-2 footer-link hover-underline">
-                  Facebook
+            <div className="footer-pro__col">
+              <h3 className="footer-pro__title">Contact</h3>
+
+              <ul className="footer-pro__contact">
+                <li>
+                  <ion-icon name="call-outline" aria-hidden="true"></ion-icon>
+                  <a href="tel:+233537965155">+233 53 796 5155</a>
+                </li>
+                <li>
+                  <ion-icon name="mail-outline" aria-hidden="true"></ion-icon>
+                  <a href={`mailto:${BUSINESS_EMAIL}`}>{BUSINESS_EMAIL}</a>
+                </li>
+                <li>
+                  <ion-icon name="logo-whatsapp" aria-hidden="true"></ion-icon>
+                  <a
+                    href="https://wa.me/233561272734?text=Hello%20Original%20Blue%20Gate%2C%20I%20want%20to%20book%20a%20table%20or%20place%20an%20order."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    WhatsApp: +233 56 127 2734
+                  </a>
+                </li>
+                <li>
+                  <ion-icon name="map-outline" aria-hidden="true"></ion-icon>
+                  <a
+                    href="https://www.google.com/maps/search/?api=1&query=Osu+Mission+Street+Accra+Ghana"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Open in Google Maps
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div className="footer-pro__col footer-pro__newsletter">
+              <h3 className="footer-pro__title">News & Offers</h3>
+              <p className="footer-pro__muted">Subscribe to get updates on events, specials & deals.</p>
+
+              <form className="footer-pro__form" onSubmit={(e) => e.preventDefault()}>
+                <div className="footer-pro__input">
+                  <ion-icon name="mail-outline" aria-hidden="true"></ion-icon>
+                  <input type="email" placeholder="Your email address" autoComplete="email" required />
+                </div>
+
+                <button className="footer-pro__btn" type="submit">Subscribe</button>
+              </form>
+
+              <div className="footer-pro__social">
+                <a href="#" aria-label="Facebook" className="footer-pro__social-link">
+                  <ion-icon name="logo-facebook" aria-hidden="true"></ion-icon>
                 </a>
-              </li>
-              <li>
-                <a href="#" className="label-2 footer-link hover-underline">
-                  Instagram
+                <a href="#" aria-label="Instagram" className="footer-pro__social-link">
+                  <ion-icon name="logo-instagram" aria-hidden="true"></ion-icon>
                 </a>
-              </li>
-              <li>
-                <a href="#" className="label-2 footer-link hover-underline">
-                  X
+                <a href="#" aria-label="X (Twitter)" className="footer-pro__social-link">
+                  <ion-icon name="logo-twitter" aria-hidden="true"></ion-icon>
                 </a>
-              </li>
-              <li>
-                <a href="#" className="label-2 footer-link hover-underline">
-                  Tiktok
+                <a href="#" aria-label="TikTok" className="footer-pro__social-link">
+                  <ion-icon name="logo-tiktok" aria-hidden="true"></ion-icon>
                 </a>
-              </li>
-              <li>
-                <a
-                  href="https://www.google.com/maps/search/?api=1&query=Osu+Mission+Street+Accra+Ghana"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="label-2 footer-link hover-underline"
-                >
-                  Google Map
-                </a>
-              </li>
-            </ul>
+              </div>
+            </div>
           </div>
 
-          <div className="footer-bottom">
-            <p className="copyright">&copy; 2026 Nelly Ange Original Blue Gate Restaurant. All Rights Reserved</p>
+          <div className="footer-pro__bottom">
+            <p className="footer-pro__copyright">
+              &copy; {new Date().getFullYear()} Nelly Ange Original Blue Gate Restaurant. All Rights Reserved.
+            </p>
+
+            <div className="footer-pro__bottom-links">
+              <a href="#reservation">Book a Table</a>
+              <span className="footer-pro__dot">•</span>
+              <a href="#menu">View Menu</a>
+            </div>
           </div>
         </div>
       </footer>
@@ -663,5 +600,167 @@ export default function App() {
         <ion-icon name="chevron-up" aria-hidden="true"></ion-icon>
       </a>
     </>
+  );
+}
+
+/* ===================== SECTIONS ===================== */
+
+function GrillsSizzlersSection() {
+  return (
+    <section className="section pro-section" id="grills" aria-label="Grills and Sizzlers">
+      <div className="container">
+        <p className="label-2 section-subtitle">Signature Flames</p>
+        <h2 className="headline-1 section-title">Grills &amp; Sizzlers</h2>
+        <p className="section-text">
+          Charcoal-grilled favorites, juicy skewers and sizzling platters — prepared fresh and served hot.
+        </p>
+
+        <div className="pro-grid">
+          <article className="pro-card">
+            <div className="pro-card__img">
+              <img src="/assets/images/hero-slider-1.jpg" alt="Charcoal grilled dishes" className="img-cover" />
+            </div>
+            <h3 className="title-2">Charcoal Grill</h3>
+            <p className="body-4">
+              Tilapia, chicken, beef and kebabs seasoned to perfection and grilled over open flame.
+            </p>
+          </article>
+
+          <article className="pro-card">
+            <div className="pro-card__img">
+              <img src="/assets/images/menu-1.png" alt="Sizzling platter" className="img-cover" />
+            </div>
+            <h3 className="title-2">Sizzlers</h3>
+            <p className="body-4">
+              Sizzling platters served with rich sauces, grilled sides and that fresh-from-the-pan aroma.
+            </p>
+          </article>
+
+          <article className="pro-card">
+            <div className="pro-card__img">
+              <img src="/assets/images/menu-2.png" alt="Sides and sauces" className="img-cover" />
+            </div>
+            <h3 className="title-2">Sides &amp; Sauces</h3>
+            <p className="body-4">
+              Banku, kenkey, fries, fried plantain, shito, pepper sauce and more to match your grill.
+            </p>
+          </article>
+        </div>
+
+        <div className="pro-cta">
+          <a href="#reservation" className="btn btn-secondary">
+            <span className="text text-1">Book a Table</span>
+            <span className="text text-2" aria-hidden="true">Book a Table</span>
+          </a>
+          <a href="#menu" className="btn btn-primary">
+            <span className="text text-1">View Menu</span>
+            <span className="text text-2" aria-hidden="true">View Menu</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TodaysSpecialSection() {
+  return (
+    <section className="section pro-section" id="special" aria-label="Today's Special">
+      <div className="container pro-split">
+        <div className="pro-split__text">
+          <p className="label-2 section-subtitle">Chef’s Pick</p>
+          <h2 className="headline-1 section-title">Today’s Special</h2>
+          <p className="section-text">
+            Limited dishes prepared fresh daily. Ask our team for today’s available specials.
+          </p>
+
+          <div className="pro-feature">
+            <ion-icon name="sparkles-outline" aria-hidden="true"></ion-icon>
+            <div>
+              <h3 className="title-2">Freshly Prepared</h3>
+              <p className="body-4">Cooked in small batches for maximum taste and quality.</p>
+            </div>
+          </div>
+
+          <div className="pro-feature">
+            <ion-icon name="restaurant-outline" aria-hidden="true"></ion-icon>
+            <div>
+              <h3 className="title-2">Local &amp; Continental</h3>
+              <p className="body-4">A mix of Ghanaian favorites and international plates.</p>
+            </div>
+          </div>
+
+          <div className="pro-feature">
+            <ion-icon name="wine-outline" aria-hidden="true"></ion-icon>
+            <div>
+              <h3 className="title-2">Perfect Pairings</h3>
+              <p className="body-4">Enjoy cocktails, wine or soft drinks to match your meal.</p>
+            </div>
+          </div>
+
+          <div className="pro-cta">
+            <a href="#reservation" className="btn btn-secondary">
+              <span className="text text-1">Reserve Now</span>
+              <span className="text text-2" aria-hidden="true">Reserve Now</span>
+            </a>
+          </div>
+        </div>
+
+        <div className="pro-split__media">
+          <div className="pro-media">
+            <img src="/assets/images/about-banner.jpg" alt="Special dish" className="img-cover" />
+          </div>
+          <div className="pro-media">
+            <img src="/assets/images/about-abs-image.jpg" alt="Chef plating" className="img-cover" />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function JazzAfrobeatsSection() {
+  return (
+    <section className="section pro-section" id="jazz" aria-label="Jazz and Afrobeats">
+      <div className="container">
+        <p className="label-2 section-subtitle">Live Nights</p>
+        <h2 className="headline-1 section-title">Jazz &amp; Afrobeats</h2>
+        <p className="section-text">
+          Smooth jazz vibes, Afrobeats energy, cocktails and great food — the perfect night out in Osu.
+        </p>
+
+        <div className="pro-grid">
+          <article className="pro-card">
+            <div className="pro-card__img">
+              <img src="/assets/images/event-1.jpg" alt="Live jazz night" className="img-cover" />
+            </div>
+            <h3 className="title-2">Live Jazz</h3>
+            <p className="body-4">Relaxed lounge atmosphere with smooth performances.</p>
+          </article>
+
+          <article className="pro-card">
+            <div className="pro-card__img">
+              <img src="/assets/images/event-2.jpg" alt="Afrobeats night" className="img-cover" />
+            </div>
+            <h3 className="title-2">Afrobeats</h3>
+            <p className="body-4">Dance-ready playlists and the best weekend vibe.</p>
+          </article>
+
+          <article className="pro-card">
+            <div className="pro-card__img">
+              <img src="/assets/images/event-3.jpg" alt="Cocktails and drinks" className="img-cover" />
+            </div>
+            <h3 className="title-2">Cocktails &amp; Drinks</h3>
+            <p className="body-4">Signature cocktails, wine, spirits, and chilled beverages.</p>
+          </article>
+        </div>
+
+        <div className="pro-cta">
+          <a href="#reservation" className="btn btn-secondary">
+            <span className="text text-1">Book for Event Night</span>
+            <span className="text text-2" aria-hidden="true">Book for Event Night</span>
+          </a>
+        </div>
+      </div>
+    </section>
   );
 }
