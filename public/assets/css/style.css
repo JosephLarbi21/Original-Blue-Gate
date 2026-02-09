@@ -3787,3 +3787,497 @@ main {
   .pro-section { padding-block: 70px; }
   .pro-cta { justify-content: center; }
 }
+
+
+/* =========================================================
+   MOBILE PROFESSIONAL FIX PACK (Paste at bottom of style.css)
+   ========================================================= */
+
+/* Prevent side scrolling on small devices */
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Better tap + font rendering */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Container padding on small screens */
+@media (max-width: 768px) {
+  .container {
+    padding-inline: 16px !important;
+  }
+}
+
+/* =========================
+   HEADER / TOPBAR (Mobile)
+   ========================= */
+@media (max-width: 768px) {
+  .topbar {
+    display: none !important;
+  }
+
+  .header .container {
+    padding-block: 10px !important;
+  }
+
+  .header-logo .logo-img {
+    height: 46px !important;
+    width: auto !important;
+    object-fit: contain !important;
+  }
+
+  .navbar-desktop {
+    display: none !important;
+  }
+
+  .header-cta {
+    display: none !important; /* cleaner on mobile */
+  }
+
+  .nav-open-btn {
+    transform: scale(0.95);
+  }
+}
+
+/* =========================
+   MOBILE DRAWER (Cleaner)
+   ========================= */
+@media (max-width: 768px) {
+  .mobile-drawer {
+    width: min(92vw, 360px) !important;
+    padding-bottom: 18px !important;
+  }
+
+  .mobile-drawer-head {
+    padding: 14px 16px !important;
+  }
+
+  .drawer-logo {
+    height: 40px !important;
+    width: auto !important;
+  }
+
+  .mobile-drawer-links a {
+    font-size: 15px !important;
+    padding: 12px 16px !important;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .mobile-drawer-info {
+    padding: 14px 16px !important;
+    font-size: 14px !important;
+    line-height: 1.45 !important;
+  }
+
+  .drawer-cta {
+    width: 100% !important;
+    justify-content: center !important;
+    margin-top: 12px !important;
+  }
+}
+
+/* =========================
+   HERO (Mobile Typography)
+   ========================= */
+@media (max-width: 768px) {
+  .hero {
+    min-height: 85vh !important;
+  }
+
+  .hero .hero-title {
+    font-size: clamp(26px, 7vw, 38px) !important;
+    line-height: 1.15 !important;
+    padding-inline: 8px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .hero .section-subtitle {
+    font-size: 12px !important;
+    letter-spacing: 0.12em !important;
+  }
+
+  .hero .hero-text {
+    font-size: 15px !important;
+    line-height: 1.6 !important;
+    padding-inline: 10px !important;
+    max-width: 35ch !important;
+    margin-inline: auto !important;
+  }
+
+  .hero .btn {
+    width: auto !important;
+    min-width: 200px !important;
+    justify-content: center !important;
+    padding: 12px 16px !important;
+    margin-top: 14px !important;
+  }
+
+  .hero .slider-btn {
+    display: none !important; /* remove clutter on small screens */
+  }
+
+  .hero-btn.has-after {
+    transform: scale(0.92);
+    right: 14px !important;
+    bottom: 18px !important;
+  }
+}
+
+/* =========================
+   SECTION SPACING (Mobile)
+   ========================= */
+@media (max-width: 768px) {
+  .section {
+    padding-block: 70px !important;
+  }
+
+  .section-title {
+    font-size: 26px !important;
+    line-height: 1.2 !important;
+  }
+
+  .section-text {
+    font-size: 15px !important;
+    line-height: 1.7 !important;
+  }
+}
+
+/* =========================
+   PRO SECTIONS (Cards/Grid)
+   ========================= */
+@media (max-width: 992px) {
+  .pro-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  .pro-card {
+    padding: 14px !important;
+    border-radius: 16px !important;
+  }
+
+  .pro-card__img {
+    height: 190px !important;
+    border-radius: 14px !important;
+  }
+
+  .pro-cta {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  .pro-cta .btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .pro-split {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+  }
+
+  .pro-media {
+    height: 210px !important;
+  }
+
+  .pro-feature {
+    padding: 12px !important;
+  }
+
+  .pro-feature h3 {
+    font-size: 16px !important;
+  }
+
+  .pro-feature p {
+    font-size: 14px !important;
+    line-height: 1.55 !important;
+  }
+}
+
+/* =========================
+   MENU SECTION (Mobile)
+   ========================= */
+@media (max-width: 768px) {
+  .menu .grid-list,
+  .menu .menu-list,
+  .menu .menu-card {
+    gap: 14px !important;
+  }
+
+  .menu-card .title-2,
+  .menu-card .title-3 {
+    font-size: 16px !important;
+  }
+
+  .menu-card .body-4 {
+    font-size: 14px !important;
+    line-height: 1.55 !important;
+  }
+}
+
+/* =========================
+   RESERVATION FORM (Mobile)
+   ========================= */
+@media (max-width: 992px) {
+  .reservation .reservation-form {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  .reservation .form-left,
+  .reservation .form-right {
+    width: 100% !important;
+    padding: 18px !important;
+  }
+
+  .reservation .headline-1 {
+    font-size: 26px !important;
+    line-height: 1.2 !important;
+  }
+
+  .reservation .form-text {
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+  }
+
+  .reservation .input-wrapper {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .reservation .input-field {
+    font-size: 15px !important;
+    padding: 12px 14px !important;
+    height: auto !important;
+  }
+
+  .reservation textarea.input-field {
+    min-height: 120px !important;
+  }
+
+  .reservation .btn.btn-secondary {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 12px 14px !important;
+  }
+
+  .contact-number {
+    font-size: 18px !important;
+  }
+}
+
+/* =========================
+   FOOTER (Mobile Professional)
+   ========================= */
+@media (max-width: 992px) {
+  .footer-pro__top {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+  }
+
+  .footer-pro__logo-img {
+    height: 44px !important;
+    width: auto !important;
+  }
+
+  .footer-pro__about {
+    font-size: 14px !important;
+    line-height: 1.65 !important;
+  }
+
+  .footer-pro__links a,
+  .footer-pro__contact a {
+    font-size: 14px !important;
+  }
+
+  .footer-pro__form {
+    display: grid !important;
+    gap: 10px !important;
+  }
+
+  .footer-pro__input input {
+    width: 100% !important;
+    font-size: 14px !important;
+    padding: 12px 14px !important;
+  }
+
+  .footer-pro__btn {
+    width: 100% !important;
+    padding: 12px 14px !important;
+  }
+
+  .footer-pro__bottom {
+    display: grid !important;
+    gap: 10px !important;
+    text-align: center !important;
+  }
+
+  .footer-pro__bottom-links {
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+}
+
+/* =========================
+   BACK TO TOP (Mobile)
+   ========================= */
+@media (max-width: 768px) {
+  .back-top-btn {
+    right: 14px !important;
+    bottom: 18px !important;
+    transform: scale(0.92);
+  }
+}
+
+
+/* =========================================================
+   HERO SLIDER (MOBILE FIX) — prevents overlap + looks pro
+   Paste at bottom of style.css
+   ========================================================= */
+
+@media (max-width: 768px) {
+  /* Make the hero height stable on phones (no overlap) */
+  .hero {
+    position: relative !important;
+    min-height: 92vh !important;
+    height: auto !important;
+    padding-top: 90px !important;  /* space for header */
+    padding-bottom: 120px !important; /* space for hero-btn */
+    overflow: hidden !important;
+  }
+
+  /* Slider wrapper should not collapse */
+  .hero-slider {
+    position: relative !important;
+    height: auto !important;
+    min-height: 92vh !important;
+  }
+
+  /* Each slide must take full hero height and stack correctly */
+  .hero-slider .slider-item {
+    position: absolute !important;
+    inset: 0 !important;
+    display: grid !important;
+    align-content: center !important;
+    justify-items: center !important;
+    padding-inline: 16px !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translateY(10px) !important;
+    transition: opacity 300ms ease, transform 300ms ease !important;
+  }
+
+  /* Active slide visible */
+  .hero-slider .slider-item.active {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    transform: translateY(0) !important;
+    z-index: 2 !important;
+  }
+
+  /* Background image should stay behind everything */
+  .hero .slider-bg {
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: -2 !important;
+  }
+
+  .hero .slider-bg .img-cover {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  /* Add a dark overlay for readability (professional look) */
+  .hero::before {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: -1 !important;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.55),
+      rgba(0, 0, 0, 0.55)
+    ) !important;
+  }
+
+  /* Typography scaling (no overlap) */
+  .hero .section-subtitle {
+    margin-bottom: 10px !important;
+    font-size: 12px !important;
+    letter-spacing: 0.12em !important;
+    text-align: center !important;
+  }
+
+  .hero .hero-title {
+    font-size: clamp(26px, 7.2vw, 36px) !important;
+    line-height: 1.12 !important;
+    margin: 0 0 10px !important;
+    text-align: center !important;
+    max-width: 22ch !important;
+  }
+
+  .hero .hero-text {
+    font-size: 15px !important;
+    line-height: 1.65 !important;
+    text-align: center !important;
+    max-width: 38ch !important;
+    margin: 0 auto 16px !important;
+  }
+
+  /* Button sizing + spacing (no covering content) */
+  .hero .btn.btn-primary {
+    width: min(92%, 320px) !important;
+    justify-content: center !important;
+    padding: 12px 16px !important;
+    margin-top: 6px !important;
+  }
+
+  /* Hide prev/next arrows on mobile (usually causes overlap) */
+  .hero .slider-btn {
+    display: none !important;
+  }
+
+  /* Move the floating hero booking button so it doesn't cover text */
+  .hero .hero-btn.has-after {
+    right: 14px !important;
+    bottom: 18px !important;
+    transform: scale(0.9) !important;
+    z-index: 5 !important;
+  }
+
+  /* Safety: ensure slider-reveal items don't animate into overlap */
+  .slider-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Extra-tight phones */
+@media (max-width: 380px) {
+  .hero {
+    padding-top: 84px !important;
+    padding-bottom: 116px !important;
+  }
+
+  .hero .hero-title {
+    font-size: 26px !important;
+  }
+
+  .hero .hero-text {
+    font-size: 14px !important;
+  }
+}
