@@ -1,14 +1,19 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-/* smooth scroll */
 html {
   scroll-behavior: smooth;
 }
 
-/* optional: nicer font rendering */
 body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #0a0a0a;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
 }
