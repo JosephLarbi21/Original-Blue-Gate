@@ -382,13 +382,15 @@ function HeroSection() {
           </div>
 
           <h1 className="mt-6 text-4xl font-bold leading-[1.05] text-white sm:text-5xl lg:text-7xl">
-            Elegant dining, unforgettable grills, and vibrant nights in Osu.
+            Join us for Tilapia, Charcoal Grill sillzlers & sumptuous food  in Osu.
           </h1>
 
           <p className="mt-6 max-w-xl text-base leading-7 text-white/75 sm:text-lg">
-            Welcome to Original Blue Gate — a refined restaurant and lounge
-            experience where delicious food, warm ambience, cocktails and live
-            entertainment come together beautifully.
+           Welcome to NellyAnge Restaurant, Bar & Grill-The Original Blue Gate- for some
+           30 years we've been serving sumptuous African food.
+           Now refined & gentrified to include a restaurant and cozy lounge with a warm
+           ambience, Afro-Fusion cocktails and live entertainment- and with the capacity
+           to serve 100 dinners/guest beautifully
           </p>
 
           <div className="mt-8 flex flex-col gap-4 sm:flex-row">
