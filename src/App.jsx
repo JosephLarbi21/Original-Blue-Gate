@@ -115,7 +115,7 @@ export default function App() {
               />
               <div className="min-w-0">
                 <p className="truncate text-[10px] uppercase tracking-[0.35em] text-amber-400 sm:text-xs">
-                  Nelly Ange
+                  NellyAnge Restaurant, Bar & Grill
                 </p>
                 <p className="truncate text-sm font-semibold text-white sm:text-base">
                   Original Blue Gate
@@ -191,7 +191,7 @@ export default function App() {
                 />
                 <div className="min-w-0">
                   <p className="truncate text-[10px] uppercase tracking-[0.35em] text-amber-400">
-                    Nelly Ange
+                    NellyAnge Restaurant, Bar & Grill
                   </p>
                   <p className="truncate text-sm font-semibold text-white">
                     Original Blue Gate
@@ -461,13 +461,13 @@ function HeroSection() {
 function GrillsSizzlersSection() {
   const items = [
     {
-      title: "Charcoal Grill",
+      title: "The Restaurant",
       text: "Tilapia, chicken, beef and kebabs seasoned to perfection and grilled over open flame.",
       image: "/assets/images/hero-slider-1.jpg",
     },
     {
-      title: "Sizzlers",
-      text: "Sizzling platters served with rich sauces, grilled sides and fresh-from-the-pan aroma.",
+      title: "Fufu Special",
+      text: "Ghanaian made Fufu served with any of our Ghanaian soups",
       image: "/assets/images/menu-1.png",
     },
     {
