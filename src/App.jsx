@@ -468,12 +468,12 @@ function GrillsSizzlersSection() {
     {
       title: "Fufu Special",
       text: "Ghanaian made Fufu served with any of our Ghanaian soups",
-      image: "/assets/images/menu-1.png",
+      image: "/assets/images/fufu.jpeg",
     },
     {
       title: "Sides & Sauces",
       text: "Banku, kenkey, fries, fried plantain, shito, pepper sauce and more to complete every plate.",
-      image: "/assets/images/menu-2.png",
+      image: "/assets/images/banku.jpg",
     },
   ];
 
@@ -594,14 +594,14 @@ function TodaysSpecialSection() {
         <div className="grid grid-cols-2 gap-4">
           <div className="overflow-hidden rounded-[1.75rem] border border-white/10">
             <img
-              src="/assets/images/about-banner.jpg"
+              src="/assets/images/hero-slider-1.jpg"
               alt="Special dish"
               className="h-full w-full object-cover"
             />
           </div>
           <div className="mt-10 overflow-hidden rounded-[1.75rem] border border-white/10">
             <img
-              src="/assets/images/about-abs-image.jpg"
+              src="/assets/images/hero-slider-2.jpg"
               alt="Chef plating"
               className="h-full w-full object-cover"
             />
@@ -617,17 +617,17 @@ function JazzAfrobeatsSection() {
     {
       title: "Live Jazz",
       text: "Relaxed lounge atmosphere with smooth performances.",
-      image: "/assets/images/event-1.jpg",
+      image: "/assets/images/jazz-night.jpg",
     },
     {
       title: "Afrobeats",
       text: "Dance-ready playlists and the best weekend vibe.",
-      image: "/assets/images/event-2.jpg",
+      image: "/assets/images/afrobeat.png",
     },
     {
       title: "Cocktails & Drinks",
       text: "Signature cocktails, wine, spirits and chilled beverages.",
-      image: "/assets/images/event-3.jpg",
+      image: "/assets/images/cocktail.jpg",
     },
   ];
 
