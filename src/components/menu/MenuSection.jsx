@@ -223,29 +223,6 @@ export default function MenuSection() {
     await loadOrderHistory(data.phone);
   };
 
-  const payWithPaystack = ({ email, amount, metadata, onSuccess, onClose }) => {
-    if (!window.PaystackPop) {
-      alert("Paystack failed to load. Please refresh and try again.");
-      return;
-    }
-
-    const handler = new window.PaystackPop();
-
-    handler.newTransaction({
-      key: "pk_test_54008b4f5d9bd1110c7ffb108a3d4c2dbbfb2f7c",
-      email,
-      amount: Math.round(amount * 100),
-      currency: "GHS",
-      metadata,
-      onSuccess: (transaction) => {
-        onSuccess(transaction);
-      },
-      onCancel: () => {
-        if (onClose) onClose();
-      },
-    });
-  };
-
   const handleSubmitOrder = async (e) => {
     e.preventDefault();
 
@@ -258,7 +235,6 @@ export default function MenuSection() {
     const orderId = generateOrderId();
     const unitPrice = getBasePrice(selectedItem);
     const total = unitPrice * Number(orderForm.quantity);
-    const customerEmail = `${orderForm.phone.replace(/\D/g, "")}@nellyange.com`;
 
     const newOrder = {
       id: orderId,
@@ -268,7 +244,8 @@ export default function MenuSection() {
       unitPrice,
       total,
       status: "Pending",
-      paymentStatus: "Paid",
+      paymentStatus: "Unpaid",
+      paymentReference: null,
       createdAt: new Date().toISOString(),
       estimatedTime:
         orderForm.orderType === "delivery"
@@ -277,82 +254,47 @@ export default function MenuSection() {
       ...orderForm,
     };
 
-    payWithPaystack({
-      email: customerEmail,
-      amount: total,
-      metadata: {
-        custom_fields: [
-          {
-            display_name: "Customer Name",
-            variable_name: "customer_name",
-            value: orderForm.customerName,
-          },
-          {
-            display_name: "Customer Phone",
-            variable_name: "customer_phone",
-            value: orderForm.phone,
-          },
-          {
-            display_name: "Order ID",
-            variable_name: "order_id",
-            value: orderId,
-          },
-          {
-            display_name: "Food Item",
-            variable_name: "food_item",
-            value: selectedItem.name,
-          },
-        ],
+    const { error } = await supabase.from("orders").insert([
+      {
+        order_id: orderId,
+        customer_name: orderForm.customerName,
+        phone: orderForm.phone,
+        item_name: selectedItem.name,
+        quantity: Number(orderForm.quantity),
+        total_price: total,
+        order_type: orderForm.orderType,
+        address: orderForm.address,
+        notes: orderForm.notes,
+        status: "Pending",
+        payment_status: "Unpaid",
+        payment_reference: null,
       },
-      onSuccess: async (response) => {
-        const paymentReference = response?.reference || "";
+    ]);
 
-        const { error } = await supabase.from("orders").insert([
-          {
-            order_id: orderId,
-            customer_name: orderForm.customerName,
-            phone: orderForm.phone,
-            item_name: selectedItem.name,
-            quantity: Number(orderForm.quantity),
-            total_price: total,
-            order_type: orderForm.orderType,
-            address: orderForm.address,
-            notes: orderForm.notes,
-            status: "Pending",
-            payment_status: "Paid",
-            payment_reference: paymentReference,
-          },
-        ]);
+    if (error) {
+      console.error("Supabase insert error:", error);
+      alert("Order failed to save. Please try again.");
+      setSubmittingOrder(false);
+      return;
+    }
 
-        if (error) {
-          console.error("Supabase insert error:", error);
-          alert("Payment succeeded, but the order failed to save.");
-          setSubmittingOrder(false);
-          return;
-        }
+    saveCustomerOrderSession(newOrder.id, newOrder.phone);
 
-        saveCustomerOrderSession(newOrder.id, newOrder.phone);
-
-        setOrderSuccess(newOrder);
-        setTrackingResult(newOrder);
-        setTrackingForm({
-          orderId: newOrder.id,
-          phone: newOrder.phone,
-        });
-
-        await loadOrderHistory(newOrder.phone);
-
-        closeModal();
-        setSubmittingOrder(false);
-
-        setTimeout(() => {
-          scrollToTracking();
-        }, 200);
-      },
-      onClose: () => {
-        setSubmittingOrder(false);
-      },
+    setOrderSuccess(newOrder);
+    setTrackingResult(newOrder);
+    setTrackingForm({
+      orderId: newOrder.id,
+      phone: newOrder.phone,
     });
+
+    await loadOrderHistory(newOrder.phone);
+
+    closeModal();
+    setSubmittingOrder(false);
+
+    setTimeout(() => {
+      scrollToTracking();
+    }, 200);
   };
 
   const handleTrackOrder = async (e) => {
@@ -600,8 +542,8 @@ export default function MenuSection() {
                       {trackingResult.orderType}
                     </p>
                     <p>
-                      <span className="font-semibold text-white">Total:</span> GH₵{" "}
-                      {trackingResult.total}
+                      <span className="font-semibold text-white">Total:</span>{" "}
+                      GH₵ {trackingResult.total}
                     </p>
                     <p>
                       <span className="font-semibold text-white">
@@ -645,7 +587,8 @@ export default function MenuSection() {
               Your Previous Orders
             </h3>
             <p className="mt-3 text-sm leading-7 text-white/65 sm:text-base">
-              Your recent paid orders will appear here after tracking or payment.
+              Your recent orders will appear here after tracking or placing an
+              order.
             </p>
           </div>
 
@@ -684,7 +627,7 @@ export default function MenuSection() {
                         {order.status}
                       </span>
                       <span className="rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-green-300">
-                        {order.payment_status || "Paid"}
+                        {order.payment_status || "Unpaid"}
                       </span>
                     </div>
                   </div>
@@ -699,8 +642,8 @@ export default function MenuSection() {
                       {order.order_type}
                     </p>
                     <p>
-                      <span className="font-semibold text-white">Total:</span> GH₵{" "}
-                      {Number(order.total_price)}
+                      <span className="font-semibold text-white">Total:</span>{" "}
+                      GH₵ {Number(order.total_price)}
                     </p>
                     <p>
                       <span className="font-semibold text-white">
@@ -739,7 +682,7 @@ export default function MenuSection() {
         {orderSuccess ? (
           <div className="mt-8 rounded-[1.75rem] border border-green-500/20 bg-green-500/10 p-5 text-sm text-green-300">
             <p>
-              Payment successful and order placed. Your Order ID is{" "}
+              Order placed successfully. Your Order ID is{" "}
               <span className="font-bold text-white">{orderSuccess.id}</span>.
             </p>
 
@@ -904,7 +847,7 @@ export default function MenuSection() {
                     GH₵ {getBasePrice(selectedItem) * Number(orderForm.quantity)}
                   </p>
                   <p className="mt-1 text-xs text-white/35">
-                    Payment is required before order is sent
+                    Your order will be saved without online payment
                   </p>
                 </div>
 
@@ -913,7 +856,7 @@ export default function MenuSection() {
                   disabled={submittingOrder}
                   className="rounded-2xl bg-amber-400 px-6 py-3 font-semibold text-black transition hover:bg-amber-300 disabled:cursor-not-allowed disabled:opacity-70"
                 >
-                  {submittingOrder ? "Opening Payment..." : "Proceed to Pay"}
+                  {submittingOrder ? "Placing Order..." : "Place Order"}
                 </button>
               </div>
             </form>
