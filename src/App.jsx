@@ -459,81 +459,262 @@ function HeroSection() {
 }
 
 function GrillsSizzlersSection() {
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedChoice, setSelectedChoice] = useState(null);
+  const [selectedExtras, setSelectedExtras] = useState([]);
+  const [quantity, setQuantity] = useState(1);
+  const [note, setNote] = useState("");
+
   const items = [
     {
-      title: "The Restaurant",
-      text: "Tilapia, chicken, beef and kebabs seasoned to perfection and grilled over open flame.",
-      image: "/assets/images/hero-slider-1.jpg",
+      title: "Grilled Specials",
+      description: "Choose your preferred grilled option",
+      image: "/assets/images/grills.jpeg",
+      choices: [
+        { name: "Tilapia", price: 120 },
+        { name: "Chicken", price: 100 },
+      ],
+      extras: [
+        { name: "Extra Pepper", price: 10 },
+        { name: "Extra Fish", price: 40 },
+      ],
     },
     {
-      title: "Fufu Special",
-      text: "Ghanaian made Fufu served with any of our Ghanaian soups",
+      title: "Fufu with Soup",
+      description: "Choose any local soup you prefer",
       image: "/assets/images/fufu.jpeg",
+      choices: [
+        { name: "Light Soup", price: 80 },
+        { name: "Groundnut Soup", price: 85 },
+        { name: "Palm Nut Soup", price: 90 },
+      ],
+      extras: [
+        { name: "Extra Meat", price: 20 },
+        { name: "Extra Fish", price: 25 },
+      ],
     },
     {
-      title: "Sides & Sauces",
-      text: "Banku, kenkey, fries, fried plantain, shito, pepper sauce and more to complete every plate.",
+      title: "Banku Meals",
+      description: "Choose your preferred combination",
       image: "/assets/images/banku.jpg",
+      choices: [
+        { name: "Banku with Tilapia", price: 100 },
+        { name: "Banku with Okro", price: 90 },
+        { name: "Banku with Pepper & Fish", price: 95 },
+      ],
+      extras: [
+        { name: "Extra Fish", price: 30 },
+        { name: "Extra Pepper", price: 10 },
+      ],
     },
   ];
+
+  // 🔥 PRICE LOGIC
+  const basePrice = selectedChoice?.price || 0;
+
+  const extrasTotal = selectedExtras.reduce(
+    (sum, extra) => sum + extra.price,
+    0
+  );
+
+  const totalPrice = (basePrice + extrasTotal) * quantity;
 
   return (
     <section id="grills" className="bg-neutral-950 py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto mb-14 max-w-3xl text-center">
-          <p className="mb-3 text-sm uppercase tracking-[0.35em] text-amber-400">
-            Signature Flames
+
+        {/* HEADER */}
+        <div className="text-center mb-16">
+          <p className="text-amber-400 uppercase tracking-[0.3em] text-sm mb-3">
+            Premium Menu
           </p>
-          <h2 className="text-3xl font-bold text-white sm:text-4xl">
-            Grills & Sizzlers
+          <h2 className="text-4xl font-bold text-white">
+            Signature Dishes
           </h2>
-          <p className="mt-4 text-white/65">
-            Charcoal-grilled favorites, juicy skewers and sizzling platters —
-            prepared fresh and served hot.
+          <p className="text-white/60 mt-4 max-w-xl mx-auto">
+            Experience authentic Ghanaian flavors crafted with passion.
           </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {items.map((item) => (
-            <article
-              key={item.title}
-              className="group overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/5 transition duration-300 hover:-translate-y-1 hover:border-amber-400/40 hover:bg-white/[0.07]"
+        {/* CARDS */}
+        <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+          {items.map((item, index) => (
+            <div
+              key={index}
+              onClick={() => {
+                setSelectedItem(item);
+                setSelectedChoice(null);
+                setSelectedExtras([]);
+                setQuantity(1);
+                setNote("");
+              }}
+              className="group cursor-pointer rounded-3xl overflow-hidden bg-white/5 border border-white/10 hover:border-amber-400/40 transition"
             >
-              <div className="overflow-hidden">
+              <div className="relative h-72 overflow-hidden">
                 <img
                   src={item.image}
                   alt={item.title}
-                  className="h-72 w-full object-cover transition duration-500 group-hover:scale-105"
+                  className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
               </div>
+
               <div className="p-6">
                 <h3 className="text-xl font-semibold text-white">
                   {item.title}
                 </h3>
-                <p className="mt-3 leading-7 text-white/65">{item.text}</p>
+                <p className="text-white/60 mt-2 text-sm">
+                  {item.description}
+                </p>
               </div>
-            </article>
+            </div>
           ))}
         </div>
-
-        <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <a
-            href="#reservation"
-            className="rounded-full bg-amber-400 px-6 py-3.5 text-sm font-semibold text-black transition hover:bg-amber-300"
-          >
-            Book a Table
-          </a>
-          <a
-            href="#menu"
-            className="rounded-full border border-white/15 px-6 py-3.5 text-sm font-semibold text-white transition hover:border-amber-400 hover:text-amber-400"
-          >
-            View Menu
-          </a>
-        </div>
       </div>
+
+      {/* 🔥 MODAL */}
+      {selectedItem && (
+        <div className="fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center p-4">
+
+          <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-3xl bg-neutral-900">
+
+            {/* CLOSE */}
+            <button
+              onClick={() => setSelectedItem(null)}
+              className="sticky top-0 z-20 flex justify-end w-full p-4 bg-black/80"
+            >
+              ✕
+            </button>
+
+            {/* IMAGE */}
+            <div className="h-64">
+              <img
+                src={selectedItem.image}
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            <div className="p-6 text-white">
+              <h3 className="text-2xl font-semibold">
+                {selectedItem.title}
+              </h3>
+
+              <p className="text-white/60 mt-2">
+                {selectedItem.description}
+              </p>
+
+              {/* CHOICES */}
+              <div className="mt-6">
+                <p className="text-sm text-white/60 mb-2">
+                  Choose an option
+                </p>
+
+                {selectedItem.choices.map((choice, index) => (
+                  <label
+                    key={index}
+                    className="flex justify-between bg-white/5 px-3 py-2 rounded-lg mb-2 cursor-pointer"
+                  >
+                    <div className="flex gap-2">
+                      <input
+                        type="radio"
+                        name="choice"
+                        onChange={() => setSelectedChoice(choice)}
+                      />
+                      {choice.name}
+                    </div>
+                    <span className="text-amber-400">
+                      GH₵ {choice.price}
+                    </span>
+                  </label>
+                ))}
+              </div>
+
+              {/* EXTRAS */}
+              <div className="mt-6">
+                <p className="text-sm text-white/60 mb-2">
+                  Add Extras
+                </p>
+
+                {selectedItem.extras.map((extra, index) => (
+                  <label
+                    key={index}
+                    className="flex justify-between bg-white/5 px-3 py-2 rounded-lg mb-2 cursor-pointer"
+                  >
+                    <div className="flex gap-2">
+                      <input
+                        type="checkbox"
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSelectedExtras([...selectedExtras, extra]);
+                          } else {
+                            setSelectedExtras(
+                              selectedExtras.filter((e) => e !== extra)
+                            );
+                          }
+                        }}
+                      />
+                      {extra.name}
+                    </div>
+
+                    <span className="text-amber-400">
+                      + GH₵ {extra.price}
+                    </span>
+                  </label>
+                ))}
+              </div>
+
+              {/* QUANTITY */}
+              <div className="mt-6 flex justify-between items-center">
+                <p className="text-sm text-white/60">Quantity</p>
+
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    className="w-10 h-10 bg-white/10 rounded-full"
+                  >
+                    -
+                  </button>
+
+                  <span>{quantity}</span>
+
+                  <button
+                    onClick={() => setQuantity(quantity + 1)}
+                    className="w-10 h-10 bg-amber-400 text-black rounded-full"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              {/* NOTE */}
+              <textarea
+                placeholder="Add a note..."
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                className="w-full mt-4 p-3 rounded-lg bg-white/5"
+              />
+
+              {/* TOTAL */}
+              <p className="text-2xl font-bold text-amber-400 mt-4">
+                GH₵ {totalPrice}
+              </p>
+
+              {/* BUTTON */}
+              <button
+                disabled={!selectedChoice}
+                className="w-full mt-4 bg-amber-400 text-black py-3 rounded-full disabled:opacity-50"
+              >
+                Add to Order • GH₵ {totalPrice}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
+
+
 
 function TodaysSpecialSection() {
   const features = [
@@ -972,12 +1153,12 @@ function Footer() {
               </li>
               <li>
                 <a
-                  href="https://wa.me/233561272734?text=Hello%20Original%20Blue%20Gate%2C%20I%20want%20to%20book%20a%20table%20or%20place%20an%20order."
+                  href="https://wa.me/233537965155?text=Hello%20Original%20Blue%20Gate%2C%20I%20want%20to%20book%20a%20table%20or%20place%20an%20order."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-amber-400"
                 >
-                  WhatsApp: +233 56 127 2734
+                  WhatsApp: +233 53 796 5155
                 </a>
               </li>
               <li>
