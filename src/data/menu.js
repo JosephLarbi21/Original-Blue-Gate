@@ -196,12 +196,12 @@ export const menuData = [
       },
       {
         name: "Goat Khebab",
-        price: 40,
+        price: 20,
         image: "/assets/images/goat-khebab.jpg",
       },
       {
         name: "Chicken Khebab",
-        price: 40,
+        price: 20,
         image: "/assets/images/chicken-khebab.jpg",
       },
     ],
