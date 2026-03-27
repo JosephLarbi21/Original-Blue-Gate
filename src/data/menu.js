@@ -123,7 +123,7 @@ export const menuData = [
       },
       {
         name: "Banku & Tilapia",
-        priceRange: [120, 150],
+        priceRange: [180, 200],
         image: "/assets/images/banku-tilapia.JPG",
         desc: "Banku with grilled tilapia.",
       },
