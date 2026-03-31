@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import MenuSection from "./components/menu/MenuSection";
 import BackToTop from "./components/BackToTop";
 import WhatsAppFloat from "./components/What'sAppFloat";
+import StatusWidget from "./components/StatusWidget";
+
 
 const BUSINESS_EMAIL = "orders@nellyangepubandgrill.com";
 const WHATSAPP_NUMBER = "233537965155";
@@ -101,6 +103,7 @@ export default function App() {
     <div className="min-h-screen overflow-x-hidden bg-neutral-950 text-white">
       <WhatsAppFloat phone={WHATSAPP_NUMBER} />
       <BackToTop />
+      <StatusWidget/>
 
       <div className="fixed inset-x-0 top-0 z-[100]">
         <TopBar />
