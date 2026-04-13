@@ -784,7 +784,7 @@ function TodaysSpecialSection() {
           </div>
           <div className="mt-10 overflow-hidden rounded-[1.75rem] border border-white/10">
             <img
-              src="/assets/images/hero-slider-2.JPG"
+              src="/assets/images/location.jpg"
               alt="Chef plating"
               className="h-full w-full object-cover"
             />
