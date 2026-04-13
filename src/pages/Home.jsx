@@ -439,7 +439,7 @@ function HeroSection() {
 
           <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-2xl shadow-black/40 backdrop-blur-md">
             <img
-              src="/assets/images/hero-slider-2.JPG"
+              src="/assets/images/hero-slider-1.jpg"
               alt="Fine dining at Original Blue Gate"
               className="h-[340px] w-full object-cover sm:h-[460px] lg:h-[560px] lg:w-[470px]"
             />
