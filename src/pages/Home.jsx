@@ -9,7 +9,7 @@ const WHATSAPP_NUMBER = "233537965155";
 
 const navLinks = [
   { label: "Home", href: "#home" },
-  { label: "Grills", href: "#grills" },
+  { label: "Dishes", href: "#grills" },
   { label: "Special", href: "#special" },
   { label: "Events", href: "#jazz" },
   { label: "Menu", href: "#menu" },
@@ -439,7 +439,7 @@ function HeroSection() {
 
           <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-2xl shadow-black/40 backdrop-blur-md">
             <img
-              src="/assets/images/hero-slider-2.jpg"
+              src="/assets/images/hero-slider-2.JPG"
               alt="Fine dining at Original Blue Gate"
               className="h-[340px] w-full object-cover sm:h-[460px] lg:h-[560px] lg:w-[470px]"
             />
@@ -784,7 +784,7 @@ function TodaysSpecialSection() {
           </div>
           <div className="mt-10 overflow-hidden rounded-[1.75rem] border border-white/10">
             <img
-              src="/assets/images/hero-slider-2.jpg"
+              src="/assets/images/hero-slider-2.JPG"
               alt="Chef plating"
               className="h-full w-full object-cover"
             />
@@ -1063,17 +1063,28 @@ function ReservationSection({
   );
 }
 
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaTiktok,
+  FaTwitter,
+  FaWhatsapp,
+} from "react-icons/fa";
+
 function Footer() {
+  const BUSINESS_EMAIL = "info@nellyange.com";
+
   return (
-    <footer className="border-t border-white/5 bg-neutral-950">
-      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        <div className="grid gap-10 lg:grid-cols-4">
+    <footer className="bg-neutral-950 border-t border-white/5">
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="grid gap-12 lg:grid-cols-4">
+          {/* BRAND */}
           <div className="lg:col-span-2">
             <div className="flex items-center gap-3">
               <img
                 src="/assets/images/logo01.jpg"
                 alt="Original Blue Gate"
-                className="h-14 w-14 rounded-full object-cover"
+                className="h-14 w-14 rounded-full object-cover ring-2 ring-amber-400/40"
               />
               <div>
                 <p className="text-xs uppercase tracking-[0.35em] text-amber-400">
@@ -1085,12 +1096,47 @@ function Footer() {
               </div>
             </div>
 
-            <p className="mt-5 max-w-xl leading-7 text-white/65">
-              Great food, warm atmosphere, and unforgettable moments. Join us
-              for local and continental dishes, grills, cocktails, and live
+            <p className="mt-5 max-w-xl text-white/60 leading-7">
+              Great food, warm atmosphere, and unforgettable moments. Enjoy
+              local and continental dishes, grills, cocktails, and vibrant live
               nights.
             </p>
 
+            {/* SOCIAL ICONS */}
+            <div className="mt-6 flex items-center gap-4">
+              
+
+              <a
+                href="https://www.instagram.com/nellyangepubandgrill?igsh=MWE0ZDdlMGlhY2ZjcQ%3D%3D&utm_source=qr"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group rounded-full bg-white/5 p-3 transition hover:bg-amber-500"
+              >
+                <FaInstagram className="text-white/70 group-hover:text-black" />
+              </a>
+
+              <a
+                href="https://www.tiktok.com/@originalbluegate?_r=1&_d=ehebl5lfjke46l&sec_uid=MS4wLjABAAAA9OWQ9an3h0YA-CiYBHgzWsIbVFYFBe2vnDHbNP3aniMZ63BM94oM3-ppb4l33KJF&share_author_id=7370811290791035910&sharer_language=en&source=h5_m&u_code=ee7jmdja664459&item_author_type=1&utm_source=copy&tt_from=copy&enable_checksum=1&utm_medium=ios&share_link_id=E0253B26-071A-4856-82C5-BAA3A7EFBF49&user_id=7370811290791035910&sec_user_id=MS4wLjABAAAA9OWQ9an3h0YA-CiYBHgzWsIbVFYFBe2vnDHbNP3aniMZ63BM94oM3-ppb4l33KJF&social_share_type=4&ug_btm=b8727,b0&utm_campaign=client_share&share_app_id=1233"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group rounded-full bg-white/5 p-3 transition hover:bg-amber-500"
+              >
+                <FaTiktok className="text-white/70 group-hover:text-black" />
+              </a>
+
+             
+
+              <a
+                href="https://wa.me/233537965155"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group rounded-full bg-white/5 p-3 transition hover:bg-green-500"
+              >
+                <FaWhatsapp className="text-white/70 group-hover:text-black" />
+              </a>
+            </div>
+
+            {/* OPENING HOURS */}
             <div className="mt-6 flex flex-wrap gap-3">
               <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/70">
                 Daily: 9:30am – Midnight
@@ -1101,45 +1147,34 @@ function Footer() {
             </div>
           </div>
 
+          {/* QUICK LINKS */}
           <div>
             <h3 className="text-lg font-semibold text-white">Quick Links</h3>
-            <ul className="mt-5 space-y-3 text-white/65">
-              <li>
-                <a href="#home" className="hover:text-amber-400">
-                  Home
-                </a>
-              </li>
-              <li>
-                <a href="#grills" className="hover:text-amber-400">
-                  Grills & Sizzlers
-                </a>
-              </li>
-              <li>
-                <a href="#special" className="hover:text-amber-400">
-                  Today’s Special
-                </a>
-              </li>
-              <li>
-                <a href="#jazz" className="hover:text-amber-400">
-                  Jazz & Afrobeats
-                </a>
-              </li>
-              <li>
-                <a href="#menu" className="hover:text-amber-400">
-                  Menu
-                </a>
-              </li>
-              <li>
-                <a href="#reservation" className="hover:text-amber-400">
-                  Reservations
-                </a>
-              </li>
+            <ul className="mt-5 space-y-3 text-white/60">
+              {[
+                "Home",
+                "Grills & Sizzlers",
+                "Today’s Special",
+                "Jazz & Afrobeats",
+                "Menu",
+                "Reservations",
+              ].map((item, i) => (
+                <li key={i}>
+                  <a
+                    href="#"
+                    className="transition hover:text-amber-400 hover:pl-1"
+                  >
+                    {item}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
 
+          {/* CONTACT + NEWSLETTER */}
           <div>
             <h3 className="text-lg font-semibold text-white">Contact</h3>
-            <ul className="mt-5 space-y-3 text-white/65">
+            <ul className="mt-5 space-y-3 text-white/60">
               <li>
                 <a href="tel:+233537965155" className="hover:text-amber-400">
                   +233 53 796 5155
@@ -1155,12 +1190,12 @@ function Footer() {
               </li>
               <li>
                 <a
-                  href="https://wa.me/233537965155?text=Hello%20Original%20Blue%20Gate%2C%20I%20want%20to%20book%20a%20table%20or%20place%20an%20order."
+                  href="https://wa.me/233537965155"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-amber-400"
                 >
-                  WhatsApp: +233 53 796 5155
+                  WhatsApp Chat
                 </a>
               </li>
               <li>
@@ -1170,25 +1205,48 @@ function Footer() {
                   rel="noopener noreferrer"
                   className="hover:text-amber-400"
                 >
-                  Open in Google Maps
+                  View Location
                 </a>
               </li>
             </ul>
+
+            {/* NEWSLETTER */}
+            <div className="mt-6">
+              <p className="text-sm text-white/50 mb-2">
+                Subscribe for updates
+              </p>
+              <div className="flex">
+                <input
+                  type="email"
+                  placeholder="Your email"
+                  className="w-full rounded-l-lg bg-white/5 px-3 py-2 text-sm text-white outline-none border border-white/10 focus:border-amber-400"
+                />
+                <button className="rounded-r-lg bg-amber-500 px-4 text-sm font-semibold text-black hover:bg-amber-400">
+                  Join
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col gap-4 border-t border-white/5 pt-6 text-sm text-white/45 sm:flex-row sm:items-center sm:justify-between">
+        {/* BOTTOM BAR */}
+        <div className="mt-12 border-t border-white/5 pt-6 flex flex-col sm:flex-row items-center justify-between text-sm text-white/40 gap-4">
           <p>
-            &copy; {new Date().getFullYear()} Nelly Ange Original Blue Gate
-            Restaurant. All Rights Reserved.
+            &copy; {new Date().getFullYear()} Nelly Ange Original Blue Gate.
+            All Rights Reserved.
           </p>
-          <div className="flex items-center gap-3">
-            <a href="#reservation" className="hover:text-amber-400">
-              Book a Table
+
+          <div className="flex items-center gap-4">
+            <a href="#" className="hover:text-amber-400">
+              Privacy Policy
             </a>
             <span>•</span>
-            <a href="#menu" className="hover:text-amber-400">
-              View Menu
+            <a href="#" className="hover:text-amber-400">
+              Terms of Service
+            </a>
+            <span>•</span>
+            <a href="#reservation" className="hover:text-amber-400">
+              Book Table
             </a>
           </div>
         </div>
@@ -1196,3 +1254,6 @@ function Footer() {
     </footer>
   );
 }
+
+
+
