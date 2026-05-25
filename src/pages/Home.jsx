@@ -468,58 +468,58 @@ function GrillsSizzlersSection() {
   const [note, setNote] = useState("");
 
   const items = [
-    {
-      title: "Grilled Specials",
-      description: "Choose your preferred grilled option",
-      image: "/assets/images/grills.jpeg",
-      choices: [
-        { name: "Tilapia", price: 120 },
-        { name: "Chicken", price: 100 },
-      ],
-      extras: [
-        { name: "Extra Pepper", price: 10 },
-        { name: "Extra Fish", price: 40 },
-      ],
-    },
-    {
-      title: "Fufu with Soup",
-      description: "Choose any local soup you prefer",
-      image: "/assets/images/fufu.jpeg",
-      choices: [
-        { name: "Light Soup", price: 80 },
-        { name: "Groundnut Soup", price: 85 },
-        { name: "Palm Nut Soup", price: 90 },
-      ],
-      extras: [
-        { name: "Extra Meat", price: 20 },
-        { name: "Extra Fish", price: 25 },
-      ],
-    },
-    {
-      title: "Banku Meals",
-      description: "Choose your preferred combination",
-      image: "/assets/images/banku.jpg",
-      choices: [
-        { name: "Banku with Tilapia", price: 100 },
-        { name: "Banku with Okro", price: 90 },
-        { name: "Banku with Pepper & Fish", price: 95 },
-      ],
-      extras: [
-        { name: "Extra Fish", price: 30 },
-        { name: "Extra Pepper", price: 10 },
-      ],
-    },
-  ];
+  {
+    title: "Grilled Specials",
+    description: "Choose your preferred grilled option",
+    image: "/assets/images/grills.jpeg",
+    choices: [
+      { name: "Tilapia", minPrice: 100, maxPrice: 140 },
+      { name: "Chicken", minPrice: 90, maxPrice: 120 },
+    ],
+    extras: [
+      { name: "Extra Pepper", minPrice: 5, maxPrice: 15 },
+      { name: "Extra Fish", minPrice: 30, maxPrice: 50 },
+    ],
+  },
+  {
+    title: "Fufu with Soup",
+    description: "Choose any local soup you prefer",
+    image: "/assets/images/fufu.jpeg",
+    choices: [
+      { name: "Light Soup", minPrice: 70, maxPrice: 90 },
+      { name: "Groundnut Soup", minPrice: 80, maxPrice: 100 },
+      { name: "Palm Nut Soup", minPrice: 85, maxPrice: 110 },
+    ],
+    extras: [
+      { name: "Extra Meat", minPrice: 15, maxPrice: 30 },
+      { name: "Extra Fish", minPrice: 20, maxPrice: 35 },
+    ],
+  },
+  {
+    title: "Banku Meals",
+    description: "Choose your preferred combination",
+    image: "/assets/images/banku.jpg",
+    choices: [
+      { name: "Banku with Tilapia", minPrice: 120, maxPrice: 200 },
+      { name: "Banku with Okro", minPrice: 80, maxPrice: 100 },
+      { name: "Banku with Pepper & Fish", minPrice: 85, maxPrice: 110 },
+    ],
+    extras: [
+      { name: "Extra Fish", minPrice: 20, maxPrice: 40 },
+      { name: "Extra Pepper", minPrice: 5, maxPrice: 15 },
+    ],
+  },
+];
 
   // 🔥 PRICE LOGIC
-  const basePrice = selectedChoice?.price || 0;
+const basePrice = selectedChoice?.customPrice || 0;
 
-  const extrasTotal = selectedExtras.reduce(
-    (sum, extra) => sum + extra.price,
-    0
-  );
+const extrasTotal = selectedExtras.reduce(
+  (sum, extra) => sum + extra.minPrice,
+  0
+);
 
-  const totalPrice = (basePrice + extrasTotal) * quantity;
+const totalPrice = (basePrice + extrasTotal) * quantity;
 
   return (
     <section id="grills" className="bg-neutral-950 py-20 sm:py-24">
@@ -575,143 +575,248 @@ function GrillsSizzlersSection() {
       </div>
 
       {/* 🔥 MODAL */}
-      {selectedItem && (
-        <div className="fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center p-4">
+     {selectedItem && (
+  <div className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
 
-          <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-3xl bg-neutral-900">
+    <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-[2rem] bg-neutral-900 border border-white/10 shadow-2xl">
 
-            {/* CLOSE */}
-            <button
-              onClick={() => setSelectedItem(null)}
-              className="sticky top-0 z-20 flex justify-end w-full p-4 bg-black/80"
-            >
-              ✕
-            </button>
+      {/* CLOSE */}
+      <button
+        onClick={() => setSelectedItem(null)}
+        className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-black/70 text-white hover:bg-amber-400 hover:text-black transition"
+      >
+        ✕
+      </button>
 
-            {/* IMAGE */}
-            <div className="h-64">
-              <img
-                src={selectedItem.image}
-                className="w-full h-full object-cover"
-              />
-            </div>
+      {/* IMAGE */}
+      <div className="relative h-64">
+        <img
+          src={selectedItem.image}
+          className="w-full h-full object-cover"
+        />
 
-            <div className="p-6 text-white">
-              <h3 className="text-2xl font-semibold">
-                {selectedItem.title}
-              </h3>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
 
-              <p className="text-white/60 mt-2">
-                {selectedItem.description}
-              </p>
+        <div className="absolute bottom-4 left-4">
+          <h3 className="text-3xl font-bold text-white">
+            {selectedItem.title}
+          </h3>
 
-              {/* CHOICES */}
-              <div className="mt-6">
-                <p className="text-sm text-white/60 mb-2">
-                  Choose an option
-                </p>
+          <p className="text-white/70 mt-1">
+            {selectedItem.description}
+          </p>
+        </div>
+      </div>
 
-                {selectedItem.choices.map((choice, index) => (
-                  <label
-                    key={index}
-                    className="flex justify-between bg-white/5 px-3 py-2 rounded-lg mb-2 cursor-pointer"
-                  >
-                    <div className="flex gap-2">
+      <div className="p-6 text-white">
+
+        {/* CHOICES */}
+        <div>
+          <p className="text-sm uppercase tracking-wider text-amber-400 mb-4">
+            Choose an option
+          </p>
+
+          <div className="space-y-3">
+            {selectedItem.choices.map((choice, index) => (
+              <label
+                key={index}
+                className={`block rounded-2xl border transition cursor-pointer ${
+                  selectedChoice?.name === choice.name
+                    ? "border-amber-400 bg-amber-400/10"
+                    : "border-white/10 bg-white/5 hover:border-amber-400/40"
+                }`}
+              >
+                <div className="p-4">
+
+                  {/* TOP */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+
                       <input
                         type="radio"
                         name="choice"
-                        onChange={() => setSelectedChoice(choice)}
+                        checked={selectedChoice?.name === choice.name}
+                        onChange={() =>
+                          setSelectedChoice({
+                            ...choice,
+                            customPrice: choice.minPrice,
+                          })
+                        }
                       />
-                      {choice.name}
-                    </div>
-                    <span className="text-amber-400">
-                      GH₵ {choice.price}
-                    </span>
-                  </label>
-                ))}
-              </div>
 
-              {/* EXTRAS */}
-              <div className="mt-6">
-                <p className="text-sm text-white/60 mb-2">
-                  Add Extras
-                </p>
+                      <div>
+                        <p className="font-medium text-white">
+                          {choice.name}
+                        </p>
 
-                {selectedItem.extras.map((extra, index) => (
-                  <label
-                    key={index}
-                    className="flex justify-between bg-white/5 px-3 py-2 rounded-lg mb-2 cursor-pointer"
-                  >
-                    <div className="flex gap-2">
-                      <input
-                        type="checkbox"
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setSelectedExtras([...selectedExtras, extra]);
-                          } else {
-                            setSelectedExtras(
-                              selectedExtras.filter((e) => e !== extra)
-                            );
-                          }
-                        }}
-                      />
-                      {extra.name}
+                        <p className="text-sm text-white/50">
+                          GH₵ {choice.minPrice} - GH₵ {choice.maxPrice}
+                        </p>
+                      </div>
                     </div>
 
-                    <span className="text-amber-400">
-                      + GH₵ {extra.price}
+                    <span className="text-amber-400 font-semibold">
+                      Select
                     </span>
-                  </label>
-                ))}
-              </div>
+                  </div>
 
-              {/* QUANTITY */}
-              <div className="mt-6 flex justify-between items-center">
-                <p className="text-sm text-white/60">Quantity</p>
+                  {/* CUSTOM PRICE */}
+                  {selectedChoice?.name === choice.name && (
+                    <div className="mt-4">
+                      <p className="text-sm text-white/60 mb-2">
+                        Enter preferred price
+                      </p>
 
-                <div className="flex items-center gap-4">
-                  <button
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-10 h-10 bg-white/10 rounded-full"
-                  >
-                    -
-                  </button>
+                     <input
+  type="number"
+  min={choice.minPrice}
+  max={choice.maxPrice}
+  value={selectedChoice.customPrice}
+  onChange={(e) => {
+    let value = Number(e.target.value);
 
-                  <span>{quantity}</span>
+    // STRICT RANGE VALIDATION
+    if (value < choice.minPrice) {
+      value = choice.minPrice;
+    }
 
-                  <button
-                    onClick={() => setQuantity(quantity + 1)}
-                    className="w-10 h-10 bg-amber-400 text-black rounded-full"
-                  >
-                    +
-                  </button>
+    if (value > choice.maxPrice) {
+      value = choice.maxPrice;
+    }
+
+    setSelectedChoice({
+      ...selectedChoice,
+      customPrice: value,
+    });
+  }}
+  className="w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-amber-400"
+/>
+
+                      <p className="text-xs text-red-400 mt-2">
+  You can only enter between GH₵ {choice.minPrice} and GH₵ {choice.maxPrice}
+</p>
+                    </div>
+                  )}
                 </div>
-              </div>
-
-              {/* NOTE */}
-              <textarea
-                placeholder="Add a note..."
-                value={note}
-                onChange={(e) => setNote(e.target.value)}
-                className="w-full mt-4 p-3 rounded-lg bg-white/5"
-              />
-
-              {/* TOTAL */}
-              <p className="text-2xl font-bold text-amber-400 mt-4">
-                GH₵ {totalPrice}
-              </p>
-
-              {/* BUTTON */}
-              <button
-                disabled={!selectedChoice}
-                className="w-full mt-4 bg-amber-400 text-black py-3 rounded-full disabled:opacity-50"
-              >
-                Add to Order • GH₵ {totalPrice}
-              </button>
-            </div>
+              </label>
+            ))}
           </div>
         </div>
-      )}
+
+        {/* EXTRAS */}
+        <div className="mt-8">
+          <p className="text-sm uppercase tracking-wider text-amber-400 mb-4">
+            Add Extras
+          </p>
+
+          <div className="space-y-3">
+            {selectedItem.extras.map((extra, index) => (
+              <label
+                key={index}
+                className="flex justify-between items-center rounded-2xl border border-white/10 bg-white/5 p-4 cursor-pointer hover:border-amber-400/40 transition"
+              >
+                <div className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedExtras([...selectedExtras, extra]);
+                      } else {
+                        setSelectedExtras(
+                          selectedExtras.filter((x) => x !== extra)
+                        );
+                      }
+                    }}
+                  />
+
+                  <div>
+                    <p>{extra.name}</p>
+
+                    <p className="text-sm text-white/50">
+                      GH₵ {extra.minPrice} - GH₵ {extra.maxPrice}
+                    </p>
+                  </div>
+                </div>
+
+                <span className="text-amber-400 font-semibold">
+                  +
+                </span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        {/* QUANTITY */}
+        <div className="mt-8 flex items-center justify-between rounded-2xl bg-white/5 border border-white/10 p-4">
+          <div>
+            <p className="text-sm text-white/50">
+              Quantity
+            </p>
+
+            <p className="font-semibold">
+              {quantity} item(s)
+            </p>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => setQuantity(Math.max(1, quantity - 1))}
+              className="w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 transition"
+            >
+              -
+            </button>
+
+            <span className="text-lg font-semibold">
+              {quantity}
+            </span>
+
+            <button
+              onClick={() => setQuantity(quantity + 1)}
+              className="w-11 h-11 rounded-full bg-amber-400 text-black font-bold hover:bg-amber-300 transition"
+            >
+              +
+            </button>
+          </div>
+        </div>
+
+        {/* NOTE */}
+        <div className="mt-8">
+          <p className="text-sm uppercase tracking-wider text-amber-400 mb-3">
+            Add Note
+          </p>
+
+          <textarea
+            placeholder="Extra spicy, less salt, etc..."
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            className="w-full rounded-2xl border border-white/10 bg-white/5 p-4 outline-none focus:border-amber-400 min-h-[120px]"
+          />
+        </div>
+
+        {/* TOTAL */}
+        <div className="mt-8 rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5">
+
+          <div className="flex items-center justify-between">
+            <p className="text-white/70">
+              Total Amount
+            </p>
+
+            <p className="text-3xl font-bold text-amber-400">
+              GH₵ {totalPrice}
+            </p>
+          </div>
+
+          <button
+            disabled={!selectedChoice}
+            className="w-full mt-5 rounded-full bg-amber-400 py-4 font-semibold text-black hover:bg-amber-300 transition disabled:opacity-50"
+          >
+            Add To Order • GH₵ {totalPrice}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
     </section>
   );
 }
