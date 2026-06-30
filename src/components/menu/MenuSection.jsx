@@ -54,6 +54,10 @@ export default function MenuSection() {
   const [historyLoading, setHistoryLoading] = useState(false);
   const [historyError, setHistoryError] = useState("");
 
+  const [customPrice, setCustomPrice] = useState(null);
+  const [priceError, setPriceError] = useState("");
+  const orderFormRef = useRef(null);
+
   const [orderForm, setOrderForm] = useState({
     customerName: "",
     phone: "",
@@ -85,6 +89,8 @@ export default function MenuSection() {
 
   const closeModal = () => {
     setSelectedItem(null);
+    setCustomPrice(null);
+    setPriceError("");
     setOrderForm({
       customerName: "",
       phone: "",
@@ -114,6 +120,10 @@ export default function MenuSection() {
   const openOrderModal = (item) => {
     setSelectedItem(item);
     setOrderSuccess(null);
+    setPriceError("");
+    setCustomPrice(
+      item.priceRange ? item.priceRange[0] : null
+    );
   };
 
   const saveCustomerOrderSession = (orderId, phone) => {
@@ -233,7 +243,9 @@ export default function MenuSection() {
     setTrackingError("");
 
     const orderId = generateOrderId();
-    const unitPrice = getBasePrice(selectedItem);
+    const unitPrice = selectedItem.priceRange
+      ? (customPrice ?? getBasePrice(selectedItem))
+      : getBasePrice(selectedItem);
     const total = unitPrice * Number(orderForm.quantity);
 
     const newOrder = {
@@ -740,10 +752,59 @@ export default function MenuSection() {
                 <div className="mt-4 inline-flex rounded-full border border-amber-400/30 bg-amber-400/10 px-4 py-2 text-sm font-semibold text-amber-300">
                   {formatPrice(selectedItem)}
                 </div>
+
+                {/* Price range picker */}
+                {selectedItem.priceRange && (
+                  <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <p className="mb-2 text-sm font-medium text-white/80">
+                      Enter preferred price
+                      <span className="ml-2 text-amber-400/70 font-normal">
+                        (GH₵ {selectedItem.priceRange[0]} – GH₵ {selectedItem.priceRange[1]})
+                      </span>
+                    </p>
+                    <input
+                      type="number"
+                      min={selectedItem.priceRange[0]}
+                      max={selectedItem.priceRange[1]}
+                      value={customPrice ?? selectedItem.priceRange[0]}
+                      onChange={(e) => {
+                        const raw = Number(e.target.value);
+                        setCustomPrice(raw);
+                        if (raw < selectedItem.priceRange[0] || raw > selectedItem.priceRange[1]) {
+                          setPriceError(
+                            `Please enter from GH₵ ${selectedItem.priceRange[0]} – GH₵ ${selectedItem.priceRange[1]}`
+                          );
+                        } else {
+                          setPriceError("");
+                        }
+                      }}
+                      className={`w-full rounded-xl border px-4 py-3 text-white outline-none transition bg-black/30 focus:border-amber-400 ${
+                        priceError ? "border-red-400" : "border-white/10"
+                      }`}
+                    />
+                    {priceError ? (
+                      <p className="mt-2 text-xs text-red-400">{priceError}</p>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setPriceError("");
+                          orderFormRef.current?.scrollIntoView({
+                            behavior: "smooth",
+                            block: "start",
+                          });
+                        }}
+                        className="mt-3 w-full rounded-xl bg-amber-400 py-2.5 text-sm font-bold text-black hover:bg-amber-300 transition active:scale-95"
+                      >
+                        Confirm Price → Fill Order Details
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
 
-            <form onSubmit={handleSubmitOrder} className="grid gap-4">
+            <form ref={orderFormRef} onSubmit={handleSubmitOrder} className="grid gap-4">
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label className="mb-2 block text-sm font-medium text-white/80">
