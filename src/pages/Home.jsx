@@ -560,14 +560,18 @@ function GrillsSizzlersSection() {
 ];
 
   // 🔥 PRICE LOGIC
-const basePrice = selectedChoice?.customPrice ?? 0;
+const customPriceNum = selectedChoice?.customPrice !== "" && selectedChoice?.customPrice != null
+  ? Number(selectedChoice.customPrice)
+  : null;
 
 const extrasTotal = selectedExtras.reduce(
   (sum, extra) => sum + extra.minPrice,
   0
 );
 
-const totalPrice = (basePrice + extrasTotal) * quantity;
+const totalPrice = customPriceNum != null
+  ? (customPriceNum + extrasTotal) * quantity
+  : null;
 
   return (
     <section id="grills" className="bg-neutral-950 py-20 sm:py-24">
@@ -684,12 +688,12 @@ const totalPrice = (basePrice + extrasTotal) * quantity;
                         type="radio"
                         name="choice"
                         checked={selectedChoice?.name === choice.name}
-                        onChange={() =>
-                          setSelectedChoice({
-                            ...choice,
-                            customPrice: choice.minPrice,
-                          })
-                        }
+                        onChange={() => {
+                          setSelectedChoice({ ...choice, customPrice: "" });
+                          setPriceError(
+                            `Please enter from GH₵ ${choice.minPrice} – GH₵ ${choice.maxPrice}`
+                          );
+                        }}
                       />
 
                       <div>
@@ -722,11 +726,13 @@ const totalPrice = (basePrice + extrasTotal) * quantity;
                         type="number"
                         min={choice.minPrice}
                         max={choice.maxPrice}
-                        value={selectedChoice.customPrice}
+                        value={selectedChoice.customPrice ?? ""}
+                        placeholder={`${choice.minPrice} – ${choice.maxPrice}`}
                         onChange={(e) => {
-                          const raw = Number(e.target.value);
+                          const raw = e.target.value;
                           setSelectedChoice({ ...selectedChoice, customPrice: raw });
-                          if (raw < choice.minPrice || raw > choice.maxPrice) {
+                          const num = Number(raw);
+                          if (raw === "" || num < choice.minPrice || num > choice.maxPrice) {
                             setPriceError(
                               `Please enter from GH₵ ${choice.minPrice} – GH₵ ${choice.maxPrice}`
                             );
@@ -864,15 +870,15 @@ const totalPrice = (basePrice + extrasTotal) * quantity;
             </p>
 
             <p className="text-3xl font-bold text-amber-400">
-              GH₵ {totalPrice}
+              {totalPrice != null ? `GH₵ ${totalPrice}` : "—"}
             </p>
           </div>
 
           <button
-            disabled={!selectedChoice}
+            disabled={!selectedChoice || totalPrice == null}
             className="w-full mt-5 rounded-full bg-amber-400 py-4 font-semibold text-black hover:bg-amber-300 transition disabled:opacity-50"
           >
-            Add To Order • GH₵ {totalPrice}
+            {totalPrice != null ? `Add To Order • GH₵ ${totalPrice}` : "Enter a price above to continue"}
           </button>
         </div>
       </div>

@@ -121,8 +121,11 @@ export default function MenuSection() {
     setSelectedItem(item);
     setOrderSuccess(null);
     setPriceError("");
-    setCustomPrice(
-      item.priceRange ? item.priceRange[0] : null
+    setCustomPrice(item.priceRange ? "" : null);
+    setPriceError(
+      item.priceRange
+        ? `Please enter from GH₵ ${item.priceRange[0]} – GH₵ ${item.priceRange[1]}`
+        : ""
     );
   };
 
@@ -766,13 +769,17 @@ export default function MenuSection() {
                       type="number"
                       min={selectedItem.priceRange[0]}
                       max={selectedItem.priceRange[1]}
-                      value={customPrice ?? selectedItem.priceRange[0]}
+                      value={customPrice ?? ""}
+                      placeholder={`GH₵ ${selectedItem.priceRange[0]} – ${selectedItem.priceRange[1]}`}
                       onChange={(e) => {
-                        const raw = Number(e.target.value);
+                        const raw = e.target.value;
                         setCustomPrice(raw);
-                        if (raw < selectedItem.priceRange[0] || raw > selectedItem.priceRange[1]) {
+                        const num = Number(raw);
+                        if (raw === "" || num < selectedItem.priceRange[0] || num > selectedItem.priceRange[1]) {
                           setPriceError(
-                            `Please enter from GH₵ ${selectedItem.priceRange[0]} – GH₵ ${selectedItem.priceRange[1]}`
+                            raw === ""
+                              ? `Please enter from GH₵ ${selectedItem.priceRange[0]} – GH₵ ${selectedItem.priceRange[1]}`
+                              : `Please enter from GH₵ ${selectedItem.priceRange[0]} – GH₵ ${selectedItem.priceRange[1]}`
                           );
                         } else {
                           setPriceError("");
@@ -905,11 +912,14 @@ export default function MenuSection() {
                 <div>
                   <p className="text-sm text-white/60">Estimated Total</p>
                   <p className="text-2xl font-bold text-white">
-                    GH₵ {(
-                      selectedItem.priceRange
-                        ? (customPrice ?? getBasePrice(selectedItem))
-                        : getBasePrice(selectedItem)
-                    ) * Number(orderForm.quantity)}
+                    {selectedItem.priceRange && (customPrice === "" || customPrice === null)
+                      ? "—"
+                      : `GH₵ ${(
+                          selectedItem.priceRange
+                            ? Number(customPrice)
+                            : getBasePrice(selectedItem)
+                        ) * Number(orderForm.quantity)}`
+                    }
                   </p>
                   <p className="mt-1 text-xs text-white/35">
                     Your order will be saved without online payment
