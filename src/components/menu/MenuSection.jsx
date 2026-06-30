@@ -2,6 +2,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { menuData } from "../../data/menu.js";
 import { supabase } from "../../lib/supabase";
 
+const PAYSTACK_PUBLIC_KEY = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY;
+
 function formatPrice(item) {
   if (item.priceRange && Array.isArray(item.priceRange)) {
     return `GH₵ ${item.priceRange[0]}–${item.priceRange[1]}`;
@@ -57,6 +59,7 @@ export default function MenuSection() {
   const [customPrice, setCustomPrice] = useState(null);
   const [priceError, setPriceError] = useState("");
   const orderFormRef = useRef(null);
+  const pendingOrderRef = useRef(null);
 
   const [orderForm, setOrderForm] = useState({
     customerName: "",
@@ -75,6 +78,15 @@ export default function MenuSection() {
   const activeData = useMemo(() => {
     return menuData.find((c) => c.category === activeCategory) || menuData[0];
   }, [activeCategory]);
+
+  useEffect(() => {
+    if (document.getElementById("paystack-js")) return;
+    const script = document.createElement("script");
+    script.id = "paystack-js";
+    script.src = "https://js.paystack.co/v1/inline.js";
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = selectedItem ? "hidden" : "auto";
@@ -269,7 +281,7 @@ export default function MenuSection() {
       ...orderForm,
     };
 
-    const { error } = await supabase.from("orders").insert([
+    const { error: insertError } = await supabase.from("orders").insert([
       {
         order_id: orderId,
         customer_name: orderForm.customerName,
@@ -286,30 +298,67 @@ export default function MenuSection() {
       },
     ]);
 
-    if (error) {
-      console.error("Supabase insert error:", error);
+    if (insertError) {
+      console.error("Supabase insert error:", insertError);
       alert("Order failed to save. Please try again.");
       setSubmittingOrder(false);
       return;
     }
 
-    saveCustomerOrderSession(newOrder.id, newOrder.phone);
-
-    setOrderSuccess(newOrder);
-    setTrackingResult(newOrder);
-    setTrackingForm({
-      orderId: newOrder.id,
-      phone: newOrder.phone,
-    });
-
-    await loadOrderHistory(newOrder.phone);
-
-    closeModal();
+    pendingOrderRef.current = newOrder;
     setSubmittingOrder(false);
+    closeModal();
 
-    setTimeout(() => {
-      scrollToTracking();
-    }, 200);
+    const markPaid = async (reference) => {
+      await supabase
+        .from("orders")
+        .update({ payment_status: "Paid", payment_reference: reference })
+        .eq("order_id", orderId);
+
+      const paidOrder = { ...newOrder, paymentStatus: "Paid", paymentReference: reference };
+      saveCustomerOrderSession(paidOrder.id, paidOrder.phone);
+      setOrderSuccess(paidOrder);
+      setTrackingResult(paidOrder);
+      setTrackingForm({ orderId: paidOrder.id, phone: paidOrder.phone });
+      await loadOrderHistory(paidOrder.phone);
+      setTimeout(() => scrollToTracking(), 200);
+    };
+
+    const markUnpaid = async () => {
+      saveCustomerOrderSession(newOrder.id, newOrder.phone);
+      setOrderSuccess(newOrder);
+      setTrackingResult(newOrder);
+      setTrackingForm({ orderId: newOrder.id, phone: newOrder.phone });
+      await loadOrderHistory(newOrder.phone);
+      setTimeout(() => scrollToTracking(), 200);
+    };
+
+    if (PAYSTACK_PUBLIC_KEY && window.PaystackPop) {
+      const amountKobo = Math.round(total * 100);
+      const handler = window.PaystackPop.setup({
+        key: PAYSTACK_PUBLIC_KEY,
+        email: `${orderForm.phone.replace(/\s+/g, "")}@nellyangepub.com`,
+        amount: amountKobo,
+        currency: "GHS",
+        ref: orderId,
+        metadata: {
+          custom_fields: [
+            { display_name: "Customer Name", variable_name: "customer_name", value: orderForm.customerName },
+            { display_name: "Order ID", variable_name: "order_id", value: orderId },
+            { display_name: "Item", variable_name: "item_name", value: selectedItem.name },
+          ],
+        },
+        callback: (response) => {
+          markPaid(response.reference);
+        },
+        onClose: () => {
+          markUnpaid();
+        },
+      });
+      handler.openIframe();
+    } else {
+      await markUnpaid();
+    }
   };
 
   const handleTrackOrder = async (e) => {
@@ -920,14 +969,14 @@ export default function MenuSection() {
                           ) * Number(orderForm.quantity)}`
                       }
                     </p>
-                    <p className="text-[11px] text-white/25 mt-0.5">No online payment required</p>
+                    <p className="text-[11px] text-white/25 mt-0.5">Secure payment via Paystack</p>
                   </div>
                   <button
                     type="submit"
                     disabled={submittingOrder}
                     className="shrink-0 rounded-xl bg-amber-400 px-6 py-3.5 text-sm font-bold text-black hover:bg-amber-300 transition disabled:cursor-not-allowed disabled:opacity-60 active:scale-95 shadow-lg shadow-amber-400/20"
                   >
-                    {submittingOrder ? "Placing…" : "Place Order"}
+                    {submittingOrder ? "Saving…" : "Pay Now"}
                   </button>
                 </div>
               </div>

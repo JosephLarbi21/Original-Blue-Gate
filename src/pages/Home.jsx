@@ -506,6 +506,13 @@ function HeroSection() {
   );
 }
 
+const PAYSTACK_PUBLIC_KEY = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY;
+
+function generateGrillOrderId() {
+  const random = Math.floor(1000 + Math.random() * 9000);
+  return `NAG-${Date.now().toString().slice(-6)}-${random}`;
+}
+
 function GrillsSizzlersSection() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedChoice, setSelectedChoice] = useState(null);
@@ -513,7 +520,20 @@ function GrillsSizzlersSection() {
   const [quantity, setQuantity] = useState(1);
   const [note, setNote] = useState("");
   const [priceError, setPriceError] = useState("");
+  const [customerName, setCustomerName] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
+  const [orderPlaced, setOrderPlaced] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
   const orderSectionRef = useRef(null);
+
+  useEffect(() => {
+    if (document.getElementById("paystack-js")) return;
+    const script = document.createElement("script");
+    script.id = "paystack-js";
+    script.src = "https://js.paystack.co/v1/inline.js";
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
 
   const items = [
   {
@@ -560,18 +580,84 @@ function GrillsSizzlersSection() {
 ];
 
   // 🔥 PRICE LOGIC
-const customPriceNum = selectedChoice?.customPrice !== "" && selectedChoice?.customPrice != null
-  ? Number(selectedChoice.customPrice)
-  : null;
+  const customPriceNum = selectedChoice?.customPrice !== "" && selectedChoice?.customPrice != null
+    ? Number(selectedChoice.customPrice)
+    : null;
 
-const extrasTotal = selectedExtras.reduce(
-  (sum, extra) => sum + extra.minPrice,
-  0
-);
+  const extrasTotal = selectedExtras.reduce(
+    (sum, extra) => sum + extra.minPrice,
+    0
+  );
 
-const totalPrice = customPriceNum != null
-  ? (customPriceNum + extrasTotal) * quantity
-  : null;
+  const totalPrice = customPriceNum != null
+    ? (customPriceNum + extrasTotal) * quantity
+    : null;
+
+  const handleAddToOrder = async () => {
+    if (!selectedChoice || totalPrice == null || !customerName.trim() || !customerPhone.trim()) return;
+    setSubmitting(true);
+
+    const orderId = generateGrillOrderId();
+    const total = totalPrice;
+    const itemLabel = `${selectedItem.title} – ${selectedChoice.name}`;
+    const extrasLabel = selectedExtras.map((x) => x.name).join(", ");
+
+    const { error: insertError } = await supabase.from("orders").insert([{
+      order_id: orderId,
+      customer_name: customerName.trim(),
+      phone: customerPhone.trim(),
+      item_name: extrasLabel ? `${itemLabel} + ${extrasLabel}` : itemLabel,
+      quantity,
+      total_price: total,
+      order_type: "dine-in",
+      address: "",
+      notes: note,
+      status: "Pending",
+      payment_status: "Unpaid",
+      payment_reference: null,
+    }]);
+
+    if (insertError) {
+      console.error("Order insert error:", insertError);
+      alert("Failed to save order. Please try again.");
+      setSubmitting(false);
+      return;
+    }
+
+    setSubmitting(false);
+    setSelectedItem(null);
+
+    const openPaystack = () => {
+      if (PAYSTACK_PUBLIC_KEY && window.PaystackPop) {
+        const handler = window.PaystackPop.setup({
+          key: PAYSTACK_PUBLIC_KEY,
+          email: `${customerPhone.trim().replace(/\s+/g, "")}@nellyangepub.com`,
+          amount: Math.round(total * 100),
+          currency: "GHS",
+          ref: orderId,
+          metadata: {
+            custom_fields: [
+              { display_name: "Customer Name", variable_name: "customer_name", value: customerName.trim() },
+              { display_name: "Order ID", variable_name: "order_id", value: orderId },
+              { display_name: "Item", variable_name: "item_name", value: itemLabel },
+            ],
+          },
+          callback: async (response) => {
+            await supabase.from("orders").update({ payment_status: "Paid", payment_reference: response.reference }).eq("order_id", orderId);
+            setOrderPlaced({ orderId, status: "Paid", reference: response.reference });
+          },
+          onClose: () => {
+            setOrderPlaced({ orderId, status: "Unpaid", reference: null });
+          },
+        });
+        handler.openIframe();
+      } else {
+        setOrderPlaced({ orderId, status: "Unpaid", reference: null });
+      }
+    };
+
+    setTimeout(openPaystack, 300);
+  };
 
   return (
     <section id="grills" className="bg-neutral-950 py-20 sm:py-24">
