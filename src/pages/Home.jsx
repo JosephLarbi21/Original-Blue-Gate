@@ -18,6 +18,14 @@ const navLinks = [
 
 export default function Home() {
     const [navOpen, setNavOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     if (navOpen) {
@@ -107,168 +115,160 @@ export default function Home() {
       <div className="fixed inset-x-0 top-0 z-[100]">
         <TopBar />
 
-        <header className="border-b border-white/5 bg-neutral-950/70 backdrop-blur-2xl">
-          <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-            <a href="#home" className="flex min-w-0 items-center gap-3">
-              <img
-                src="/assets/images/logo01.jpg"
-                alt="Original Blue Gate"
-                className="h-11 w-11 rounded-full border border-amber-400/30 object-cover shadow-lg shadow-amber-500/10 sm:h-12 sm:w-12"
-              />
-              <div className="min-w-0">
-                <p className="truncate text-[10px] uppercase tracking-[0.35em] text-amber-400 sm:text-xs">
-                  NellyAnge Restaurant, Bar & Grill
+        <header
+          className={`transition-all duration-500 ${
+            scrolled
+              ? "border-b border-white/[0.06] bg-neutral-950/85 shadow-[0_4px_32px_rgba(0,0,0,0.6)] backdrop-blur-2xl py-2"
+              : "bg-neutral-950/60 backdrop-blur-xl py-3.5"
+          }`}
+        >
+          <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8">
+            {/* Logo */}
+            <a href="#home" className="group flex shrink-0 items-center gap-3">
+              <div className="relative overflow-hidden rounded-full ring-1 ring-amber-400/20 transition-all duration-300 group-hover:ring-amber-400/50">
+                <img
+                  src="/assets/images/logo01.jpg"
+                  alt="Original Blue Gate"
+                  className="h-10 w-10 rounded-full object-cover transition-transform duration-300 group-hover:scale-105 sm:h-11 sm:w-11"
+                />
+              </div>
+              <div className="hidden min-w-0 sm:block">
+                <p className="truncate text-[9px] font-bold uppercase tracking-[0.25em] text-amber-400">
+                  NellyAnge · Bar & Grill
                 </p>
-                <p className="truncate text-sm font-semibold text-white sm:text-base">
+                <p className="truncate text-[13px] font-semibold text-white/90">
                   Original Blue Gate
                 </p>
               </div>
             </a>
 
-            <nav className="hidden items-center gap-8 lg:flex">
+            {/* Desktop nav */}
+            <nav className="ml-auto hidden items-center gap-1 lg:flex">
               {navLinks.map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
-                  className="text-sm font-medium tracking-wide text-white/75 transition hover:text-amber-400"
+                  className="group relative inline-flex items-center rounded-lg px-3.5 py-2 text-[13px] font-medium text-white/65 transition-all duration-200 hover:bg-white/[0.06] hover:text-white"
                 >
                   {link.label}
+                  <span className="absolute bottom-1 left-1/2 h-[2px] w-0 -translate-x-1/2 rounded-full bg-amber-400 transition-all duration-300 group-hover:w-4" />
                 </a>
               ))}
             </nav>
 
-            <div className="hidden lg:block">
-              <a
-                href="#reservation"
-                className="rounded-full border border-amber-400 bg-amber-400 px-5 py-3 text-sm font-semibold text-black transition hover:bg-amber-300"
-              >
-                Find a Table
-              </a>
-            </div>
+            {/* CTA */}
+            <a
+              href="#reservation"
+              className="ml-auto hidden shrink-0 items-center gap-2 rounded-full bg-amber-400 px-5 py-2.5 text-[13px] font-bold text-black shadow-[0_0_20px_rgba(251,191,36,0.2)] transition-all duration-200 hover:bg-amber-300 hover:shadow-[0_0_28px_rgba(251,191,36,0.4)] active:scale-95 lg:ml-4 lg:inline-flex"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              Find a Table
+            </a>
 
+            {/* Hamburger */}
             <button
               type="button"
               onClick={() => setNavOpen(true)}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:border-amber-400 hover:text-amber-400 lg:hidden"
+              className="ml-auto flex h-10 w-10 shrink-0 flex-col items-center justify-center gap-[5px] rounded-xl border border-white/10 transition-all duration-200 hover:border-amber-400/30 hover:bg-white/5 lg:hidden"
               aria-label="Open menu"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="1.8"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M4 7h16M4 12h16M4 17h16"
-                />
-              </svg>
+              <span className="h-[1.5px] w-[18px] rounded-full bg-white/80" />
+              <span className="h-[1.5px] w-[13px] self-start ml-[5px] rounded-full bg-white/50" />
+              <span className="h-[1.5px] w-[18px] rounded-full bg-white/80" />
             </button>
           </div>
 
+          {/* Mobile backdrop */}
           <div
-            className={`fixed inset-0 z-40 bg-black/70 backdrop-blur-sm transition-all duration-300 lg:hidden ${
-              navOpen
-                ? "pointer-events-auto opacity-100"
-                : "pointer-events-none opacity-0"
+            className={`fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-all duration-300 lg:hidden ${
+              navOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
             }`}
             onClick={() => setNavOpen(false)}
           />
 
+          {/* Mobile drawer */}
           <aside
-            className={`fixed right-0 top-0 z-50 flex h-screen w-[88%] max-w-sm flex-col border-l border-white/10 bg-neutral-950/95 shadow-2xl backdrop-blur-2xl transition-transform duration-300 ease-out lg:hidden ${
+            className={`fixed right-0 top-0 z-50 flex h-screen w-[300px] max-w-[88vw] flex-col border-l border-white/[0.07] bg-neutral-950 shadow-2xl transition-transform duration-300 ease-in-out lg:hidden ${
               navOpen ? "translate-x-0" : "translate-x-full"
             }`}
             aria-hidden={!navOpen}
           >
-            <div className="flex items-center justify-between border-b border-white/10 px-5 py-5">
-              <div className="flex min-w-0 items-center gap-3">
+            {/* Drawer header */}
+            <div className="flex items-center justify-between border-b border-white/[0.07] px-5 py-4">
+              <div className="flex items-center gap-3">
                 <img
                   src="/assets/images/logo01.jpg"
                   alt="Original Blue Gate"
-                  className="h-11 w-11 rounded-full object-cover"
+                  className="h-9 w-9 rounded-full object-cover ring-1 ring-amber-400/30"
                 />
-                <div className="min-w-0">
-                  <p className="truncate text-[10px] uppercase tracking-[0.35em] text-amber-400">
-                    NellyAnge Restaurant, Bar & Grill
+                <div>
+                  <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-amber-400">
+                    NellyAnge
                   </p>
-                  <p className="truncate text-sm font-semibold text-white">
+                  <p className="text-[12px] font-semibold text-white/80">
                     Original Blue Gate
                   </p>
                 </div>
               </div>
-
               <button
                 type="button"
                 onClick={() => setNavOpen(false)}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:border-amber-400 hover:text-amber-400"
+                className="grid h-8 w-8 place-items-center rounded-lg border border-white/10 text-white/60 transition hover:border-white/20 hover:text-white"
                 aria-label="Close menu"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 18 18 6M6 6l12 12"
-                  />
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto px-5 py-6">
-              <div className="space-y-2">
+            {/* Drawer links */}
+            <nav className="flex-1 overflow-y-auto px-4 py-5">
+              <p className="mb-3 px-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-white/25">
+                Navigate
+              </p>
+              <ul className="space-y-1">
                 {navLinks.map((link) => (
-                  <a
-                    key={link.label}
-                    href={link.href}
-                    onClick={() => setNavOpen(false)}
-                    className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4 text-sm font-medium text-white/85 transition hover:border-amber-400/30 hover:bg-white/[0.06] hover:text-amber-400"
-                  >
-                    <span>{link.label}</span>
-                    <span className="text-white/30">→</span>
-                  </a>
+                  <li key={link.label}>
+                    <a
+                      href={link.href}
+                      onClick={() => setNavOpen(false)}
+                      className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-[14px] font-medium text-white/65 transition-all duration-150 hover:bg-white/[0.05] hover:text-white"
+                    >
+                      <span className="h-1 w-1 shrink-0 rounded-full bg-amber-400/60" />
+                      {link.label}
+                    </a>
+                  </li>
                 ))}
-              </div>
+              </ul>
 
-              <div className="mt-8 rounded-[1.5rem] border border-white/10 bg-white/5 p-5">
-                <p className="text-xs uppercase tracking-[0.35em] text-amber-400">
-                  Visit Us
-                </p>
+              <a
+                href="#reservation"
+                onClick={() => setNavOpen(false)}
+                className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-amber-400 px-4 py-3 text-[13px] font-bold text-black shadow-[0_0_20px_rgba(251,191,36,0.15)] transition-all active:scale-95 hover:bg-amber-300"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                Find a Table
+              </a>
+            </nav>
 
-                <div className="mt-4 space-y-3 text-sm text-white/70">
-                  <p>Osu, Mission Street, Accra-Ghana</p>
-                  <p>Daily: 9:30 am - Midnight</p>
-
-                  <a
-                    href="tel:+233537965155"
-                    className="block transition hover:text-amber-400"
-                  >
-                    +233 53 796 5155
-                  </a>
-
-                  <a
-                    href={`mailto:${BUSINESS_EMAIL}`}
-                    className="block break-all transition hover:text-amber-400"
-                  >
-                    {BUSINESS_EMAIL}
-                  </a>
-                </div>
-
-                <a
-                  href="#reservation"
-                  onClick={() => setNavOpen(false)}
-                  className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-amber-400 px-5 py-3.5 text-sm font-semibold text-black transition hover:bg-amber-300"
-                >
-                  Book a Table
+            {/* Drawer footer */}
+            <div className="border-t border-white/[0.07] px-5 py-5">
+              <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.15em] text-white/25">
+                Contact
+              </p>
+              <div className="space-y-2.5 text-[13px] text-white/55">
+                <p>Osu, Mission Street, Accra-Ghana</p>
+                <p>Daily: 9:30 am – Midnight</p>
+                <a href="tel:+233537965155" className="block transition hover:text-amber-400">
+                  +233 53 796 5155
+                </a>
+                <a href={`mailto:${BUSINESS_EMAIL}`} className="block break-all transition hover:text-amber-400">
+                  {BUSINESS_EMAIL}
                 </a>
               </div>
             </div>
