@@ -560,7 +560,7 @@ function GrillsSizzlersSection() {
 ];
 
   // 🔥 PRICE LOGIC
-const basePrice = selectedChoice?.customPrice || 0;
+const basePrice = selectedChoice?.customPrice ?? 0;
 
 const extrasTotal = selectedExtras.reduce(
   (sum, extra) => sum + extra.minPrice,

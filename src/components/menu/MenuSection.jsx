@@ -905,7 +905,11 @@ export default function MenuSection() {
                 <div>
                   <p className="text-sm text-white/60">Estimated Total</p>
                   <p className="text-2xl font-bold text-white">
-                    GH₵ {getBasePrice(selectedItem) * Number(orderForm.quantity)}
+                    GH₵ {(
+                      selectedItem.priceRange
+                        ? (customPrice ?? getBasePrice(selectedItem))
+                        : getBasePrice(selectedItem)
+                    ) * Number(orderForm.quantity)}
                   </p>
                   <p className="mt-1 text-xs text-white/35">
                     Your order will be saved without online payment
