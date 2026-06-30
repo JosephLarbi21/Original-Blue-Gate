@@ -628,260 +628,222 @@ const totalPrice = customPriceNum != null
 
       {/* 🔥 MODAL */}
      {selectedItem && (
-  <div className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+  <div className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-md flex items-end sm:items-center justify-center">
+    <div className="relative w-full max-w-lg max-h-[95vh] sm:max-h-[90vh] overflow-y-auto rounded-t-[2.5rem] sm:rounded-[2.5rem] bg-[#0d0d0d] shadow-2xl border border-white/[0.06]">
 
-    <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-[2rem] bg-neutral-900 border border-white/10 shadow-2xl">
-
-      {/* CLOSE */}
-      <button
-        onClick={() => setSelectedItem(null)}
-        className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-black/70 text-white hover:bg-amber-400 hover:text-black transition"
-      >
-        ✕
-      </button>
-
-      {/* IMAGE */}
-      <div className="relative h-64">
+      {/* ── Hero Image ── */}
+      <div className="relative h-64 sm:h-72 overflow-hidden rounded-t-[2.5rem]">
         <img
           src={selectedItem.image}
-          className="w-full h-full object-cover"
+          alt={selectedItem.title}
+          className="w-full h-full object-cover scale-105"
         />
-
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-
-        <div className="absolute bottom-4 left-4">
-          <h3 className="text-3xl font-bold text-white">
-            {selectedItem.title}
-          </h3>
-
-          <p className="text-white/70 mt-1">
-            {selectedItem.description}
-          </p>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-black/40 to-transparent" />
+        <button
+          onClick={() => setSelectedItem(null)}
+          className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white/80 hover:bg-amber-400 hover:text-black transition"
+        >
+          ✕
+        </button>
+        <div className="absolute bottom-5 left-5 right-16">
+          <span className="inline-block rounded-full border border-amber-400/40 bg-amber-400/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-300 mb-2">
+            Signature Dish
+          </span>
+          <h3 className="text-2xl font-bold text-white leading-snug">{selectedItem.title}</h3>
+          <p className="text-sm text-white/55 mt-1 line-clamp-2">{selectedItem.description}</p>
         </div>
       </div>
 
-      <div className="p-6 text-white">
+      <div className="px-5 sm:px-6 pb-6 pt-5 text-white">
 
-        {/* CHOICES */}
-        <div>
-          <p className="text-sm uppercase tracking-wider text-amber-400 mb-4">
-            Choose an option
-          </p>
+        {/* ── Choices ── */}
+        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-400 mb-3">
+          Choose an Option
+        </p>
 
-          <div className="space-y-3">
-            {selectedItem.choices.map((choice, index) => (
-              <label
-                key={index}
-                className={`block rounded-2xl border transition cursor-pointer ${
-                  selectedChoice?.name === choice.name
-                    ? "border-amber-400 bg-amber-400/10"
-                    : "border-white/10 bg-white/5 hover:border-amber-400/40"
-                }`}
-              >
-                <div className="p-4">
-
-                  {/* TOP */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-
-                      <input
-                        type="radio"
-                        name="choice"
-                        checked={selectedChoice?.name === choice.name}
-                        onChange={() => {
-                          setSelectedChoice({ ...choice, customPrice: "" });
-                          setPriceError(
-                            `Please enter from GH₵ ${choice.minPrice} – GH₵ ${choice.maxPrice}`
-                          );
-                        }}
-                      />
-
-                      <div>
-                        <p className="font-medium text-white">
-                          {choice.name}
-                        </p>
-
-                        <p className="text-sm text-white/50">
-                          GH₵ {choice.minPrice} - GH₵ {choice.maxPrice}
-                        </p>
-                      </div>
-                    </div>
-
-                    <span className="text-amber-400 font-semibold">
-                      Select
-                    </span>
-                  </div>
-
-                  {/* CUSTOM PRICE */}
-                  {selectedChoice?.name === choice.name && (
-                    <div className="mt-4">
-                      <p className="text-sm text-white/60 mb-2">
-                        Enter preferred price
-                        <span className="ml-2 text-amber-400/70">
-                          (GH₵ {choice.minPrice} – GH₵ {choice.maxPrice})
-                        </span>
-                      </p>
-
-                      <input
-                        type="number"
-                        min={choice.minPrice}
-                        max={choice.maxPrice}
-                        value={selectedChoice.customPrice ?? ""}
-                        placeholder={`${choice.minPrice} – ${choice.maxPrice}`}
-                        onChange={(e) => {
-                          const raw = e.target.value;
-                          setSelectedChoice({ ...selectedChoice, customPrice: raw });
-                          const num = Number(raw);
-                          if (raw === "") {
-                            setPriceError(`Enter a price between GH₵ ${choice.minPrice} and GH₵ ${choice.maxPrice}`);
-                          } else if (num < choice.minPrice) {
-                            setPriceError(`Too low — minimum is GH₵ ${choice.minPrice}`);
-                          } else if (num > choice.maxPrice) {
-                            setPriceError(`Too high — maximum is GH₵ ${choice.maxPrice}`);
-                          } else {
-                            setPriceError("");
-                          }
-                        }}
-                        className={`w-full rounded-xl border px-4 py-3 outline-none transition bg-black/30 ${
-                          priceError ? "border-red-400 focus:border-red-400" : "border-white/10 focus:border-amber-400"
-                        }`}
-                      />
-
-                      {priceError ? (
-                        <p className="text-xs text-red-400 mt-2">{priceError}</p>
-                      ) : (
-                        <button
-                          type="button"
-                          disabled={!selectedChoice.customPrice}
-                          onClick={() => {
-                            setPriceError("");
-                            orderSectionRef.current?.scrollIntoView({
-                              behavior: "smooth",
-                              block: "center",
-                            });
-                          }}
-                          className="mt-3 w-full rounded-xl bg-amber-400 py-2.5 text-sm font-bold text-black hover:bg-amber-300 transition active:scale-95 disabled:opacity-40"
-                        >
-                          Confirm Price → Continue
-                        </button>
+        <div className="space-y-2.5">
+          {selectedItem.choices.map((choice, index) => (
+            <label
+              key={index}
+              className={`block rounded-2xl border transition-all cursor-pointer ${
+                selectedChoice?.name === choice.name
+                  ? "border-amber-400/60 bg-amber-400/[0.08]"
+                  : "border-white/[0.08] bg-white/[0.03] hover:border-amber-400/30"
+              }`}
+            >
+              <div className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition ${
+                      selectedChoice?.name === choice.name
+                        ? "border-amber-400 bg-amber-400"
+                        : "border-white/30"
+                    }`}>
+                      {selectedChoice?.name === choice.name && (
+                        <div className="w-2 h-2 rounded-full bg-black" />
                       )}
                     </div>
-                  )}
-                </div>
-              </label>
-            ))}
-          </div>
-        </div>
-
-        {/* EXTRAS */}
-        <div className="mt-8">
-          <p className="text-sm uppercase tracking-wider text-amber-400 mb-4">
-            Add Extras
-          </p>
-
-          <div className="space-y-3">
-            {selectedItem.extras.map((extra, index) => (
-              <label
-                key={index}
-                className="flex justify-between items-center rounded-2xl border border-white/10 bg-white/5 p-4 cursor-pointer hover:border-amber-400/40 transition"
-              >
-                <div className="flex items-center gap-3">
-                  <input
-                    type="checkbox"
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setSelectedExtras([...selectedExtras, extra]);
-                      } else {
-                        setSelectedExtras(
-                          selectedExtras.filter((x) => x !== extra)
+                    <input
+                      type="radio"
+                      name="choice"
+                      className="sr-only"
+                      checked={selectedChoice?.name === choice.name}
+                      onChange={() => {
+                        setSelectedChoice({ ...choice, customPrice: "" });
+                        setPriceError(
+                          `Enter a price between GH₵ ${choice.minPrice} and GH₵ ${choice.maxPrice}`
                         );
-                      }
-                    }}
-                  />
-
-                  <div>
-                    <p>{extra.name}</p>
-
-                    <p className="text-sm text-white/50">
-                      GH₵ {extra.minPrice} - GH₵ {extra.maxPrice}
-                    </p>
+                      }}
+                    />
+                    <div>
+                      <p className="font-semibold text-white">{choice.name}</p>
+                      <p className="text-xs text-white/40 mt-0.5">GH₵ {choice.minPrice} – GH₵ {choice.maxPrice}</p>
+                    </div>
                   </div>
+                  <span className={`text-xs font-semibold px-3 py-1 rounded-full transition ${
+                    selectedChoice?.name === choice.name
+                      ? "bg-amber-400 text-black"
+                      : "bg-white/5 text-white/50"
+                  }`}>
+                    {selectedChoice?.name === choice.name ? "Selected" : "Select"}
+                  </span>
                 </div>
 
-                <span className="text-amber-400 font-semibold">
-                  +
-                </span>
-              </label>
-            ))}
+                {/* Custom Price Input */}
+                {selectedChoice?.name === choice.name && (
+                  <div className="mt-4 rounded-xl border border-white/[0.08] bg-black/30 p-3">
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-amber-400 mb-2">Your Price</p>
+                    <input
+                      type="number"
+                      min={choice.minPrice}
+                      max={choice.maxPrice}
+                      value={selectedChoice.customPrice ?? ""}
+                      placeholder={`GH₵ ${choice.minPrice} – ${choice.maxPrice}`}
+                      onChange={(e) => {
+                        const raw = e.target.value;
+                        setSelectedChoice({ ...selectedChoice, customPrice: raw });
+                        const num = Number(raw);
+                        if (raw === "") {
+                          setPriceError(`Enter a price between GH₵ ${choice.minPrice} and GH₵ ${choice.maxPrice}`);
+                        } else if (num < choice.minPrice) {
+                          setPriceError(`Too low — minimum is GH₵ ${choice.minPrice}`);
+                        } else if (num > choice.maxPrice) {
+                          setPriceError(`Too high — maximum is GH₵ ${choice.maxPrice}`);
+                        } else {
+                          setPriceError("");
+                        }
+                      }}
+                      className={`w-full rounded-xl border px-4 py-3 text-white outline-none transition bg-black/30 placeholder:text-white/20 ${
+                        priceError ? "border-red-400 focus:border-red-400" : "border-white/10 focus:border-amber-400"
+                      }`}
+                    />
+                    {priceError ? (
+                      <p className="text-xs text-red-400 mt-2 flex items-center gap-1.5"><span>⚠</span>{priceError}</p>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setPriceError("");
+                          orderSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+                        }}
+                        className="mt-3 w-full rounded-xl bg-amber-400 py-2.5 text-sm font-bold text-black hover:bg-amber-300 transition active:scale-95"
+                      >
+                        Confirm Price → Continue
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
+            </label>
+          ))}
+        </div>
+
+        {/* ── Extras ── */}
+        <div className="mt-6">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-400 mb-3">Add Extras</p>
+          <div className="flex flex-wrap gap-2">
+            {selectedItem.extras.map((extra, index) => {
+              const isSelected = selectedExtras.includes(extra);
+              return (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={() => {
+                    if (isSelected) {
+                      setSelectedExtras(selectedExtras.filter((x) => x !== extra));
+                    } else {
+                      setSelectedExtras([...selectedExtras, extra]);
+                    }
+                  }}
+                  className={`rounded-full border px-4 py-2 text-sm font-medium transition-all ${
+                    isSelected
+                      ? "border-amber-400 bg-amber-400/15 text-amber-300"
+                      : "border-white/10 bg-white/[0.03] text-white/60 hover:border-amber-400/40 hover:text-white/80"
+                  }`}
+                >
+                  {isSelected ? "✓ " : "+ "}{extra.name}
+                  <span className="ml-1.5 text-xs opacity-60">GH₵{extra.minPrice}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        {/* QUANTITY */}
-        <div className="mt-8 flex items-center justify-between rounded-2xl bg-white/5 border border-white/10 p-4">
+        {/* ── Quantity ── */}
+        <div className="mt-6 flex items-center justify-between rounded-2xl border border-white/[0.08] bg-white/[0.03] px-5 py-4">
           <div>
-            <p className="text-sm text-white/50">
-              Quantity
-            </p>
-
-            <p className="font-semibold">
-              {quantity} item(s)
-            </p>
+            <p className="text-[10px] uppercase tracking-widest text-white/35 mb-0.5">Quantity</p>
+            <p className="font-semibold text-white">{quantity} item{quantity > 1 ? "s" : ""}</p>
           </div>
-
           <div className="flex items-center gap-4">
             <button
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
-              className="w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 transition"
+              className="w-10 h-10 rounded-full border border-white/10 bg-white/5 text-white text-lg font-bold hover:bg-white/15 transition"
             >
-              -
+              −
             </button>
-
-            <span className="text-lg font-semibold">
-              {quantity}
-            </span>
-
+            <span className="text-lg font-bold text-white w-6 text-center">{quantity}</span>
             <button
               onClick={() => setQuantity(quantity + 1)}
-              className="w-11 h-11 rounded-full bg-amber-400 text-black font-bold hover:bg-amber-300 transition"
+              className="w-10 h-10 rounded-full bg-amber-400 text-black text-lg font-bold hover:bg-amber-300 transition shadow-md shadow-amber-400/20"
             >
               +
             </button>
           </div>
         </div>
 
-        {/* NOTE */}
-        <div className="mt-8">
-          <p className="text-sm uppercase tracking-wider text-amber-400 mb-3">
-            Add Note
-          </p>
-
+        {/* ── Note ── */}
+        <div className="mt-5">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/35 mb-2">Special Instructions</p>
           <textarea
-            placeholder="Extra spicy, less salt, etc..."
+            placeholder="Extra spicy, less salt, no onions…"
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            className="w-full rounded-2xl border border-white/10 bg-white/5 p-4 outline-none focus:border-amber-400 min-h-[120px]"
+            className="w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-white outline-none transition placeholder:text-white/20 focus:border-amber-400 min-h-[90px] resize-none"
           />
         </div>
 
-        {/* TOTAL */}
-        <div ref={orderSectionRef} className="mt-8 rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5">
-
-          <div className="flex items-center justify-between">
-            <p className="text-white/70">
-              Total Amount
-            </p>
-
-            <p className="text-3xl font-bold text-amber-400">
-              {totalPrice != null ? `GH₵ ${totalPrice}` : "—"}
-            </p>
+        {/* ── Total ── */}
+        <div ref={orderSectionRef} className="mt-5 rounded-2xl overflow-hidden border border-amber-400/15 bg-gradient-to-br from-amber-400/[0.08] to-amber-600/[0.04]">
+          <div className="px-5 py-4">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-white/35 mb-1">Total Amount</p>
+                <p className="text-2xl font-bold text-white">
+                  {totalPrice != null ? `GH₵ ${totalPrice}` : "—"}
+                </p>
+              </div>
+              {totalPrice != null && (
+                <span className="text-xs text-white/30">× {quantity}</span>
+              )}
+            </div>
+            <button
+              disabled={!selectedChoice || totalPrice == null}
+              className="w-full rounded-xl bg-amber-400 py-3.5 text-sm font-bold text-black hover:bg-amber-300 transition disabled:opacity-50 active:scale-95 shadow-lg shadow-amber-400/20"
+            >
+              {totalPrice != null ? `Add To Order • GH₵ ${totalPrice}` : "Enter a price above to continue"}
+            </button>
           </div>
-
-          <button
-            disabled={!selectedChoice || totalPrice == null}
-            className="w-full mt-5 rounded-full bg-amber-400 py-4 font-semibold text-black hover:bg-amber-300 transition disabled:opacity-50"
-          >
-            {totalPrice != null ? `Add To Order • GH₵ ${totalPrice}` : "Enter a price above to continue"}
-          </button>
         </div>
       </div>
     </div>

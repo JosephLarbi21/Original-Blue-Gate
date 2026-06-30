@@ -723,123 +723,128 @@ export default function MenuSection() {
       </div>
 
       {selectedItem ? (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/75 px-4 py-8 backdrop-blur-sm">
-          <div className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-[2rem] border border-white/10 bg-[#111111] p-5 shadow-2xl sm:p-8">
-            <button
-              type="button"
-              onClick={closeModal}
-              className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-xl text-white/70 transition hover:border-amber-400 hover:text-amber-400"
-              aria-label="Close order modal"
-            >
-              ×
-            </button>
+        <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-md">
+          <div className="relative w-full max-w-2xl max-h-[95vh] sm:max-h-[90vh] overflow-y-auto rounded-t-[2.5rem] sm:rounded-[2.5rem] bg-[#0d0d0d] shadow-2xl border border-white/[0.06]">
 
-            <div className="mb-6 flex flex-col gap-5 sm:flex-row">
+            {/* ── Hero Image ── */}
+            <div className="relative h-56 sm:h-64 overflow-hidden rounded-t-[2.5rem]">
               <img
                 src={selectedItem.image}
                 alt={selectedItem.name}
-                className="h-44 w-full rounded-[1.5rem] object-cover sm:h-36 sm:w-40"
+                className="w-full h-full object-cover scale-105"
               />
-
-              <div className="flex-1">
-                <p className="text-xs uppercase tracking-[0.35em] text-amber-400">
-                  Complete Order
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-black/40 to-transparent" />
+              <button
+                type="button"
+                onClick={closeModal}
+                aria-label="Close"
+                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white/80 hover:bg-amber-400 hover:text-black transition"
+              >
+                ✕
+              </button>
+              <div className="absolute bottom-5 left-5 right-16">
+                <span className="inline-block rounded-full border border-amber-400/40 bg-amber-400/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-300 mb-2">
+                  {selectedItem.category || "Menu Item"}
+                </span>
+                <h3 className="text-2xl font-bold text-white leading-snug">{selectedItem.name}</h3>
+                <p className="text-sm text-white/55 mt-1 line-clamp-2">
+                  {selectedItem.desc || "Freshly prepared with quality ingredients and rich flavor."}
                 </p>
-                <h3 className="mt-2 text-2xl font-bold text-white">
-                  {selectedItem.name}
-                </h3>
-                <p className="mt-3 text-sm leading-7 text-white/65">
-                  {selectedItem.desc ||
-                    "Freshly prepared with quality ingredients and rich flavor."}
-                </p>
-                <div className="mt-4 inline-flex rounded-full border border-amber-400/30 bg-amber-400/10 px-4 py-2 text-sm font-semibold text-amber-300">
-                  {formatPrice(selectedItem)}
-                </div>
-
-                {/* Price range picker */}
-                {selectedItem.priceRange && (
-                  <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4">
-                    <p className="mb-2 text-sm font-medium text-white/80">
-                      Enter preferred price
-                      <span className="ml-2 text-amber-400/70 font-normal">
-                        (GH₵ {selectedItem.priceRange[0]} – GH₵ {selectedItem.priceRange[1]})
-                      </span>
-                    </p>
-                    <input
-                      type="number"
-                      min={selectedItem.priceRange[0]}
-                      max={selectedItem.priceRange[1]}
-                      value={customPrice ?? ""}
-                      placeholder={`GH₵ ${selectedItem.priceRange[0]} – ${selectedItem.priceRange[1]}`}
-                      onChange={(e) => {
-                        const raw = e.target.value;
-                        setCustomPrice(raw);
-                        const num = Number(raw);
-                        const [min, max] = selectedItem.priceRange;
-                        if (raw === "") {
-                          setPriceError(`Enter a price between GH₵ ${min} and GH₵ ${max}`);
-                        } else if (num < min) {
-                          setPriceError(`Too low — minimum is GH₵ ${min}`);
-                        } else if (num > max) {
-                          setPriceError(`Too high — maximum is GH₵ ${max}`);
-                        } else {
-                          setPriceError("");
-                        }
-                      }}
-                      className={`w-full rounded-xl border px-4 py-3 text-white outline-none transition bg-black/30 ${
-                        priceError ? "border-red-400 focus:border-red-400" : "border-white/10 focus:border-amber-400"
-                      }`}
-                    />
-                    {priceError ? (
-                      <p className="mt-2 text-xs text-red-400">{priceError}</p>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setPriceError("");
-                          orderFormRef.current?.scrollIntoView({
-                            behavior: "smooth",
-                            block: "start",
-                          });
-                        }}
-                        className="mt-3 w-full rounded-xl bg-amber-400 py-2.5 text-sm font-bold text-black hover:bg-amber-300 transition active:scale-95"
-                      >
-                        Confirm Price → Fill Order Details
-                      </button>
-                    )}
-                  </div>
-                )}
               </div>
             </div>
 
-            <form ref={orderFormRef} onSubmit={handleSubmitOrder} className="grid gap-4">
+            {/* ── Price badge + range picker ── */}
+            <div className="px-5 sm:px-7 pt-5">
+              <div className="flex items-center gap-3 flex-wrap">
+                <span className="inline-flex items-center rounded-full bg-amber-400 px-4 py-1.5 text-sm font-bold text-black shadow-md shadow-amber-400/20">
+                  {formatPrice(selectedItem)}
+                </span>
+                {selectedItem.priceRange && (
+                  <span className="text-xs text-white/35">Enter your preferred price below</span>
+                )}
+              </div>
+
+              {selectedItem.priceRange && (
+                <div className="mt-4 rounded-2xl border border-white/[0.08] bg-white/[0.04] p-4">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-400 mb-3">
+                    Your Price
+                  </p>
+                  <input
+                    type="number"
+                    min={selectedItem.priceRange[0]}
+                    max={selectedItem.priceRange[1]}
+                    value={customPrice ?? ""}
+                    placeholder={`GH₵ ${selectedItem.priceRange[0]} – ${selectedItem.priceRange[1]}`}
+                    onChange={(e) => {
+                      const raw = e.target.value;
+                      setCustomPrice(raw);
+                      const num = Number(raw);
+                      const [min, max] = selectedItem.priceRange;
+                      if (raw === "") {
+                        setPriceError(`Enter a price between GH₵ ${min} and GH₵ ${max}`);
+                      } else if (num < min) {
+                        setPriceError(`Too low — minimum is GH₵ ${min}`);
+                      } else if (num > max) {
+                        setPriceError(`Too high — maximum is GH₵ ${max}`);
+                      } else {
+                        setPriceError("");
+                      }
+                    }}
+                    className={`w-full rounded-xl border px-4 py-3 text-white outline-none transition bg-black/30 placeholder:text-white/25 ${
+                      priceError ? "border-red-400 focus:border-red-400" : "border-white/10 focus:border-amber-400"
+                    }`}
+                  />
+                  {priceError ? (
+                    <p className="mt-2 text-xs text-red-400 flex items-center gap-1.5">
+                      <span>⚠</span>{priceError}
+                    </p>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPriceError("");
+                        orderFormRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                      }}
+                      className="mt-3 w-full rounded-xl bg-amber-400 py-2.5 text-sm font-bold text-black hover:bg-amber-300 transition active:scale-95"
+                    >
+                      Confirm Price → Fill Order Details
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* ── Divider ── */}
+            <div className="mx-5 sm:mx-7 my-5 border-t border-white/[0.06]" />
+
+            {/* ── Order form ── */}
+            <form ref={orderFormRef} onSubmit={handleSubmitOrder} className="px-5 sm:px-7 pb-7 grid gap-4">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/35">
+                Order Details
+              </p>
+
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-white/80">
-                    Full Name
-                  </label>
+                  <label className="mb-1.5 block text-sm font-medium text-white/60">Full Name</label>
                   <input
                     type="text"
                     name="customerName"
                     value={orderForm.customerName}
                     onChange={handleOrderInputChange}
-                    placeholder="Enter your full name"
-                    className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition placeholder:text-white/30 focus:border-amber-400"
+                    placeholder="Your full name"
+                    className="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/20 focus:border-amber-400"
                     required
                   />
                 </div>
-
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-white/80">
-                    Phone Number
-                  </label>
+                  <label className="mb-1.5 block text-sm font-medium text-white/60">Phone Number</label>
                   <input
                     type="text"
                     name="phone"
                     value={orderForm.phone}
                     onChange={handleOrderInputChange}
-                    placeholder="Enter your phone number"
-                    className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition placeholder:text-white/30 focus:border-amber-400"
+                    placeholder="Your phone number"
+                    className="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/20 focus:border-amber-400"
                     required
                   />
                 </div>
@@ -847,29 +852,24 @@ export default function MenuSection() {
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-white/80">
-                    Quantity
-                  </label>
+                  <label className="mb-1.5 block text-sm font-medium text-white/60">Quantity</label>
                   <input
                     type="number"
                     min="1"
                     name="quantity"
                     value={orderForm.quantity}
                     onChange={handleOrderInputChange}
-                    className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition focus:border-amber-400"
+                    className="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-3 text-white outline-none transition focus:border-amber-400"
                     required
                   />
                 </div>
-
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-white/80">
-                    Order Type
-                  </label>
+                  <label className="mb-1.5 block text-sm font-medium text-white/60">Order Type</label>
                   <select
                     name="orderType"
                     value={orderForm.orderType}
                     onChange={handleOrderInputChange}
-                    className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition focus:border-amber-400"
+                    className="w-full rounded-xl border border-white/[0.08] bg-[#0d0d0d] px-4 py-3 text-white outline-none transition focus:border-amber-400"
                   >
                     <option value="pickup">Pickup</option>
                     <option value="delivery">Delivery</option>
@@ -880,60 +880,56 @@ export default function MenuSection() {
 
               {orderForm.orderType === "delivery" ? (
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-white/80">
-                    Delivery Address
-                  </label>
+                  <label className="mb-1.5 block text-sm font-medium text-white/60">Delivery Address</label>
                   <textarea
                     name="address"
                     value={orderForm.address}
                     onChange={handleOrderInputChange}
                     rows="3"
-                    placeholder="Enter delivery address"
-                    className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition placeholder:text-white/30 focus:border-amber-400"
+                    placeholder="Enter your delivery address"
+                    className="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/20 focus:border-amber-400"
                     required
                   />
                 </div>
               ) : null}
 
               <div>
-                <label className="mb-2 block text-sm font-medium text-white/80">
-                  Order Notes
-                </label>
+                <label className="mb-1.5 block text-sm font-medium text-white/60">Special Instructions</label>
                 <textarea
                   name="notes"
                   value={orderForm.notes}
                   onChange={handleOrderInputChange}
                   rows="3"
-                  placeholder="Extra instructions, spice level, drinks, etc."
-                  className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition placeholder:text-white/30 focus:border-amber-400"
+                  placeholder="Extra spicy, no onions, add sauce…"
+                  className="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/20 focus:border-amber-400"
                 />
               </div>
 
-              <div className="mt-2 flex flex-col gap-4 rounded-[1.5rem] border border-white/10 bg-white/5 p-4 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <p className="text-sm text-white/60">Estimated Total</p>
-                  <p className="text-2xl font-bold text-white">
-                    {selectedItem.priceRange && (customPrice === "" || customPrice === null)
-                      ? "—"
-                      : `GH₵ ${(
-                          selectedItem.priceRange
-                            ? Number(customPrice)
-                            : getBasePrice(selectedItem)
-                        ) * Number(orderForm.quantity)}`
-                    }
-                  </p>
-                  <p className="mt-1 text-xs text-white/35">
-                    Your order will be saved without online payment
-                  </p>
+              {/* ── Total + Submit ── */}
+              <div className="mt-1 rounded-2xl overflow-hidden border border-amber-400/15 bg-gradient-to-br from-amber-400/[0.08] to-amber-600/[0.04]">
+                <div className="flex items-center justify-between px-5 py-4 gap-4">
+                  <div>
+                    <p className="text-[10px] uppercase tracking-widest text-white/35 mb-1">Estimated Total</p>
+                    <p className="text-2xl font-bold text-white">
+                      {selectedItem.priceRange && (customPrice === "" || customPrice === null)
+                        ? "—"
+                        : `GH₵ ${(
+                            selectedItem.priceRange
+                              ? Number(customPrice)
+                              : getBasePrice(selectedItem)
+                          ) * Number(orderForm.quantity)}`
+                      }
+                    </p>
+                    <p className="text-[11px] text-white/25 mt-0.5">No online payment required</p>
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={submittingOrder}
+                    className="shrink-0 rounded-xl bg-amber-400 px-6 py-3.5 text-sm font-bold text-black hover:bg-amber-300 transition disabled:cursor-not-allowed disabled:opacity-60 active:scale-95 shadow-lg shadow-amber-400/20"
+                  >
+                    {submittingOrder ? "Placing…" : "Place Order"}
+                  </button>
                 </div>
-
-                <button
-                  type="submit"
-                  disabled={submittingOrder}
-                  className="rounded-2xl bg-amber-400 px-6 py-3 font-semibold text-black transition hover:bg-amber-300 disabled:cursor-not-allowed disabled:opacity-70"
-                >
-                  {submittingOrder ? "Placing Order..." : "Place Order"}
-                </button>
               </div>
             </form>
           </div>
