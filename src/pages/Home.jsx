@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MenuSection from "../components/menu/MenuSection";
 import BackToTop from "../components/BackToTop";
 import WhatsAppFloat from "../components/What'sAppFloat"; // Fixed import
@@ -512,6 +512,8 @@ function GrillsSizzlersSection() {
   const [selectedExtras, setSelectedExtras] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [note, setNote] = useState("");
+  const [priceError, setPriceError] = useState("");
+  const orderSectionRef = useRef(null);
 
   const items = [
   {
@@ -711,36 +713,50 @@ const totalPrice = (basePrice + extrasTotal) * quantity;
                     <div className="mt-4">
                       <p className="text-sm text-white/60 mb-2">
                         Enter preferred price
+                        <span className="ml-2 text-amber-400/70">
+                          (GH₵ {choice.minPrice} – GH₵ {choice.maxPrice})
+                        </span>
                       </p>
 
-                     <input
-  type="number"
-  min={choice.minPrice}
-  max={choice.maxPrice}
-  value={selectedChoice.customPrice}
-  onChange={(e) => {
-    let value = Number(e.target.value);
+                      <input
+                        type="number"
+                        min={choice.minPrice}
+                        max={choice.maxPrice}
+                        value={selectedChoice.customPrice}
+                        onChange={(e) => {
+                          const raw = Number(e.target.value);
+                          setSelectedChoice({ ...selectedChoice, customPrice: raw });
+                          if (raw < choice.minPrice || raw > choice.maxPrice) {
+                            setPriceError(
+                              `Please enter from GH₵ ${choice.minPrice} – GH₵ ${choice.maxPrice}`
+                            );
+                          } else {
+                            setPriceError("");
+                          }
+                        }}
+                        className={`w-full rounded-xl border px-4 py-3 outline-none transition bg-black/30 focus:border-amber-400 ${
+                          priceError ? "border-red-400" : "border-white/10"
+                        }`}
+                      />
 
-    // STRICT RANGE VALIDATION
-    if (value < choice.minPrice) {
-      value = choice.minPrice;
-    }
-
-    if (value > choice.maxPrice) {
-      value = choice.maxPrice;
-    }
-
-    setSelectedChoice({
-      ...selectedChoice,
-      customPrice: value,
-    });
-  }}
-  className="w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-amber-400"
-/>
-
-                      <p className="text-xs text-red-400 mt-2">
-  You can only enter between GH₵ {choice.minPrice} and GH₵ {choice.maxPrice}
-</p>
+                      {priceError ? (
+                        <p className="text-xs text-red-400 mt-2">{priceError}</p>
+                      ) : (
+                        <button
+                          type="button"
+                          disabled={!selectedChoice.customPrice}
+                          onClick={() => {
+                            setPriceError("");
+                            orderSectionRef.current?.scrollIntoView({
+                              behavior: "smooth",
+                              block: "center",
+                            });
+                          }}
+                          className="mt-3 w-full rounded-xl bg-amber-400 py-2.5 text-sm font-bold text-black hover:bg-amber-300 transition active:scale-95 disabled:opacity-40"
+                        >
+                          Confirm Price → Continue
+                        </button>
+                      )}
                     </div>
                   )}
                 </div>
@@ -840,7 +856,7 @@ const totalPrice = (basePrice + extrasTotal) * quantity;
         </div>
 
         {/* TOTAL */}
-        <div className="mt-8 rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5">
+        <div ref={orderSectionRef} className="mt-8 rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5">
 
           <div className="flex items-center justify-between">
             <p className="text-white/70">
