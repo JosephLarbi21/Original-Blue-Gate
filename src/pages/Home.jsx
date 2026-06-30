@@ -19,12 +19,31 @@ const navLinks = [
 export default function Home() {
     const [navOpen, setNavOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
     onScroll();
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const ids = navLinks.map((l) => l.href.replace("#", ""));
+    const observers = ids.map((id) => {
+      const el = document.getElementById(id);
+      if (!el) return null;
+      const observer = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) setActiveSection(id); },
+        { rootMargin: "-30% 0px -60% 0px", threshold: 0 }
+      );
+      observer.observe(el);
+      return observer;
+    });
+    return () => observers.forEach((obs, i) => {
+      const el = document.getElementById(ids[i]);
+      if (obs && el) obs.unobserve(el);
+    });
   }, []);
 
   useEffect(() => {
@@ -144,16 +163,27 @@ export default function Home() {
 
             {/* Desktop nav */}
             <nav className="ml-auto hidden items-center gap-1 lg:flex">
-              {navLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  className="group relative inline-flex items-center rounded-lg px-3.5 py-2 text-[13px] font-medium text-white/65 transition-all duration-200 hover:bg-white/[0.06] hover:text-white"
-                >
-                  {link.label}
-                  <span className="absolute bottom-1 left-1/2 h-[2px] w-0 -translate-x-1/2 rounded-full bg-amber-400 transition-all duration-300 group-hover:w-4" />
-                </a>
-              ))}
+              {navLinks.map((link) => {
+                const isActive = activeSection === link.href.replace("#", "");
+                return (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    className={`group relative inline-flex items-center rounded-lg px-3.5 py-2 text-[13px] font-medium transition-all duration-200 ${
+                      isActive
+                        ? "bg-white/[0.07] text-white"
+                        : "text-white/55 hover:bg-white/[0.06] hover:text-white"
+                    }`}
+                  >
+                    {link.label}
+                    <span
+                      className={`absolute bottom-1 left-1/2 h-[2px] -translate-x-1/2 rounded-full bg-amber-400 transition-all duration-300 ${
+                        isActive ? "w-4" : "w-0 group-hover:w-4"
+                      }`}
+                    />
+                  </a>
+                );
+              })}
             </nav>
 
             {/* CTA */}
@@ -230,18 +260,34 @@ export default function Home() {
                 Navigate
               </p>
               <ul className="space-y-1">
-                {navLinks.map((link) => (
-                  <li key={link.label}>
-                    <a
-                      href={link.href}
-                      onClick={() => setNavOpen(false)}
-                      className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-[14px] font-medium text-white/65 transition-all duration-150 hover:bg-white/[0.05] hover:text-white"
-                    >
-                      <span className="h-1 w-1 shrink-0 rounded-full bg-amber-400/60" />
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
+                {navLinks.map((link) => {
+                  const isActive = activeSection === link.href.replace("#", "");
+                  return (
+                    <li key={link.label}>
+                      <a
+                        href={link.href}
+                        onClick={() => setNavOpen(false)}
+                        className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-[14px] font-medium transition-all duration-150 ${
+                          isActive
+                            ? "bg-amber-400/10 text-amber-400"
+                            : "text-white/60 hover:bg-white/[0.05] hover:text-white"
+                        }`}
+                      >
+                        <span
+                          className={`h-1.5 w-1.5 shrink-0 rounded-full transition-all duration-200 ${
+                            isActive ? "bg-amber-400 scale-125" : "bg-white/20"
+                          }`}
+                        />
+                        {link.label}
+                        {isActive && (
+                          <span className="ml-auto text-[10px] font-bold uppercase tracking-wider text-amber-400/70">
+                            now
+                          </span>
+                        )}
+                      </a>
+                    </li>
+                  );
+                })}
               </ul>
 
               <a
