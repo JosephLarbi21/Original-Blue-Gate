@@ -775,18 +775,19 @@ export default function MenuSection() {
                         const raw = e.target.value;
                         setCustomPrice(raw);
                         const num = Number(raw);
-                        if (raw === "" || num < selectedItem.priceRange[0] || num > selectedItem.priceRange[1]) {
-                          setPriceError(
-                            raw === ""
-                              ? `Please enter from GH₵ ${selectedItem.priceRange[0]} – GH₵ ${selectedItem.priceRange[1]}`
-                              : `Please enter from GH₵ ${selectedItem.priceRange[0]} – GH₵ ${selectedItem.priceRange[1]}`
-                          );
+                        const [min, max] = selectedItem.priceRange;
+                        if (raw === "") {
+                          setPriceError(`Enter a price between GH₵ ${min} and GH₵ ${max}`);
+                        } else if (num < min) {
+                          setPriceError(`Too low — minimum is GH₵ ${min}`);
+                        } else if (num > max) {
+                          setPriceError(`Too high — maximum is GH₵ ${max}`);
                         } else {
                           setPriceError("");
                         }
                       }}
-                      className={`w-full rounded-xl border px-4 py-3 text-white outline-none transition bg-black/30 focus:border-amber-400 ${
-                        priceError ? "border-red-400" : "border-white/10"
+                      className={`w-full rounded-xl border px-4 py-3 text-white outline-none transition bg-black/30 ${
+                        priceError ? "border-red-400 focus:border-red-400" : "border-white/10 focus:border-amber-400"
                       }`}
                     />
                     {priceError ? (

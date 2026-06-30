@@ -732,16 +732,18 @@ const totalPrice = customPriceNum != null
                           const raw = e.target.value;
                           setSelectedChoice({ ...selectedChoice, customPrice: raw });
                           const num = Number(raw);
-                          if (raw === "" || num < choice.minPrice || num > choice.maxPrice) {
-                            setPriceError(
-                              `Please enter from GH₵ ${choice.minPrice} – GH₵ ${choice.maxPrice}`
-                            );
+                          if (raw === "") {
+                            setPriceError(`Enter a price between GH₵ ${choice.minPrice} and GH₵ ${choice.maxPrice}`);
+                          } else if (num < choice.minPrice) {
+                            setPriceError(`Too low — minimum is GH₵ ${choice.minPrice}`);
+                          } else if (num > choice.maxPrice) {
+                            setPriceError(`Too high — maximum is GH₵ ${choice.maxPrice}`);
                           } else {
                             setPriceError("");
                           }
                         }}
-                        className={`w-full rounded-xl border px-4 py-3 outline-none transition bg-black/30 focus:border-amber-400 ${
-                          priceError ? "border-red-400" : "border-white/10"
+                        className={`w-full rounded-xl border px-4 py-3 outline-none transition bg-black/30 ${
+                          priceError ? "border-red-400 focus:border-red-400" : "border-white/10 focus:border-amber-400"
                         }`}
                       />
 
