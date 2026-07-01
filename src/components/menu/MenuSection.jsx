@@ -744,11 +744,35 @@ export default function MenuSection() {
         </div>
 
         {orderSuccess ? (
-          <div className="mt-8 rounded-[1.75rem] border border-green-500/20 bg-green-500/10 p-5 text-sm text-green-300">
-            <p>
-              Order placed successfully. Your Order ID is{" "}
-              <span className="font-bold text-white">{orderSuccess.id}</span>.
-            </p>
+          <div className={`mt-8 rounded-2xl border p-5 text-sm ${
+            orderSuccess.paymentStatus === "Paid"
+              ? "border-green-500/20 bg-green-500/10"
+              : "border-amber-400/20 bg-amber-400/10"
+          }`}>
+            <div className="flex items-start gap-3">
+              <span className="text-xl">{orderSuccess.paymentStatus === "Paid" ? "✅" : "🕐"}</span>
+              <div className="flex-1">
+                <p className="font-semibold text-white">
+                  {orderSuccess.paymentStatus === "Paid"
+                    ? "Payment confirmed! Order placed."
+                    : "Order saved — payment not completed"}
+                </p>
+                <p className="mt-1 text-white/60">
+                  Order ID:{" "}
+                  <span className="font-bold text-white">{orderSuccess.id}</span>
+                </p>
+                {orderSuccess.paymentReference && (
+                  <p className="mt-0.5 text-xs text-white/40">
+                    Paystack ref: {orderSuccess.paymentReference}
+                  </p>
+                )}
+                {orderSuccess.paymentStatus !== "Paid" && (
+                  <p className="mt-1.5 text-xs text-white/40">
+                    Your order is saved. You can pay later or contact the restaurant to complete payment.
+                  </p>
+                )}
+              </div>
+            </div>
 
             <div className="mt-4 flex flex-wrap gap-3">
               <button
@@ -758,7 +782,6 @@ export default function MenuSection() {
               >
                 Track This Order
               </button>
-
               <button
                 type="button"
                 onClick={scrollToHistory}

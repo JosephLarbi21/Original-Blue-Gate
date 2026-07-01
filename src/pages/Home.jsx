@@ -3,6 +3,7 @@ import MenuSection from "../components/menu/MenuSection";
 import BackToTop from "../components/BackToTop";
 import WhatsAppFloat from "../components/What'sAppFloat"; // Fixed import
 import StatusWidget from "../components/StatusWidget";
+import { supabase } from "../lib/supabase";
 
 const BUSINESS_EMAIL = "orders@nellyangepubandgrill.com";
 const WHATSAPP_NUMBER = "233537965155";
@@ -712,6 +713,43 @@ function GrillsSizzlersSection() {
         </div>
       </div>
 
+      {/* ── Order Success Banner ── */}
+      {orderPlaced && (
+        <div className={`mt-10 rounded-2xl border p-5 text-sm ${
+          orderPlaced.status === "Paid"
+            ? "border-green-500/20 bg-green-500/10 text-green-300"
+            : "border-amber-400/20 bg-amber-400/10 text-amber-300"
+        }`}>
+          <div className="flex items-start gap-3">
+            <span className="text-lg">{orderPlaced.status === "Paid" ? "✅" : "🕐"}</span>
+            <div className="flex-1">
+              <p className="font-semibold text-white">
+                {orderPlaced.status === "Paid" ? "Payment successful!" : "Order saved — payment pending"}
+              </p>
+              <p className="mt-1 text-white/60">
+                Order ID: <span className="font-bold text-white">{orderPlaced.orderId}</span>
+              </p>
+              {orderPlaced.reference && (
+                <p className="mt-0.5 text-white/50 text-xs">
+                  Paystack ref: {orderPlaced.reference}
+                </p>
+              )}
+              {orderPlaced.status !== "Paid" && (
+                <p className="mt-2 text-xs text-white/40">
+                  Your order is saved. You can pay later or contact us to complete payment.
+                </p>
+              )}
+            </div>
+            <button
+              onClick={() => setOrderPlaced(null)}
+              className="text-white/30 hover:text-white/70 transition text-lg leading-none"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* 🔥 MODAL */}
      {selectedItem && (
   <div className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-md flex items-end sm:items-center justify-center">
@@ -909,6 +947,30 @@ function GrillsSizzlersSection() {
           />
         </div>
 
+        {/* ── Contact Details ── */}
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/35 mb-2">Your Name</p>
+            <input
+              type="text"
+              placeholder="Full name"
+              value={customerName}
+              onChange={(e) => setCustomerName(e.target.value)}
+              className="w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-white outline-none transition placeholder:text-white/20 focus:border-amber-400"
+            />
+          </div>
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/35 mb-2">Phone Number</p>
+            <input
+              type="text"
+              placeholder="e.g. 0241234567"
+              value={customerPhone}
+              onChange={(e) => setCustomerPhone(e.target.value)}
+              className="w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-white outline-none transition placeholder:text-white/20 focus:border-amber-400"
+            />
+          </div>
+        </div>
+
         {/* ── Total ── */}
         <div ref={orderSectionRef} className="mt-5 rounded-2xl overflow-hidden border border-amber-400/15 bg-gradient-to-br from-amber-400/[0.08] to-amber-600/[0.04]">
           <div className="px-5 py-4">
@@ -918,16 +980,22 @@ function GrillsSizzlersSection() {
                 <p className="text-2xl font-bold text-white">
                   {totalPrice != null ? `GH₵ ${totalPrice}` : "—"}
                 </p>
+                <p className="text-[11px] text-white/25 mt-0.5">Secure payment via Paystack</p>
               </div>
               {totalPrice != null && (
                 <span className="text-xs text-white/30">× {quantity}</span>
               )}
             </div>
             <button
-              disabled={!selectedChoice || totalPrice == null}
+              disabled={!selectedChoice || totalPrice == null || !customerName.trim() || !customerPhone.trim() || submitting}
+              onClick={handleAddToOrder}
               className="w-full rounded-xl bg-amber-400 py-3.5 text-sm font-bold text-black hover:bg-amber-300 transition disabled:opacity-50 active:scale-95 shadow-lg shadow-amber-400/20"
             >
-              {totalPrice != null ? `Add To Order • GH₵ ${totalPrice}` : "Enter a price above to continue"}
+              {submitting
+                ? "Saving order…"
+                : totalPrice != null
+                  ? `Pay Now • GH₵ ${totalPrice}`
+                  : "Enter a price above to continue"}
             </button>
           </div>
         </div>
