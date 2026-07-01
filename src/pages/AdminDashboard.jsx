@@ -93,12 +93,16 @@ export default function AdminDashboard() {
       <aside className="w-56 shrink-0 bg-[#09091a] border-r border-white/5 flex flex-col sticky top-0 h-screen overflow-y-auto">
         {/* Logo */}
         <div className="flex items-center gap-3 px-4 py-5 border-b border-white/5">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-black font-bold text-sm shrink-0">
-            NA
+          <div className="relative shrink-0 overflow-hidden rounded-full ring-1 ring-amber-400/30">
+            <img
+              src="/assets/images/logo01.jpg"
+              alt="Nelly Ange"
+              className="w-10 h-10 rounded-full object-cover"
+            />
           </div>
           <div className="min-w-0">
-            <p className="font-bold text-sm leading-tight truncate">Nelly Ange</p>
-            <p className="text-[10px] text-white/40 truncate">Taste. Elegance.</p>
+            <p className="text-[9px] font-bold uppercase tracking-widest text-amber-400 truncate">NellyAnge · Bar & Grill</p>
+            <p className="text-[12px] font-semibold text-white/90 truncate">Original Blue Gate</p>
           </div>
         </div>
 
