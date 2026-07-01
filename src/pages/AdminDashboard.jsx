@@ -60,10 +60,12 @@ function avatarColor(name = "") {
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
-  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [orders, setOrders] = useState([]);
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
 
   const fetchAll = async () => {
     const [{ data: ord }, { data: res }] = await Promise.all([
@@ -84,7 +86,24 @@ export default function AdminDashboard() {
     return () => supabase.removeChannel(channel);
   }, []);
 
-  const pendingCount = orders.filter(o => o.status === "Pending" || o.status === "Preparing").length;
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handler = () => { setShowNotifications(false); setShowUserMenu(false); };
+    document.addEventListener("click", handler);
+    return () => document.removeEventListener("click", handler);
+  }, []);
+
+  const pendingOrders = orders.filter(o => o.status === "Pending" || o.status === "Preparing");
+  const pendingCount = pendingOrders.length;
+
+  // Global search: when user submits search, jump to orders tab with pre-filled search
+  const handleSearchKeyDown = (e) => {
+    if (e.key === "Enter" && searchQuery.trim()) {
+      setActiveTab("orders");
+    }
+  };
+
+  const goToTab = (tab) => { setActiveTab(tab); setShowNotifications(false); setShowUserMenu(false); };
 
   return (
     <div className="flex min-h-screen bg-[#0d0d1b] text-white font-sans">
@@ -94,11 +113,7 @@ export default function AdminDashboard() {
         {/* Logo */}
         <div className="flex items-center gap-3 px-4 py-5 border-b border-white/5">
           <div className="relative shrink-0 overflow-hidden rounded-full ring-1 ring-amber-400/30">
-            <img
-              src="/assets/images/logo01.jpg"
-              alt="Nelly Ange"
-              className="w-10 h-10 rounded-full object-cover"
-            />
+            <img src="/assets/images/logo01.jpg" alt="Nelly Ange" className="w-10 h-10 rounded-full object-cover" />
           </div>
           <div className="min-w-0">
             <p className="text-[9px] font-bold uppercase tracking-widest text-amber-400 truncate">NellyAnge · Bar & Grill</p>
@@ -108,10 +123,10 @@ export default function AdminDashboard() {
 
         {/* Nav */}
         <nav className="flex-1 px-3 py-4 space-y-0.5">
-          {SIDEBAR_NAV.map(({ key, label, icon: Icon, badge }) => (
+          {SIDEBAR_NAV.map(({ key, label, icon: Icon }) => (
             <button
               key={key}
-              onClick={() => setActiveTab(key)}
+              onClick={() => goToTab(key)}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all cursor-pointer ${
                 activeTab === key
                   ? "bg-amber-500/10 text-amber-400 font-semibold"
@@ -144,13 +159,19 @@ export default function AdminDashboard() {
 
         {/* TOP BAR */}
         <header className="sticky top-0 z-20 bg-[#0d0d1b]/90 backdrop-blur border-b border-white/5 px-6 py-3 flex items-center gap-4">
-          <div className="flex-1 flex items-center gap-3 bg-white/5 border border-white/8 rounded-xl px-3 py-2 max-w-xs">
+          {/* Search */}
+          <div className="flex-1 flex items-center gap-3 bg-white/5 border border-white/8 rounded-xl px-3 py-2 max-w-xs focus-within:border-amber-400/30 transition">
             <MdSearch className="text-white/30 text-lg shrink-0" />
             <input
-              placeholder="Search anything..."
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              onKeyDown={handleSearchKeyDown}
+              placeholder="Search orders, customers..."
               className="bg-transparent text-sm text-white placeholder-white/30 outline-none w-full"
             />
-            <span className="text-[10px] text-white/20 shrink-0 hidden sm:block">⌘K</span>
+            {searchQuery && (
+              <button onClick={() => setSearchQuery("")} className="text-white/20 hover:text-white/60 text-xs shrink-0">✕</button>
+            )}
           </div>
 
           <div className="ml-auto flex items-center gap-3">
@@ -163,37 +184,127 @@ export default function AdminDashboard() {
               Visit Website <MdOpenInNew className="text-base" />
             </a>
 
-            <button className="relative w-9 h-9 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition">
-              <MdNotifications className="text-xl text-white/70" />
-              {pendingCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-amber-500 text-black text-[9px] font-bold rounded-full flex items-center justify-center">
-                  {pendingCount}
-                </span>
-              )}
-            </button>
+            {/* Notification Bell */}
+            <div className="relative">
+              <button
+                onClick={e => { e.stopPropagation(); setShowNotifications(v => !v); setShowUserMenu(false); }}
+                className="relative w-9 h-9 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition"
+              >
+                <MdNotifications className="text-xl text-white/70" />
+                {pendingCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-amber-500 text-black text-[9px] font-bold rounded-full flex items-center justify-center">
+                    {pendingCount}
+                  </span>
+                )}
+              </button>
 
-            <div className="flex items-center gap-2 cursor-pointer">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-black text-xs font-bold">
-                AN
-              </div>
-              <div className="hidden sm:block">
-                <p className="text-xs font-semibold leading-none">Admin Nelly</p>
-                <p className="text-[10px] text-white/40 mt-0.5">Super Admin</p>
-              </div>
-              <MdKeyboardArrowDown className="text-white/30" />
+              {showNotifications && (
+                <div
+                  onClick={e => e.stopPropagation()}
+                  className="absolute right-0 top-12 w-80 bg-[#13132a] border border-white/10 rounded-2xl shadow-2xl z-50 overflow-hidden"
+                >
+                  <div className="flex items-center justify-between px-4 py-3 border-b border-white/5">
+                    <p className="text-sm font-semibold">Notifications</p>
+                    {pendingCount > 0 && (
+                      <span className="text-[10px] bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full">{pendingCount} pending</span>
+                    )}
+                  </div>
+                  <div className="max-h-72 overflow-y-auto">
+                    {pendingOrders.length === 0 ? (
+                      <p className="text-white/20 text-sm text-center py-8">No pending orders</p>
+                    ) : pendingOrders.slice(0, 6).map((o, i) => (
+                      <button
+                        key={i}
+                        onClick={() => goToTab("orders")}
+                        className="w-full flex items-start gap-3 px-4 py-3 hover:bg-white/5 transition text-left border-b border-white/5 last:border-0"
+                      >
+                        <div className={`w-8 h-8 rounded-full ${avatarColor(o.customer_name)} flex items-center justify-center text-white text-xs font-bold shrink-0 mt-0.5`}>
+                          {getInitials(o.customer_name)}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-xs font-medium text-white/80 truncate">{o.customer_name || "Customer"}</p>
+                          <p className="text-[11px] text-white/40 truncate">{o.item_name} · GH₵{(o.total_price||0).toFixed(2)}</p>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className={`text-[10px] px-1.5 py-0.5 rounded-md ${STATUS_CONFIG[o.status]?.bg || "bg-amber-400/10"} ${STATUS_CONFIG[o.status]?.color || "text-amber-400"}`}>
+                              {o.status}
+                            </span>
+                            <span className="text-[10px] text-white/20">{timeAgo(o.created_at)}</span>
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                  <div className="px-4 py-2 border-t border-white/5">
+                    <button onClick={() => goToTab("orders")} className="w-full text-center text-xs text-amber-400 hover:underline py-1">
+                      View all orders →
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* User Menu */}
+            <div className="relative">
+              <button
+                onClick={e => { e.stopPropagation(); setShowUserMenu(v => !v); setShowNotifications(false); }}
+                className="flex items-center gap-2 cursor-pointer hover:bg-white/5 px-2 py-1 rounded-xl transition"
+              >
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-black text-xs font-bold">
+                  AN
+                </div>
+                <div className="hidden sm:block text-left">
+                  <p className="text-xs font-semibold leading-none">Admin Nelly</p>
+                  <p className="text-[10px] text-white/40 mt-0.5">Super Admin</p>
+                </div>
+                <MdKeyboardArrowDown className={`text-white/30 transition-transform ${showUserMenu ? "rotate-180" : ""}`} />
+              </button>
+
+              {showUserMenu && (
+                <div
+                  onClick={e => e.stopPropagation()}
+                  className="absolute right-0 top-12 w-52 bg-[#13132a] border border-white/10 rounded-2xl shadow-2xl z-50 overflow-hidden"
+                >
+                  <div className="px-4 py-3 border-b border-white/5">
+                    <p className="text-sm font-semibold">Admin Nelly</p>
+                    <p className="text-xs text-white/30">Super Admin</p>
+                  </div>
+                  {[
+                    { label: "Dashboard", icon: MdDashboard, tab: "dashboard" },
+                    { label: "Settings",  icon: MdSettings,  tab: "settings" },
+                  ].map((item, i) => (
+                    <button
+                      key={i}
+                      onClick={() => goToTab(item.tab)}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/5 transition"
+                    >
+                      <item.icon className="text-base" />
+                      {item.label}
+                    </button>
+                  ))}
+                  <div className="border-t border-white/5 mt-1">
+                    <a
+                      href="/"
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/5 transition"
+                    >
+                      <MdOpenInNew className="text-base" /> Visit Website
+                    </a>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </header>
 
         {/* PAGE CONTENT */}
         <main className="flex-1 p-6 overflow-auto">
-          {activeTab === "dashboard"    && <DashboardTab orders={orders} reservations={reservations} loading={loading} />}
-          {activeTab === "orders"       && <OrdersTab orders={orders} onRefresh={fetchAll} />}
+          {activeTab === "dashboard"    && <DashboardTab orders={orders} reservations={reservations} loading={loading} setActiveTab={goToTab} />}
+          {activeTab === "orders"       && <OrdersTab orders={orders} onRefresh={fetchAll} initialSearch={searchQuery} />}
           {activeTab === "reservations" && <ReservationsTab reservations={reservations} />}
           {activeTab === "menu"         && <MenuTab />}
           {!["dashboard","orders","reservations","menu"].includes(activeTab) && (
-            <div className="flex items-center justify-center h-64 text-white/20 text-lg capitalize">
-              {activeTab} — coming soon
+            <div className="flex flex-col items-center justify-center h-64 gap-3 text-white/20">
+              <span className="text-4xl">🚧</span>
+              <p className="text-lg capitalize">{activeTab} — coming soon</p>
             </div>
           )}
         </main>
@@ -205,7 +316,7 @@ export default function AdminDashboard() {
 /* ══════════════════════════════════════════
    DASHBOARD TAB
 ══════════════════════════════════════════ */
-function DashboardTab({ orders, reservations, loading }) {
+function DashboardTab({ orders, reservations, loading, setActiveTab }) {
   const totalRevenue = orders.reduce((s, o) => s + (o.total_price || 0), 0);
   const totalOrders  = orders.length;
   const uniqueCustomers = new Set(orders.map(o => o.phone)).size;
@@ -368,7 +479,7 @@ function DashboardTab({ orders, reservations, loading }) {
         <div className="bg-[#13132a] border border-white/5 rounded-2xl p-5">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-semibold text-sm">Top Selling Items</h2>
-            <button className="text-xs text-amber-400 hover:underline">View all</button>
+            <button onClick={() => setActiveTab("orders")} className="text-xs text-amber-400 hover:underline">View all</button>
           </div>
           {topDishes.length === 0 ? (
             <p className="text-white/20 text-sm text-center py-8">No orders yet</p>
@@ -471,7 +582,7 @@ function DashboardTab({ orders, reservations, loading }) {
         <div className="bg-[#13132a] border border-white/5 rounded-2xl p-5">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-semibold text-sm">Recent Activity</h2>
-            <button className="text-xs text-amber-400 hover:underline">View all</button>
+            <button onClick={() => setActiveTab("orders")} className="text-xs text-amber-400 hover:underline">View all</button>
           </div>
           <div className="space-y-4">
             {recentActivity.length === 0 ? (
@@ -495,7 +606,7 @@ function DashboardTab({ orders, reservations, loading }) {
       <div className="bg-[#13132a] border border-white/5 rounded-2xl p-5">
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-semibold">Recent Orders</h2>
-          <button className="text-xs text-amber-400 hover:underline">View all</button>
+          <button onClick={() => setActiveTab("orders")} className="text-xs text-amber-400 hover:underline">View all</button>
         </div>
         <OrdersTable orders={recentOrders} compact />
       </div>
@@ -505,14 +616,18 @@ function DashboardTab({ orders, reservations, loading }) {
         <h2 className="font-semibold text-sm mb-4">Quick Actions</h2>
         <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
           {[
-            { label: "Add Menu Item",       icon: MdAddCircle,   color: "text-amber-400",  bg: "bg-amber-400/10" },
-            { label: "Create Offer",         icon: RiCoupon3Line, color: "text-violet-400", bg: "bg-violet-400/10" },
-            { label: "Add Product",          icon: MdInventory2,  color: "text-blue-400",   bg: "bg-blue-400/10" },
-            { label: "Manage Reservations",  icon: MdTableRestaurant, color: "text-emerald-400", bg: "bg-emerald-400/10" },
-            { label: "Send Notification",    icon: MdSend,        color: "text-pink-400",   bg: "bg-pink-400/10" },
-            { label: "View Analytics",       icon: MdBarChart,    color: "text-orange-400", bg: "bg-orange-400/10" },
+            { label: "Menu Management",      icon: MdAddCircle,       color: "text-amber-400",  bg: "bg-amber-400/10",  tab: "menu" },
+            { label: "Coupons & Offers",      icon: RiCoupon3Line,     color: "text-violet-400", bg: "bg-violet-400/10", tab: "coupons" },
+            { label: "All Orders",            icon: MdInventory2,      color: "text-blue-400",   bg: "bg-blue-400/10",   tab: "orders" },
+            { label: "Reservations",          icon: MdTableRestaurant, color: "text-emerald-400",bg: "bg-emerald-400/10",tab: "reservations" },
+            { label: "Customers",             icon: MdPeople,          color: "text-pink-400",   bg: "bg-pink-400/10",   tab: "customers" },
+            { label: "Analytics",             icon: MdBarChart,        color: "text-orange-400", bg: "bg-orange-400/10", tab: "analytics" },
           ].map((a, i) => (
-            <button key={i} className="flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-white/5 transition group">
+            <button
+              key={i}
+              onClick={() => setActiveTab(a.tab)}
+              className="flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-white/5 transition group"
+            >
               <div className={`w-10 h-10 rounded-xl ${a.bg} flex items-center justify-center group-hover:scale-110 transition`}>
                 <a.icon className={`text-xl ${a.color}`} />
               </div>
@@ -528,10 +643,10 @@ function DashboardTab({ orders, reservations, loading }) {
 /* ══════════════════════════════════════════
    ORDERS TAB
 ══════════════════════════════════════════ */
-function OrdersTab({ orders, onRefresh }) {
+function OrdersTab({ orders, onRefresh, initialSearch = "" }) {
   const [filter, setFilter] = useState("All");
   const [payFilter, setPayFilter] = useState("All");
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(initialSearch);
   const [updating, setUpdating] = useState(null);
 
   const statuses = ["All", "Pending", "Preparing", "Out for Delivery", "Delivered", "Cancelled"];
