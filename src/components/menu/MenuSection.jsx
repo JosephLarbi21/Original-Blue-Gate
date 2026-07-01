@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { menuData } from "../../data/menu.js";
 import { supabase } from "../../lib/supabase";
 
-const PAYSTACK_PUBLIC_KEY = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY;
+const PAYSTACK_PUBLIC_KEY = "pk_test_54008b4f5d9bd1110c7ffb108a3d4c2dbbfb2f7c";
 
 function formatPrice(item) {
   if (item.priceRange && Array.isArray(item.priceRange)) {

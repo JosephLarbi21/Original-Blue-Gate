@@ -507,7 +507,7 @@ function HeroSection() {
   );
 }
 
-const PAYSTACK_PUBLIC_KEY = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY;
+const PAYSTACK_PUBLIC_KEY = "pk_test_54008b4f5d9bd1110c7ffb108a3d4c2dbbfb2f7c";
 
 function generateGrillOrderId() {
   const random = Math.floor(1000 + Math.random() * 9000);
